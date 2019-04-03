@@ -19,10 +19,10 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.lomo-snap.lomo-snap"
+      "bundleIdentifier": "com.LomoSnaps.LomoSnaps"
     },
     "android": {
-      "package": "com.lomo-snap.lomo-snap"
+      "package": "com.LomoSnaps.LomoSnaps"
     }
   }
 }
