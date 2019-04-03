@@ -2,6 +2,9 @@
 .expo
 __generated__
 
+# Firebase Config Settings
+firebaseConfig.js
+
 # macOS
 .DS_Store
 
