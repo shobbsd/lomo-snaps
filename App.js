@@ -1,29 +1,13 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
 import { createStackNavigator, createAppContainer } from "react-navigation";
-import Camera from "./Components/Camera";
-import SignUp from "./Components/SignUp";
-import NewEvent from "./Components/NewEvent";
-import Gallery from "./Components/Gallery";
-import firebaseConnect from "./firebaseConfig";
+import Camera from "./src/views/Camera";
+import SignUp from "./src/views/SignUp";
+import NewEvent from "./src/views/NewEvent";
+import Gallery from "./src/views/Gallery";
 
 class Home extends Component {
   render() {
-    firebaseConnect
-      .auth()
-      .signInAnonymously()
-      .then(user => console.log(user, "first"));
-    firebaseConnect
-      .auth()
-      .signInWithEmailAndPassword("shobbsdaley@gmail.com", "northCoders")
-      .then(user => console.log(user));
-    // .app("retro_snaps")
-    // .auth()
-    // .("apple@icloud.com", "apple123")
-    // .then(user => {
-    //   console.log(user);
-    //   // console.log("kittensApp user ->", user.toJSON());
-    // });
     return (
       <View>
         <Text>This is the home screen</Text>
