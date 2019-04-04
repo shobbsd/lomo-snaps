@@ -3,6 +3,7 @@ import { View, Text, ScrollView, Header } from 'react-native';
 import EventCard from '../components/EventCard';
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import Photos from './Photos';
+import firebaseConnect from '../../firebaseConfig';
 
 class GalleryScreen extends Component {
 
@@ -27,6 +28,11 @@ class GalleryScreen extends Component {
         ]
     }
 
+    // componentDidMount() {
+    //     firebaseConnect.firestore().collection('events')
+    //         .then(console.log)
+    // }
+
     render() {
         return (
             <View style={{ flex: 1 }}>
@@ -41,7 +47,6 @@ class GalleryScreen extends Component {
     }
 
     handleClick = () => {
-        console.log('clicked')
         this.props.navigation.navigate('Photos')
     }
 }
@@ -49,9 +54,15 @@ class GalleryScreen extends Component {
 const AppNavigator = createStackNavigator({
     Gallery: {
         screen: GalleryScreen,
+        navigationOptions: {
+            header: null
+        }
     },
     Photos: {
-        screen: Photos
+        screen: Photos,
+        navigationOptions: {
+            header: null
+        }
     }
 }, { initialRouteName: 'Gallery' })
 
