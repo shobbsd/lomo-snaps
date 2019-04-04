@@ -4,6 +4,9 @@ import EventCard from '../components/EventCard';
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import Photos from './Photos';
 import firebaseConnect from '../../firebaseConfig';
+// import 'firebase/firestore'
+
+// npm i firebase/firestore
 
 class GalleryScreen extends Component {
 
