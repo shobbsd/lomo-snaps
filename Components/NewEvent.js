@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import { View, Text, TextInput, Button, DatePickerIOS } from 'react-native';
-import firebaseConnect from '../firebaseConfig';
-import '@firebase/firestore';
+import React, { Component } from 'react'
+import { Text, TextInput, Button, DatePickerIOS } from 'react-native'
+import firebaseConnect from '../firebaseConfig'
+import '@firebase/firestore'
 
 const db = firebaseConnect.firestore();
 
