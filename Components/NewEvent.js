@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
-import { Text, TextInput, Button, DatePickerIOS } from 'react-native'
+import { Platform, Text, TextInput, Button, DatePickerIOS } from 'react-native'
 import firebaseConnect from '../firebaseConfig'
 import '@firebase/firestore'
 
 const db = firebaseConnect.firestore();
+const plat = Platform.OS
+console.log(plat, "platform")
 
 export default class NewEvent extends Component {
     constructor() {
