@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { View, Text, TextInput, Button, DatePickerIOS } from "react-native";
+import { Platform, Text, TextInput, Button, DatePickerIOS, DatePickerAndroid } from "react-native";
 import firebaseConnect from "../../firebaseConfig";
 import "@firebase/firestore";
 
 const db = firebaseConnect.firestore();
+const pf = Platform.OS
 
 export default class NewEvent extends Component {
   constructor() {
@@ -25,6 +26,18 @@ export default class NewEvent extends Component {
       this.setState({ isEventNameError: true });
     }
   };
+
+  handleAndroidEventDate = () => {
+    loadAndroidDatePicker()
+      .then(androidEventDate => this.setState({ eventEndDate: androidEventDate }))
+      .catch(console.log("something went wrong with returned Event Date"))
+  }
+
+  handleAndroidDevelopDate = () => {
+    loadAndroidDatePicker()
+      .then(androidDevelopDate => this.setState({ eventEndDate: androidDevelopDate }))
+      .catch(console.log("something went wrong with returned Develop Date"))
+  }
 
   addEvent = () => {
     // https://firebase.google.com/docs/firestore/quickstart
@@ -67,19 +80,44 @@ export default class NewEvent extends Component {
 
         <Text style={{ textAlign: "center" }}>Event End Date:</Text>
 
-        <DatePickerIOS
+        {pf === 'ios' && <DatePickerIOS
           minimumDate={new Date()}
           date={this.state.eventEndDate}
           onDateChange={eventEndDate => this.setState({ eventEndDate })}
         />
+        }
+
+        {pf === 'android' && <Button
+          style={{
+            color: "red",
+            padding: 40,
+            borderWidth: 1,
+            margin: 40
+          }}
+          title="Event End Date.."
+          onPress={this.handleAndroidEventDate}
+        />
+        }
 
         <Text style={{ textAlign: "center" }}>Develop Photos Date:</Text>
 
-        <DatePickerIOS
+        {pf === 'ios' && <DatePickerIOS
           minimumDate={this.state.eventEndDate}
           date={this.state.eventDevelopDate}
           onChangeText={eventDevelopDate => this.setState({ eventDevelopDate })}
+        />}
+
+        {pf === 'android' && <Button
+          style={{
+            color: "red",
+            padding: 40,
+            borderWidth: 1,
+            margin: 40
+          }}
+          title="Develop Photos Date.."
+          onPress={this.handleAndroidDevelopDate}
         />
+        }
 
         <Button
           style={{
@@ -95,3 +133,20 @@ export default class NewEvent extends Component {
     );
   }
 }
+
+async function loadAndroidDatePicker() {
+  try {
+    const { action, year, month, day } = await DatePickerAndroid.open({ date: new Date() });
+    if (action !== DatePickerAndroid.dismissedAction) {
+      const androidDate = new Date(year, month, day)
+      return androidDate;
+    }
+  } catch ({ code, message }) {
+    console.warn('Cannot open date picker' + message);
+  }
+}
+
+// TODO UI polish
+// TODO can not style react-native <Button /> goto https://facebook.github.io/react-native/docs/touchableopacity.html
+// TODO simplify IOS date picker ( no time required )
+// TODO default time of events is midday
