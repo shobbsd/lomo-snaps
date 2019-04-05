@@ -1,9 +1,13 @@
 import React from "react";
 import { View, Text } from "react-native";
-import { Camera, Permissions } from "expo";
+import { Camera, Permissions, FileSystem } from "expo";
 
 import styles from "../styles/cameraStyle";
 import Toolbar from "./toolbar.component";
+import firebaseConnect from "../../firebaseConfig";
+import { database } from "firebase";
+
+// import * as firebase from "firebase";
 // import Gallery from "./Gallery";
 
 export default class CameraPage extends React.Component {
@@ -26,12 +30,52 @@ export default class CameraPage extends React.Component {
   //   };
 
   handleShortCapture = async () => {
-    const photoData = await this.camera.takePictureAsync();
-    console.log(this.state.captures, "this");
+    const { uri } = await this.camera.takePictureAsync();
     this.setState({
       capturing: false,
-      captures: [photoData, ...this.state.captures]
+      captures: [uri, ...this.state.captures]
     });
+    this.uploadImage(uri)
+      .then(res => {
+        console.log(res, "success");
+      })
+      .catch(console.log);
+    console.log(this.state.captures, "this");
+  };
+
+  _urlToBlob = url => {
+    return new Promise((resolve, reject) => {
+      var xhr = new XMLHttpRequest();
+      xhr.onerror = reject;
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+          resolve(xhr.response);
+        }
+      };
+      xhr.open("GET", url);
+      xhr.responseType = "blob"; // convert type
+      xhr.send();
+    });
+  };
+
+  uploadImage = async uri => {
+    // console.log(uri, "uri");
+    // const response = await FileSystem.getInfoAsync(uri);
+    // console.log(response, "res");
+
+    this._urlToBlob(uri)
+      .then(blob => {
+        const ref = firebaseConnect
+          .storage()
+          .ref()
+          .child("images/" + Date.now());
+
+        return ref.put(blob);
+      })
+      .then(res => {
+        console.log(res);
+      })
+      .catch(console.log);
   };
 
   //   handleLongCapture = async () => {
