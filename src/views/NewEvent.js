@@ -32,10 +32,10 @@ export default class NewEvent extends Component {
     const { eventName, eventEndDate, eventDevelopDate } = this.state;
     db.collection("events")
       .add({ eventName, eventEndDate, eventDevelopDate })
-      .then(function(docRef) {
+      .then(function (docRef) {
         console.log("Document written with ID: ", docRef.id);
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.error("Error adding document: ", error);
       });
   };
