@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, TextInput, Button, DatePickerIOS } from 'react-native';
-import firebaseConnect from '../firebaseConfig';
+import firebaseConnect from '../../firebaseConfig';
 import '@firebase/firestore';
 
 const db = firebaseConnect.firestore();

@@ -3,8 +3,8 @@ import { Calendar } from 'expo';
 const createCalendar = (username) => {
     return Calendar.getCalendarsAsync()
         .then((calendars) => {
-            const { source } = calendars[0]
-            return Calendar.createCalendarAsync({
+            const { source, timeZone } = calendars[0]
+            const calendarId = Calendar.createCalendarAsync({
                 accessLevel: "write",
                 allowedReminders: [
                     "default",
@@ -23,7 +23,9 @@ const createCalendar = (username) => {
                     type: "com.google",
                 },
                 title: "Lomo",
+                timeZone,
             })
+            return Promise.all([timeZone, calendarId])
         })
 }
 
