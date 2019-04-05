@@ -5,6 +5,7 @@ import Camera from "./src/views/Camera";
 import SignUp from "./src/views/SignUp";
 import NewEvent from "./src/views/NewEvent";
 import Gallery from "./src/views/Gallery";
+import EventCalendar from './src/components/EventCalendar';
 
 class Home extends Component {
   render() {
@@ -35,6 +36,7 @@ class Home extends Component {
             this.props.navigation.navigate("Gallery");
           }}
         />
+        <EventCalendar />
       </View>
     );
   }
