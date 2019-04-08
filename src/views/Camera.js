@@ -65,10 +65,11 @@ export default class CameraPage extends React.Component {
 
     this._urlToBlob(uri)
       .then(blob => {
+        const imageName = Date.now();
         const ref = firebaseConnect
           .storage()
           .ref()
-          .child("images/" + Date.now());
+          .child("images/" + imageName);
 
         return ref.put(blob);
       })

@@ -1,53 +1,18 @@
-import React, { Component } from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import React from "react";
 import { createStackNavigator, createAppContainer } from "react-navigation";
-import Camera from "./src/views/Camera";
 import SignUp from "./src/views/SignUp";
 import NewEvent from "./src/views/NewEvent";
 import Gallery from "./src/views/Gallery";
-import EventCalendar from './src/components/EventCalendar';
-
-class Home extends Component {
-  render() {
-    return (
-      <View>
-        <Text>This is the home screen</Text>
-        <Button
-          title="open camera"
-          onPress={() => {
-            this.props.navigation.navigate("Camera");
-          }}
-        />
-        <Button
-          title="open SignUp"
-          onPress={() => {
-            this.props.navigation.navigate("SignUp");
-          }}
-        />
-        <Button
-          title="open new event"
-          onPress={() => {
-            this.props.navigation.navigate("NewEvent");
-          }}
-        />
-        <Button
-          title="open Gallery"
-          onPress={() => {
-            this.props.navigation.navigate("Gallery");
-          }}
-        />
-        <EventCalendar />
-      </View>
-    );
-  }
-}
+import LogIn from "./src/views/LogIn";
+import Home from "./src/views/Home";
+import CameraPage from "./src/views/Camera";
 
 const AppNavigator = createStackNavigator({
   Home: {
     screen: Home
   },
   Camera: {
-    screen: Camera
+    screen: CameraPage
   },
   SignUp: {
     screen: SignUp
@@ -57,6 +22,9 @@ const AppNavigator = createStackNavigator({
   },
   Gallery: {
     screen: Gallery
+  },
+  LogIn: {
+    screen: LogIn
   }
 });
 
