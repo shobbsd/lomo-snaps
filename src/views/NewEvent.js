@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Platform, Text, TextInput, Button, DatePickerIOS, DatePickerAndroid } from "react-native";
 import firebaseConnect from "../../firebaseConfig";
 import "@firebase/firestore";
+import { Permissions } from 'expo';
 
 const db = firebaseConnect.firestore();
 const pf = Platform.OS
@@ -13,7 +14,8 @@ export default class NewEvent extends Component {
       eventName: "",
       eventEndDate: new Date(),
       eventDevelopDate: new Date(),
-      isEventNameError: false // local state only.
+      isEventNameError: null, // local state only.
+      hasCalendarPermission: false
     };
   }
 
@@ -53,84 +55,95 @@ export default class NewEvent extends Component {
       });
   };
 
+  async componentDidMount() {
+    const calendar = await Permissions.askAsync(Permissions.CALENDAR);
+    const hasCalendarPermission = calendar.status === "granted";
+
+    this.setState({ hasCalendarPermission });
+  }
+
   render() {
     const { isEventNameError } = this.state;
-    return (
-      <>
-        <Text style={{ textAlign: "center", padding: 10 }}>Event Name:</Text>
-        <TextInput
-          style={{
-            height: 40,
-            borderColor: "gray",
-            borderWidth: 1,
-            margin: 20,
-            marginTop: 0
-          }}
-          placeholder="Enter your event name, at least 5 characters..."
-          onChangeText={eventName =>
-            this.setState({ eventName: eventName, isEventNameError: false })
+    if (this.state.hasCalendarPermission === false) return <Text>Calendar permissions not given</Text>
+    else {
+      return (
+        <>
+          <Text style={{ textAlign: "center", padding: 10 }}>Event Name:</Text>
+          <TextInput
+            style={{
+              height: 40,
+              borderColor: "gray",
+              borderWidth: 1,
+              margin: 20,
+              marginTop: 0
+            }}
+            placeholder="Enter your event name, at least 5 characters..."
+            onChangeText={eventName =>
+              this.setState({ eventName: eventName, isEventNameError: false })
+            }
+            value={this.state.eventName}
+          />
+          {isEventNameError && (
+            <Text style={{ textAlign: "center", padding: 10, color: "red" }}>
+              Event Name must be at least 5 characters
+            </Text>
+          )}
+
+          <Text style={{ textAlign: "center" }}>Event End Date:</Text>
+
+          {pf === 'ios' && <DatePickerIOS
+            minimumDate={new Date()}
+            date={this.state.eventEndDate}
+            onDateChange={eventEndDate => this.setState({ eventEndDate })}
+          />
           }
-          value={this.state.eventName}
-        />
-        {isEventNameError && (
-          <Text style={{ textAlign: "center", padding: 10, color: "red" }}>
-            Event Name must be at least 5 characters
-          </Text>
-        )}
 
-        <Text style={{ textAlign: "center" }}>Event End Date:</Text>
+          {pf === 'android' && <Button
+            style={{
+              color: "red",
+              padding: 40,
+              borderWidth: 1,
+              margin: 40
+            }}
+            title="Event End Date.."
+            onPress={this.handleAndroidEventDate}
+          />
+          }
 
-        {pf === 'ios' && <DatePickerIOS
-          minimumDate={new Date()}
-          date={this.state.eventEndDate}
-          onDateChange={eventEndDate => this.setState({ eventEndDate })}
-        />
-        }
+          <Text style={{ textAlign: "center" }}>Develop Photos Date:</Text>
 
-        {pf === 'android' && <Button
-          style={{
-            color: "red",
-            padding: 40,
-            borderWidth: 1,
-            margin: 40
-          }}
-          title="Event End Date.."
-          onPress={this.handleAndroidEventDate}
-        />
-        }
+          {pf === 'ios' && <DatePickerIOS
+            minimumDate={this.state.eventEndDate}
+            date={this.state.eventDevelopDate}
+            onChangeText={eventDevelopDate => this.setState({ eventDevelopDate })}
+          />}
 
-        <Text style={{ textAlign: "center" }}>Develop Photos Date:</Text>
+          {pf === 'android' && <Button
+            style={{
+              color: "red",
+              padding: 40,
+              borderWidth: 1,
+              margin: 40
+            }}
+            title="Develop Photos Date.."
+            onPress={this.handleAndroidDevelopDate}
+          />
+          }
 
-        {pf === 'ios' && <DatePickerIOS
-          minimumDate={this.state.eventEndDate}
-          date={this.state.eventDevelopDate}
-          onChangeText={eventDevelopDate => this.setState({ eventDevelopDate })}
-        />}
+          <Button
+            style={{
+              color: "red",
+              padding: 20,
+              borderWidth: 1,
+              marginBottom: 40
+            }}
+            title="Submit your event"
+            onPress={this.handleEventSubmit}
+          />
+        </>
+      );
+    }
 
-        {pf === 'android' && <Button
-          style={{
-            color: "red",
-            padding: 40,
-            borderWidth: 1,
-            margin: 40
-          }}
-          title="Develop Photos Date.."
-          onPress={this.handleAndroidDevelopDate}
-        />
-        }
-
-        <Button
-          style={{
-            color: "red",
-            padding: 20,
-            borderWidth: 1,
-            marginBottom: 40
-          }}
-          title="Submit your event"
-          onPress={this.handleEventSubmit}
-        />
-      </>
-    );
   }
 }
 
