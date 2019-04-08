@@ -20,35 +20,34 @@ import React, { Component } from "react";
 import { Image } from "react-native";
 import { Container, Header, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right } from 'native-base';
 import firebaseConnect from '../../firebaseConfig'
-// import { Font } from 'expo';
-// import { Ionicons } from '@expo/vector-icons';
 
 const storage = firebaseConnect.storage();
 const storageRef = storage.ref();
 const imagesRef = storageRef.child('images/1554725383867');
-// const imageURL = imagesRef.getDownloadURL()
-// console.log(imagesRef);
 
 export default class Gallery extends Component {
 
-  // async componentDidMount() {
-  //   await Font.loadAsync({
-  //     'Roboto': require('native-base/Fonts/Roboto.ttf'),
-  //     'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
-  //     ...Ionicons.font,
-  //   });
-  // }
-
   state = {
-    imageURL: ''
+    imageURL: 'https://cdn.dribbble.com/users/421466/screenshots/2379575/replace-2r-400px.gif',   // default loading gif
+    imageTimeCreated: new Date(),
   }
 
   getImageURL = () => {
     imagesRef.getDownloadURL()
       .then(url => { // `url` is the download URL for 'images/stars.jpg'
-        console.log(url, '<< URL')
         this.setState({ imageURL: url })
-        console.log(this.state, "<< this.state")
+      }).catch(function (error) {
+        // Handle any errors
+      });
+  }
+
+  // storage meta-data
+  getImageTimeCreated = () => {
+    imagesRef.getMetadata()
+      .then(metadata => {
+        console.log(metadata, '<< metadata')
+        this.setState({ imageTimeCreated: new Date(metadata.timeCreated) })
+        console.log(this.state, "<< state")
       }).catch(function (error) {
         // Handle any errors
       });
@@ -56,9 +55,15 @@ export default class Gallery extends Component {
 
   componentDidMount() {
     this.getImageURL()
+    this.getImageTimeCreated()
   }
 
   render() {
+
+    const { imageTimeCreated } = this.state
+    // var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };  TODO
+    const uiDate = imageTimeCreated.toLocaleDateString('en-GB')
+    const uiTime = imageTimeCreated.toLocaleTimeString('en-GB')
 
     return (
       <Container>
@@ -69,14 +74,14 @@ export default class Gallery extends Component {
               <Left>
                 <Thumbnail source={{ uri: 'https://pbs.twimg.com/profile_images/578519382650974209/idoLfRxY_400x400.jpeg' }} />
                 <Body>
-                  <Text>NativeBase</Text>
-                  <Text note>GeekyAnts</Text>
+                  <Text>Photo by: name</Text>
+                  <Text>{uiDate} @ {uiTime}</Text>
                 </Body>
               </Left>
             </CardItem>
             <CardItem cardBody>
               {/* <Image source={{ uri: 'gs://lomo-snaps.appspot.com/images/1554725383867' }} style={{ height: 200, width: null, flex: 1 }} /> */}
-              <Image source={{ uri: this.state.imageURL }} style={{ height: 200, width: null, flex: 1 }} />
+              <Image source={{ uri: this.state.imageURL }} style={{ height: 400, width: null, flex: 1 }} />
             </CardItem>
             <CardItem>
               <Left>
@@ -91,9 +96,6 @@ export default class Gallery extends Component {
                   <Text>4 Comments</Text>
                 </Button>
               </Body>
-              <Right>
-                <Text>11h ago</Text>
-              </Right>
             </CardItem>
           </Card>
         </Content>
@@ -102,3 +104,5 @@ export default class Gallery extends Component {
   }
 
 }
+
+// TODO better loading gif
