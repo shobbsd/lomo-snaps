@@ -5,7 +5,7 @@ import CustomButton from "../components/CustomButton";
 import firebaseConnect from "../../firebaseConfig";
 import "firebase/firestore";
 import verifySignUp from "../utils/verifySignUp";
-import { signInWithFacebook } from "../utils/facebookLogin";
+import { signInWithFacebook } from "../utils/facebookSignUp";
 
 const styles = StyleSheet.create({
   red: {
@@ -142,36 +142,39 @@ export default class SignUp extends Component {
   };
 
   onSubmit = event => {
-    const verified = verifySignUp(this.state);
-    console.log(verified);
+    let uid;
+    const verified = true || verifySignUp(this.state);
     if (verified === true) {
       const db = firebaseConnect.firestore();
       const { name, email, phone, password } = this.state;
       event.preventDefault();
-      console.log("before Auth");
       firebaseConnect
         .auth()
         //   .signInAnonymously()
         .createUserWithEmailAndPassword(email, password)
-        .then(() => {
-          return db
-            .collection("users")
-            .add({
+        .then(({ user }) => {
+          db.collection("users")
+            .doc(user.uid)
+            .set({
               email,
               name,
               phone
-            })
-            .then(({ id }) => {
-              console.log(id);
-              return firebaseConnect.auth().currentUser.updateProfile({
-                name,
-                email,
-                phoneNumber: phone,
-                fireStoreRef: id
-              });
             });
+          return user.uid;
         })
-        .then(docRef => console.log(docRef, "went well"))
+        .then(uid => {
+          firebaseConnect.auth().currentUser.updateProfile({
+            displayName: name,
+            email,
+            phoneNumber: phone
+          });
+          return uid;
+        })
+
+        .then(uid => {
+          this.props.navigation.state.params.getUser(uid);
+          this.props.navigation.navigate("Home", { uid });
+        })
         .catch(e => console.log(e));
     } else {
       this.setState({

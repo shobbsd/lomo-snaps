@@ -23,7 +23,7 @@ export default class Gallery extends Component {
   render() {
     return (
       <View>
-        <Text>This is the Gallery</Text>
+        <Text>Events</Text>
       </View>
     );
   }
