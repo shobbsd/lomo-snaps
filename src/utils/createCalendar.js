@@ -34,6 +34,7 @@ const createCalendar = (username) => {
                     },
                     title: "Lomo",
                     timeZone,
+                    entityType: Calendar.EntityTypes.REMINDER
                 })
             }
             return Promise.all([timeZone, calendarId])
