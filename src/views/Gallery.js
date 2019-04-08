@@ -16,14 +16,31 @@
 //   </ScrollView>
 // );
 
+// https://github.com/firebase/quickstart-js/blob/master/firestore/scripts/FriendlyEats.Data.js
+
 import React, { Component } from "react";
 import { Image } from "react-native";
 import { Container, Header, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right } from 'native-base';
 import firebaseConnect from '../../firebaseConfig'
 
+// STORAGE
 const storage = firebaseConnect.storage();
 const storageRef = storage.ref();
-const imagesRef = storageRef.child('images/1554725383867');
+const singleImageRef = storageRef.child('images/1554725383867');
+
+// DATABASE
+const db = firebaseConnect.firestore()
+
+db.collection("events").get().then((querySnapshot) => {
+  querySnapshot.forEach((doc) => {
+    const docData = doc.data()
+    console.log(docData.eventName);
+    // console.log(`${doc.id} => ${(doc.data())}`);
+  });
+});
+
+// const imagesArrayRef = storageRef.child('images');
+// console.log(imagesArrayRef, '<< imagesArrayRef')
 
 export default class Gallery extends Component {
 
@@ -33,7 +50,7 @@ export default class Gallery extends Component {
   }
 
   getImageURL = () => {
-    imagesRef.getDownloadURL()
+    singleImageRef.getDownloadURL()
       .then(url => { // `url` is the download URL for 'images/stars.jpg'
         this.setState({ imageURL: url })
       }).catch(function (error) {
@@ -43,11 +60,11 @@ export default class Gallery extends Component {
 
   // storage meta-data
   getImageTimeCreated = () => {
-    imagesRef.getMetadata()
+    singleImageRef.getMetadata()
       .then(metadata => {
-        console.log(metadata, '<< metadata')
+        // console.log(metadata, '<< metadata')
         this.setState({ imageTimeCreated: new Date(metadata.timeCreated) })
-        console.log(this.state, "<< state")
+        // console.log(this.state, "<< state")
       }).catch(function (error) {
         // Handle any errors
       });
