@@ -2,10 +2,10 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, StyleSheet, Header, TouchableOpacity, Image } from 'react-native';
 import EventCard from '../components/EventCard';
-import { createStackNavigator, createAppContainer } from "react-navigation";
-import Photos from './Photos';
 import '@firebase/firestore';
 import firebaseConnect from '../../firebaseConfig';
+
+const db = firebaseConnect.firestore()
 
 export default class EventsList extends Component {
 
@@ -28,15 +28,19 @@ export default class EventsList extends Component {
         user: {}
     }
 
-    // getEvents = async (uid) => {
-    //     const events = await firebaseConnect
-    //         .firestore()
-    //         .collection('events')
-    // }
+    getEvents = (userEmail) => {
+        return db.collection('events').where('attendees', 'array-contains', 'x7iWUr13Whf0otlthZ53HxpWS4F2')
+            .get()
+            .then(events => {
+                events.forEach(event => console.log(Object.keys(event.data(), 'EVENT ID')))
+            })
+            .catch(console.log)
+    }
 
     componentDidMount() {
         const user = this.props.navigation.getParam('user')
-        this.setState({ user })
+        this.getEvents(user.email)
+            .then(events => this.setState({ events }))
     }
 
     render() {
@@ -44,9 +48,9 @@ export default class EventsList extends Component {
             <View style={{ flex: 1 }}>
                 <Text style={{ fontSize: 30, textAlign: 'center', color: 'black' }} >Events</Text>
                 <ScrollView>
-                    {this.state.events.map((event) => {
+                    {/* {this.state.events.map((event) => {
                         return <EventCard handleClick={this.handleClick} key={event.key} name={event.name} />
-                    })}
+                    })} */}
                 </ScrollView>
                 <TouchableOpacity onPress={() => { this.props.navigation.navigate('NewEvent') }} style={styles.TouchableOpacityStyle}>
                     <Image source={{
