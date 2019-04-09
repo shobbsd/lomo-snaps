@@ -5,46 +5,51 @@ import Camera from "./src/views/Camera";
 import SignUp from "./src/views/SignUp";
 import NewEvent from "./src/views/NewEvent";
 import Gallery from "./src/views/Gallery";
-import EventCalendar from './src/components/EventCalendar';
+import EventCalendar from "./src/components/EventCalendar";
+import Menu from "./src/views/Menu";
 
 class Home extends Component {
   render() {
     return (
-      <View>
-        <Text>This is the home screen</Text>
-        <Button
-          title="open camera"
-          onPress={() => {
-            this.props.navigation.navigate("Camera");
-          }}
-        />
-        <Button
-          title="open SignUp"
-          onPress={() => {
-            this.props.navigation.navigate("SignUp");
-          }}
-        />
-        <Button
-          title="open new event"
-          onPress={() => {
-            this.props.navigation.navigate("NewEvent");
-          }}
-        />
-        <Button
-          title="open Gallery"
-          onPress={() => {
-            this.props.navigation.navigate("Gallery");
-          }}
-        />
-        <EventCalendar />
-      </View>
+      // <View>
+      //   <Text>This is the home screen</Text>
+      //   <Button
+      //     title="open camera"
+      //     onPress={() => {
+      //       this.props.navigation.navigate("Camera");
+      //     }}
+      //   />
+      //   <Button
+      //     title="open SignUp"
+      //     onPress={() => {
+      //       this.props.navigation.navigate("SignUp");
+      //     }}
+      //   />
+      //   <Button
+      //     title="open new event"
+      //     onPress={() => {
+      //       this.props.navigation.navigate("NewEvent");
+      //     }}
+      //   />
+      //   <Button
+      //     title="open Gallery"
+      //     onPress={() => {
+      //       this.props.navigation.navigate("Gallery");
+      //     }}
+      //   />
+      //   <EventCalendar />
+      // </View>
+      <Menu />
     );
   }
 }
 
 const AppNavigator = createStackNavigator({
   Home: {
-    screen: Home
+    screen: Home,
+    navigationOptions: {
+      header: null
+    }
   },
   Camera: {
     screen: Camera
