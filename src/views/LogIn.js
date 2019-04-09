@@ -7,13 +7,25 @@ import firebaseConnect from "../../firebaseConfig";
 export default class LogIn extends Component {
   state = {
     email: "",
-    password: ""
+    password: "",
+    user: {},
   };
+
+  getUser = async uid => {
+    const userRes = await firebaseConnect
+      .firestore()
+      .collection("users")
+      .doc(uid)
+      .get();
+    const user = userRes.data();
+    this.setState({ user });
+  };
+
 
   render() {
     const { email, password } = this.state;
     return (
-      <View>
+      <View style={styles.container}>
         <Text>Email Address</Text>
         <FormTextInput
           placeholder="Enter your email address here"
@@ -31,6 +43,7 @@ export default class LogIn extends Component {
         />
         <CustomButton label="Submit" onPress={this.onSubmit} />
         <CustomButton label="Facebook Sign up" onPress={this.onSubmit} />
+        <CustomButton label="Email Sign up" onPress={() => { this.props.navigation.navigate('SignUp', { getUser: this.getUser }) }} />
       </View>
     );
   }
@@ -46,11 +59,22 @@ export default class LogIn extends Component {
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then(({ user }) => {
-        this.props.navigation.state.params.getUser(user.uid);
-        this.props.navigation.navigate("Home", { uid: user.uid });
+        this.getUser(user.uid);
+        this.props.navigation.navigate("EventsList", { uid: user.uid });
       })
       .catch(console.log);
   };
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 10,
+  },
+  button: {
+    borderRadius: 5,
+    backgroundColor: 'teal'
+  }
+});
