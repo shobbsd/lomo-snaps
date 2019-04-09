@@ -29,10 +29,9 @@ export default class EventsList extends Component {
     }
 
     // getEvents = async (uid) => {
-    //     const userRes = await firebaseConnect
+    //     const events = await firebaseConnect
     //         .firestore()
     //         .collection('events')
-    //     console.log(userRes)
     // }
 
     componentDidMount() {
@@ -59,7 +58,7 @@ export default class EventsList extends Component {
     }
 
     handleClick = () => {
-        this.props.navigation.navigate('SignUp')
+        this.props.navigation.navigate('Menu')
     }
 }
 
