@@ -9,7 +9,6 @@ export async function signInWithFacebook() {
     appId,
     { permissions }
   );
-
   switch (type) {
     case "success": {
       await firebase
@@ -19,11 +18,9 @@ export async function signInWithFacebook() {
       const facebookProfileData = await firebase
         .auth()
         .signInAndRetrieveDataWithCredential(credential); // Sign in with Facebook credential
-
       // Do something with Facebook profile data
       // OR you have subscribed to auth state change, authStateChange handler will process the profile data
-
-      return Promise.resolve({ type: "success" });
+      return Promise.resolve({ type: "success", facebookProfileData });
     }
     case "cancel": {
       return Promise.reject({ type: "cancel" });

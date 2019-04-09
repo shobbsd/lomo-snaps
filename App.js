@@ -1,8 +1,7 @@
-import React, { Component } from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import React from "react";
 import { createStackNavigator, createAppContainer } from "react-navigation";
-import Camera from "./src/views/Camera";
 import SignUp from "./src/views/SignUp";
+<<<<<<< HEAD
 import NewEvent from "./src/views/NewEvent";
 import Gallery from "./src/views/Gallery";
 import EventCalendar from "./src/components/EventCalendar";
@@ -64,10 +63,49 @@ const AppNavigator = createStackNavigator({
     screen: Gallery
   }
 });
+=======
+import LogIn from "./src/views/LogIn";
+import EventsList from './src/views/EventsList';
+import '@firebase/firestore';
+import NewEvent from './src/views/NewEvent';
+
+
+const AppNavigator = createStackNavigator(
+  {
+    SignUp: {
+      screen: SignUp,
+      navigationOptions: {
+        header: null
+      }
+    },
+    LogIn: {
+      screen: LogIn,
+      navigationOptions: {
+        header: null
+      }
+    },
+    EventsList: {
+      screen: EventsList,
+      navigationOptions: {
+        header: null
+      }
+    },
+    NewEvent: {
+      screen: NewEvent,
+      navigationOptions: {
+        header: null
+      }
+    }
+    // Event: {
+    //   screen: null,
+    // }
+  }, { initialRouteName: 'LogIn' });
+>>>>>>> 31a383378485d5f793872e6e7f400f8632b62330
 
 const AppContainer = createAppContainer(AppNavigator);
 
 export default class App extends React.Component {
+
   render() {
     return <AppContainer />;
   }
