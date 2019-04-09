@@ -3,13 +3,18 @@ import { View, Text, StyleSheet } from "react-native";
 import FormTextInput from "../components/FormTextInput";
 import CustomButton from "../components/CustomButton";
 import firebaseConnect from "../../firebaseConfig";
-import "firebase/firestore";
+import "@firebase/firestore";
 import verifySignUp from "../utils/verifySignUp";
 import { signInWithFacebook } from "../utils/facebookSignUp";
 
 const styles = StyleSheet.create({
   red: {
     color: "red"
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
 export default class SignUp extends Component {
@@ -35,7 +40,7 @@ export default class SignUp extends Component {
       toFill
     } = this.state;
     return (
-      <View>
+      <View style={styles.container}>
         <Text>Full Name:</Text>
         <FormTextInput
           placeholder="Enter your name here"
@@ -170,10 +175,9 @@ export default class SignUp extends Component {
           });
           return uid;
         })
-
         .then(uid => {
           this.props.navigation.state.params.getUser(uid);
-          this.props.navigation.navigate("Home", { uid });
+          this.props.navigation.navigate("EventsList", { uid });
         })
         .catch(e => console.log(e));
     } else {
