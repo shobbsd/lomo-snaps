@@ -17,10 +17,7 @@
     "react-devtools": "^3.6.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-easy-grid": "^0.2.0",
-<<<<<<< HEAD
     "react-native-image-grid": "^1.0.0",
-=======
->>>>>>> 31a383378485d5f793872e6e7f400f8632b62330
     "react-navigation": "^3.6.1"
   },
   "devDependencies": {
