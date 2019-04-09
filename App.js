@@ -4,6 +4,7 @@ import SignUp from "./src/views/SignUp";
 import LogIn from "./src/views/LogIn";
 import EventsList from './src/views/EventsList';
 import '@firebase/firestore';
+import NewEvent from './src/views/NewEvent';
 
 
 const AppNavigator = createStackNavigator(
@@ -26,6 +27,15 @@ const AppNavigator = createStackNavigator(
         header: null
       }
     },
+    NewEvent: {
+      screen: NewEvent,
+      navigationOptions: {
+        header: null
+      }
+    }
+    // Event: {
+    //   screen: null,
+    // }
   }, { initialRouteName: 'LogIn' });
 
 const AppContainer = createAppContainer(AppNavigator);
