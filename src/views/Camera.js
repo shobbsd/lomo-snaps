@@ -18,7 +18,18 @@ export default class CameraPage extends React.Component {
     capturing: null,
     hasCameraPermission: null,
     cameraType: Camera.Constants.Type.back,
-    flashMode: Camera.Constants.FlashMode.off
+    flashMode: Camera.Constants.FlashMode.off,
+    user: {}
+  };
+
+  getUser = () => {
+    const db = firebaseConnect.firestore();
+    const dbRef = db.collection("users").doc("bUmnUiS6N91y4BfC2Q49");
+
+    dbRef.get().then(doc => {
+      this.setState({ user: doc.data() });
+      console.log(this.state.user, "this");
+    });
   };
 
   setFlashMode = flashMode => this.setState({ flashMode });
@@ -93,6 +104,7 @@ export default class CameraPage extends React.Component {
     const hasCameraPermission = camera.status === "granted";
     //    && audio.status === "granted";
 
+    this.getUser();
     this.setState({ hasCameraPermission });
   }
 
