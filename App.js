@@ -3,6 +3,8 @@ import { createStackNavigator, createAppContainer } from "react-navigation";
 import SignUp from "./src/views/SignUp";
 import LogIn from "./src/views/LogIn";
 import EventsList from './src/views/EventsList';
+import '@firebase/firestore';
+
 
 const AppNavigator = createStackNavigator(
   {

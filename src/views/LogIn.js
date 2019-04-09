@@ -19,6 +19,7 @@ export default class LogIn extends Component {
       .get();
     const user = userRes.data();
     this.setState({ user });
+    return user;
   };
 
 
@@ -59,8 +60,11 @@ export default class LogIn extends Component {
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then(({ user }) => {
-        this.getUser(user.uid);
-        this.props.navigation.navigate("EventsList", { uid: user.uid });
+        return this.getUser(user.uid);
+      })
+      .then((user) => {
+        this.props.navigation.navigate("EventsList", { user: this.state.user });
+
       })
       .catch(console.log);
   };

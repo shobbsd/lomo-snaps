@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import FormTextInput from "../components/FormTextInput";
 import CustomButton from "../components/CustomButton";
 import firebaseConnect from "../../firebaseConfig";
-import "firebase/firestore";
+import "@firebase/firestore";
 import verifySignUp from "../utils/verifySignUp";
 import { signInWithFacebook } from "../utils/facebookSignUp";
 
