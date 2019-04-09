@@ -24,6 +24,7 @@ export default class NewEvent extends Component {
     console.log(this.state); // logs to expo start console
     if (eventName.length >= 5) {
       this.addEvent();
+      this.props.navigation.navigate('EventsList');
     } else {
       this.setState({ isEventNameError: true });
     }
@@ -37,7 +38,7 @@ export default class NewEvent extends Component {
 
   handleAndroidDevelopDate = () => {
     loadAndroidDatePicker()
-      .then(androidDevelopDate => this.setState({ eventEndDate: androidDevelopDate }))
+      .then(androidDevelopDate => this.setState({ eventDevelopDate: androidDevelopDate }))
       .catch(console.log("something went wrong with returned Develop Date"))
   }
 

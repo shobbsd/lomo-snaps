@@ -148,7 +148,7 @@ export default class SignUp extends Component {
 
   onSubmit = event => {
     let uid;
-    const verified = true || verifySignUp(this.state);
+    const verified = verifySignUp(this.state);
     if (verified === true) {
       const db = firebaseConnect.firestore();
       const { name, email, phone, password } = this.state;
