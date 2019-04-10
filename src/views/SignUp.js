@@ -14,8 +14,8 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: "center",
+    alignItems: "center"
   }
 });
 export default class SignUp extends Component {
@@ -170,16 +170,8 @@ export default class SignUp extends Component {
           return user.uid;
         })
         .then(uid => {
-          firebaseConnect.auth().currentUser.updateProfile({
-            displayName: name,
-            email,
-            phoneNumber: phone
-          });
-          return uid;
-        })
-        .then(uid => {
           this.props.navigation.state.params.getUser(uid);
-          this.props.navigation.navigate("EventsList", { uid });
+          this.props.navigation.navigate("EventsList", { uid: uid, events: [] });
         })
         .catch(e => console.log(e));
     } else {
