@@ -20,10 +20,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Camera from "./Camera";
 import UserList from "./UserList";
 import PhotoGallery from "./PhotoGallery";
-import Loading from "../components/Loading";
-// import TabOne from "./tabOne";
-// import TabTwo from "./tabTwo";
-// import TabThree from "./tabThree";
+import Loading from '../components/Loading'
 
 class Menu extends Component {
   state = {
@@ -41,12 +38,27 @@ class Menu extends Component {
     this.setState({ isReady: true, event });
   }
   render() {
+
+    const imagesArray = this.state.event.images
+    const { eventName } = this.state.event
+    // const eventDevelopDate = this.state.event.eventDevelopDate
+    // const devDate = new (Date).toLocaleDateString('en-GB')
+
     if (!this.state.isReady) {
       return <Loading />;
     }
     return (
       <Container>
-        <Header />
+
+        <Header hasTabs>
+          <Left />
+          <Body>
+            <Title>{eventName}</Title>
+            {/* <Subtitle>Released on : {devDate}</Subtitle> */}
+          </Body>
+          <Right />
+        </Header>
+
         <Tabs renderTabBar={() => <ScrollableTab />}>
           <Tab
             heading={
@@ -62,7 +74,7 @@ class Menu extends Component {
             heading={
               <TabHeading>
                 <Icon name="person" />
-                {/* <Text>Users</Text> */}
+                <Text>People</Text>
               </TabHeading>
             }
           >
@@ -71,16 +83,13 @@ class Menu extends Component {
           <Tab
             heading={
               <TabHeading>
-                <Icon name="apps" />
+                <Icon name="md-photos" />
+                <Text>Album</Text>
               </TabHeading>
             }
           >
-            <PhotoGallery />
-            {/* <Text>3</Text> */}
+            <PhotoGallery imagesArray={imagesArray} />
           </Tab>
-          {/* <Tab heading="Tab5">
-            <Text>3</Text>
-          </Tab> */}
         </Tabs>
       </Container>
     );
@@ -88,5 +97,3 @@ class Menu extends Component {
 }
 
 export default Menu;
-
-// Later on in your component
