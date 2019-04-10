@@ -1,11 +1,18 @@
 import React, { Component } from "react";
-import { Platform, Text, TextInput, Button, DatePickerIOS, DatePickerAndroid } from "react-native";
+import {
+  Platform,
+  Text,
+  TextInput,
+  Button,
+  DatePickerIOS,
+  DatePickerAndroid
+} from "react-native";
 import firebaseConnect from "../../firebaseConfig";
 import "@firebase/firestore";
-import { Permissions } from 'expo';
+import { Permissions } from "expo";
 
 const db = firebaseConnect.firestore();
-const pf = Platform.OS
+const pf = Platform.OS;
 
 export default class NewEvent extends Component {
   constructor() {
@@ -15,16 +22,17 @@ export default class NewEvent extends Component {
       eventEndDate: new Date(),
       eventDevelopDate: new Date(),
       isEventNameError: null, // local state only.
-      hasCalendarPermission: false
+      hasCalendarPermission: false,
+      user: {}
     };
   }
 
   handleEventSubmit = () => {
     const { eventName } = this.state;
-    console.log(this.state); // logs to expo start console
+    // console.log(this.state); // logs to expo start console
     if (eventName.length >= 5) {
       this.addEvent();
-      this.props.navigation.navigate('EventsList');
+      this.props.navigation.navigate("EventsList");
     } else {
       this.setState({ isEventNameError: true });
     }
@@ -32,40 +40,53 @@ export default class NewEvent extends Component {
 
   handleAndroidEventDate = () => {
     loadAndroidDatePicker()
-      .then(androidEventDate => this.setState({ eventEndDate: androidEventDate }))
-      .catch(console.log("something went wrong with returned Event Date"))
-  }
+      .then(androidEventDate =>
+        this.setState({ eventEndDate: androidEventDate })
+      )
+      .catch(console.log("something went wrong with returned Event Date"));
+  };
 
   handleAndroidDevelopDate = () => {
     loadAndroidDatePicker()
-      .then(androidDevelopDate => this.setState({ eventDevelopDate: androidDevelopDate }))
-      .catch(console.log("something went wrong with returned Develop Date"))
-  }
+      .then(androidDevelopDate =>
+        this.setState({ eventDevelopDate: androidDevelopDate })
+      )
+      .catch(console.log("something went wrong with returned Develop Date"));
+  };
 
   addEvent = () => {
     // https://firebase.google.com/docs/firestore/quickstart
     // NB firestore generates unique ID eg. 8pWgaC79rQ8KbhtjTrnN
-    const { eventName, eventEndDate, eventDevelopDate } = this.state;
+    const { user, eventName, eventEndDate, eventDevelopDate } = this.state;
+    const attendees = [user.uid]; // add first attendee who is the organiser
+    const docname = user.uid + eventName;
+    console.log(docname);
     db.collection("events")
-      .add({ eventName, eventEndDate, eventDevelopDate })
-      .then(function (docRef) {
-        console.log("Document written with ID: ", docRef.id);
+      .doc(docname)
+      .set({
+        eventName,
+        eventEndDate,
+        eventDevelopDate,
+        organiser: user.uid,
+        attendees
       })
-      .catch(function (error) {
+      .catch(function(error) {
         console.error("Error adding document: ", error);
       });
   };
 
   async componentDidMount() {
+    const { user } = this.props.navigation.state.params;
     const calendar = await Permissions.askAsync(Permissions.CALENDAR);
     const hasCalendarPermission = calendar.status === "granted";
 
-    this.setState({ hasCalendarPermission });
+    this.setState({ user, hasCalendarPermission });
   }
 
   render() {
     const { isEventNameError } = this.state;
-    if (this.state.hasCalendarPermission === false) return <Text>Calendar permissions not given</Text>
+    if (this.state.hasCalendarPermission === false)
+      return <Text>Calendar permissions not given</Text>;
     else {
       return (
         <>
@@ -92,44 +113,51 @@ export default class NewEvent extends Component {
 
           <Text style={{ textAlign: "center" }}>Event End Date:</Text>
 
-          {pf === 'ios' && <DatePickerIOS
-            minimumDate={new Date()}
-            date={this.state.eventEndDate}
-            onDateChange={eventEndDate => this.setState({ eventEndDate })}
-          />
-          }
+          {pf === "ios" && (
+            <DatePickerIOS
+              minimumDate={new Date()}
+              date={this.state.eventEndDate}
+              onDateChange={eventEndDate => this.setState({ eventEndDate })}
+            />
+          )}
 
-          {pf === 'android' && <Button
-            style={{
-              color: "red",
-              padding: 40,
-              borderWidth: 1,
-              margin: 40
-            }}
-            title="Event End Date.."
-            onPress={this.handleAndroidEventDate}
-          />
-          }
+          {pf === "android" && (
+            <Button
+              style={{
+                color: "red",
+                padding: 40,
+                borderWidth: 1,
+                margin: 40
+              }}
+              title="Event End Date.."
+              onPress={this.handleAndroidEventDate}
+            />
+          )}
 
           <Text style={{ textAlign: "center" }}>Develop Photos Date:</Text>
 
-          {pf === 'ios' && <DatePickerIOS
-            minimumDate={this.state.eventEndDate}
-            date={this.state.eventDevelopDate}
-            onChangeText={eventDevelopDate => this.setState({ eventDevelopDate })}
-          />}
+          {pf === "ios" && (
+            <DatePickerIOS
+              minimumDate={this.state.eventEndDate}
+              date={this.state.eventDevelopDate}
+              onChangeText={eventDevelopDate =>
+                this.setState({ eventDevelopDate })
+              }
+            />
+          )}
 
-          {pf === 'android' && <Button
-            style={{
-              color: "red",
-              padding: 40,
-              borderWidth: 1,
-              margin: 40
-            }}
-            title="Develop Photos Date.."
-            onPress={this.handleAndroidDevelopDate}
-          />
-          }
+          {pf === "android" && (
+            <Button
+              style={{
+                color: "red",
+                padding: 40,
+                borderWidth: 1,
+                margin: 40
+              }}
+              title="Develop Photos Date.."
+              onPress={this.handleAndroidDevelopDate}
+            />
+          )}
 
           <Button
             style={{
@@ -144,19 +172,20 @@ export default class NewEvent extends Component {
         </>
       );
     }
-
   }
 }
 
 async function loadAndroidDatePicker() {
   try {
-    const { action, year, month, day } = await DatePickerAndroid.open({ date: new Date() });
+    const { action, year, month, day } = await DatePickerAndroid.open({
+      date: new Date()
+    });
     if (action !== DatePickerAndroid.dismissedAction) {
-      const androidDate = new Date(year, month, day)
+      const androidDate = new Date(year, month, day);
       return androidDate;
     }
   } catch ({ code, message }) {
-    console.warn('Cannot open date picker' + message);
+    console.warn("Cannot open date picker" + message);
   }
 }
 

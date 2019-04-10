@@ -20,7 +20,7 @@ export default class LogIn extends Component {
       .doc(uid)
       .get();
     const user = userRes.data();
-    this.setState({ user: { false: true, ...user } });
+    this.setState({ user });
     return user;
   };
 
@@ -32,7 +32,6 @@ export default class LogIn extends Component {
       .onSnapshot(QuerySnapshot => {
         const eventArr = [];
         QuerySnapshot.forEach((doc, i) => {
-          if ((i = 0)) console.log(doc.data());
           eventArr.push(doc.data());
         });
         this.setState({ events: eventArr });
@@ -40,10 +39,6 @@ export default class LogIn extends Component {
       .catch(function(error) {
         console.log("Error getting documents: ", error);
       });
-    // const arr = firebaseArr.map(event => {
-    //   return event.doc();
-    // });
-    // console.log(eventsArr);
   };
 
   render() {

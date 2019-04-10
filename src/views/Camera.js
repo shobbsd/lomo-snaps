@@ -28,7 +28,7 @@ export default class CameraPage extends React.Component {
 
     dbRef.get().then(doc => {
       this.setState({ user: doc.data() });
-      console.log(this.state.user, "this");
+      // console.log(this.state.user, "this");
     });
   };
 
@@ -46,12 +46,8 @@ export default class CameraPage extends React.Component {
       capturing: false,
       captures: [uri, ...this.state.captures]
     });
-    this.uploadImage(uri)
-      .then(res => {
-        console.log(res, "success");
-      })
-      .catch(console.log);
-    console.log(this.state.captures, "this");
+    this.uploadImage(uri);
+    // console.log(this.state.captures, "this");
   };
 
   _urlToBlob = url => {
@@ -74,20 +70,42 @@ export default class CameraPage extends React.Component {
     // const response = await FileSystem.getInfoAsync(uri);
     // console.log(response, "res");
 
-    this._urlToBlob(uri)
-      .then(blob => {
-        const imageName = Date.now();
-        const ref = firebaseConnect
-          .storage()
-          .ref()
-          .child("images/" + imageName);
+    this._urlToBlob(uri).then(blob => {
+      const imageName = Date.now();
+      const ref = firebaseConnect
+        .storage()
+        .ref()
+        .child("images/" + imageName);
 
-        return ref.put(blob);
-      })
-      .then(res => {
-        console.log(res);
-      })
-      .catch(console.log);
+      const task = ref.put(blob);
+      task.on(
+        "state_changed",
+        function(snapshot) {
+          // Observe state change events such as progress, pause, and resume
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          // var progress =
+          //   (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          // console.log("Upload is " + progress + "% done");
+          // switch (snapshot.state) {
+          //   case firebaseConnect.storage.TaskState.PAUSED: // or 'paused'
+          //     console.log("Upload is paused");
+          //     break;
+          //   case firebaseConnect.storage.TaskState.RUNNING: // or 'running'
+          //     console.log("Upload is running");
+          //     break;
+        },
+        function(error) {
+          // Handle unsuccessful uploads
+        },
+        function() {
+          // Handle successful uploads on complete
+          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+          task.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+            const db = firebaseConnect.firestore();
+          });
+        }
+      );
+    });
   };
 
   //   handleLongCapture = async () => {
