@@ -35,8 +35,11 @@ const AppNavigator = createStackNavigator(
       }
     },
     Menu: {
-      screen: Menu
-    }
+      screen: Menu,
+      navigationOptions: {
+        header: null
+      }
+    },
   }, { initialRouteName: 'LogIn' });
 
 const AppContainer = createAppContainer(AppNavigator);

@@ -6,6 +6,7 @@ import firebaseConnect from "../../firebaseConfig";
 import "@firebase/firestore";
 import verifySignUp from "../utils/verifySignUp";
 import { signInWithFacebook } from "../utils/facebookSignUp";
+import createCalendar from '../utils/createCalendar';
 
 const styles = StyleSheet.create({
   red: {

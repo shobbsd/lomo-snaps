@@ -20,6 +20,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Camera from "./Camera";
 import UserList from "./UserList";
 import PhotoGallery from "./PhotoGallery";
+import Loading from '../components/Loading';
 // import TabOne from "./tabOne";
 // import TabTwo from "./tabTwo";
 // import TabThree from "./tabThree";
@@ -41,17 +42,17 @@ class Menu extends Component {
   }
   render() {
     if (!this.state.isReady) {
-      return <Text>loading</Text>;
+      return <Loading />;
     }
     return (
       <Container>
-        <Header hasTabs />
+        <Header hasTabs>{this.state.event.eventName}</Header>
         <Tabs renderTabBar={() => <ScrollableTab />}>
           <Tab
             heading={
               <TabHeading>
                 <Icon name="camera" />
-                <Text>Camera</Text>
+                {/* <Text>Camera</Text> */}
               </TabHeading>
             }
           >
