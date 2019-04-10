@@ -17,23 +17,40 @@ export default class PhotoGallery extends React.Component {
   state = {
     imageuri: "",
     ModalVisibleStatus: false,
-    items: []
+    items: [{ id: 0, src: 'http://placehold.it/200x200?text=due%20soon' }]
+
+    // http://placehold.it/200x200?text=due%20soon...
   };
 
+  // componentDidMount() {
+  //   let items = Array.apply(null, Array(20)).map((v, i) => {
+  //     //Using demo placeholder images but you can add your images here
+  //     return { id: i, src: "http://placehold.it/200x200?text=" + (i + 1) };
+  //   });
+
+  //   const storageRef = firebaseConnect.storage();
+  //   storageRef
+  //     .refFromURL("gs://lomo-snaps.appspot.com/images/1554477181787")
+  //     .getDownloadURL()
+  //     .then(url => {
+  //       items = [{ id: 61, src: url }, ...items];
+  //       this.setState({ items });
+  //     });
+  // }
+
   componentDidMount() {
-    let items = Array.apply(null, Array(20)).map((v, i) => {
-      //Using demo placeholder images but you can add your images here
-      return { id: i, src: "http://placehold.it/200x200?text=" + (i + 1) };
-    });
-    const storageRef = firebaseConnect.storage();
-    storageRef
-      .refFromURL("gs://lomo-snaps.appspot.com/images/1554477181787")
-      .getDownloadURL()
-      .then(url => {
-        items = [{ id: 61, src: url }, ...items];
-        this.setState({ items });
-      });
+
+    const imagesArray = this.props.imagesArray
+
+    if (imagesArray.length !== 0) {
+      const updateGallery = imagesArray.map((imgSRC, i) => {
+        return { id: i, src: imgSRC } // make objects
+      })
+
+      this.setState({ items: updateGallery })
+    } // end if
   }
+
   //   renderHeader() {
   //     //Header of the Screen
   //     return (
@@ -49,6 +66,7 @@ export default class PhotoGallery extends React.Component {
   //       </Text>
   //     );
   //   }
+
   ShowModalFunction(visible, imageURL) {
     //handler to handle the click on image of Grid
     //and close button on modal

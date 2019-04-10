@@ -91,7 +91,7 @@ export default class CameraPage extends React.Component {
           // Handle successful uploads on complete
           // For instance, get the download URL: https://firebasestorage.googleapis.com/...
 
-          task.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+          task.snapshot.ref.getDownloadURL().then(function (downloadURL) {
             // console.log(this.props);
             // console.log(this.state);
             const { organiser, eventName, images = [] } = currentEvent;
