@@ -5,8 +5,12 @@ import { Camera, Permissions, FileSystem } from "expo";
 import styles from "../styles/cameraStyle";
 import Toolbar from "./toolbar.component";
 import firebaseConnect from "../../firebaseConfig";
+<<<<<<< HEAD
+import * as firebase from "firebase";
+=======
 import firebase from 'firebase';
 import { database } from "firebase";
+>>>>>>> b6dd26dfc88a67a43c49e75059880e9c6b049fd2
 
 // import * as firebase from "firebase";
 // import Gallery from "./Gallery";
@@ -99,11 +103,10 @@ export default class CameraPage extends React.Component {
             const docName = organiser.concat(eventName);
 
             const db = firebaseConnect.firestore();
-            eventsRef = db
-              .collection("events")
+            db.collection("events")
               .doc(docName)
               .update({
-                images: [downloadURL, ...images]
+                images: firebase.firestore.FieldValue.arrayUnion(downloadURL)
               });
           });
         }
