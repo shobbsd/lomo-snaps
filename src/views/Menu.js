@@ -26,17 +26,21 @@ import PhotoGallery from "./PhotoGallery";
 
 class Menu extends Component {
   state = {
-    isReady: false
+    isReady: false,
+    event: {}
   };
 
   async componentDidMount() {
-    console.log(this.props.navigation.state.param)
+    console.log(this.props.navigation.state.params)
     await Font.loadAsync({
       Roboto: require("native-base/Fonts/Roboto.ttf"),
       Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
       ...Ionicons.font
     });
-    this.setState({ isReady: true });
+    this.setState({
+      isReady: true,
+      event: this.props.navigation.state.params
+    });
   }
   render() {
     if (!this.state.isReady) {
@@ -44,17 +48,17 @@ class Menu extends Component {
     }
     return (
       <Container>
-        <Header hasTabs />
+        <Header hasTabs>{this.state.event.name}</Header>
         <Tabs renderTabBar={() => <ScrollableTab />}>
           <Tab
             heading={
               <TabHeading>
                 <Icon name="camera" />
-                <Text>Camera</Text>
+                {/* <Text>Camera</Text> */}
               </TabHeading>
             }
           >
-            <Camera />
+            <Camera event={this.state.event} />
           </Tab>
           <Tab
             heading={
