@@ -163,7 +163,8 @@ export default class SignUp extends Component {
             .set({
               email,
               name,
-              phone
+              phone,
+              uid: user.uid
             });
           return user.uid;
         })

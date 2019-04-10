@@ -29,7 +29,7 @@ export default class EventsList extends Component {
                         return <EventCard handleClick={() => { this.handleClick(event) }} key={event.name} name={event.name} />
                     })}
                 </ScrollView>
-                <TouchableOpacity onPress={() => { this.props.navigation.navigate('NewEvent') }} style={styles.TouchableOpacityStyle}>
+                <TouchableOpacity onPress={() => { this.props.navigation.navigate('NewEvent', { user: this.state.user }) }} style={styles.TouchableOpacityStyle}>
                     <Image source={{
                         uri: 'https://img.icons8.com/cotton/2x/plus--v1.png',
                     }} style={styles.FloatingButtonStyle} />
