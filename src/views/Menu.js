@@ -20,6 +20,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Camera from "./Camera";
 import UserList from "./UserList";
 import PhotoGallery from "./PhotoGallery";
+import Loading from '../components/Loading'
 
 class Menu extends Component {
   state = {
@@ -39,13 +40,23 @@ class Menu extends Component {
   render() {
 
     const imagesArray = this.state.event.images
+    const { eventName } = this.state.event
+    // const eventDevelopDate = this.state.event.eventDevelopDate
+    // const devDate = new (Date).toLocaleDateString('en-GB')
 
     if (!this.state.isReady) {
       return <Loading />;
     }
     return (
       <Container>
-        <Header hasTabs>{this.state.event.eventName}</Header>
+        <Header hasTabs>
+          <Left />
+          <Body>
+            <Title>{eventName}</Title>
+            {/* <Subtitle>Released on : {devDate}</Subtitle> */}
+          </Body>
+          <Right />
+        </Header>
         <Tabs renderTabBar={() => <ScrollableTab />}>
           <Tab
             heading={
