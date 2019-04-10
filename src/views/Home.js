@@ -13,7 +13,7 @@ export default class Home extends Component {
       .collection("users")
       .doc(uid)
       .get();
-    const user = userRes.data();
+    const user = userRes.data();  
     this.setState({ user });
   };
 
