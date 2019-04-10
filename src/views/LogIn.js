@@ -26,6 +26,10 @@ export default class LogIn extends Component {
     return user;
   };
 
+  stopLoading = () => {
+    this.setState({ isLoading: false })
+  }
+
   getEvents = async uid => {
     const firebaseArr = await firebaseConnect
       .firestore()
@@ -95,7 +99,8 @@ export default class LogIn extends Component {
       .then(user => {
         this.props.navigation.navigate("EventsList", {
           user: this.state.user,
-          events: this.state.events
+          events: this.state.events,
+          stopLoading: this.stopLoading
         });
       })
       .catch(err => {

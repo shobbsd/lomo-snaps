@@ -20,6 +20,10 @@ export default class EventsList extends Component {
         this.setState({ user, events })
     }
 
+    componentWillUnmount() {
+        this.props.navigation.state.params.stopLoading();
+    }
+
     render() {
         return (
             <View style={{ flex: 1 }}>
