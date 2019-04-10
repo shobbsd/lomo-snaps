@@ -19,17 +19,7 @@ export default class CameraPage extends React.Component {
     hasCameraPermission: null,
     cameraType: Camera.Constants.Type.back,
     flashMode: Camera.Constants.FlashMode.off,
-    user: {}
-  };
-
-  getUser = () => {
-    const db = firebaseConnect.firestore();
-    const dbRef = db.collection("users").doc("bUmnUiS6N91y4BfC2Q49");
-
-    dbRef.get().then(doc => {
-      this.setState({ user: doc.data() });
-      // console.log(this.state.user, "this");
-    });
+    event: {}
   };
 
   setFlashMode = flashMode => this.setState({ flashMode });
@@ -46,11 +36,7 @@ export default class CameraPage extends React.Component {
       capturing: false,
       captures: [uri, ...this.state.captures]
     });
-    this.uploadImage(uri)
-      .then(res => {
-        // console.log(res, "success");
-      })
-      .catch(console.log);
+    this.uploadImage(uri);
     // console.log(this.state.captures, "this");
   };
 
@@ -73,21 +59,53 @@ export default class CameraPage extends React.Component {
     // console.log(uri, "uri");
     // const response = await FileSystem.getInfoAsync(uri);
     // console.log(response, "res");
+    const currentEvent = this.state.event;
+    this._urlToBlob(uri).then(blob => {
+      const imageName = Date.now();
+      const ref = firebaseConnect
+        .storage()
+        .ref()
+        .child("images/" + imageName);
 
-    this._urlToBlob(uri)
-      .then(blob => {
-        const imageName = Date.now();
-        const ref = firebaseConnect
-          .storage()
-          .ref()
-          .child("images/" + imageName);
-
-        return ref.put(blob);
-      })
-      .then(res => {
-        console.log(res);
-      })
-      .catch(console.log);
+      const task = ref.put(blob);
+      task.on(
+        "state_changed",
+        function(snapshot) {
+          // Observe state change events such as progress, pause, and resume
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          // var progress =
+          //   (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          // console.log("Upload is " + progress + "% done");
+          // switch (snapshot.state) {
+          //   case firebaseConnect.storage.TaskState.PAUSED: // or 'paused'
+          //     console.log("Upload is paused");
+          //     break;
+          //   case firebaseConnect.storage.TaskState.RUNNING: // or 'running'
+          //     console.log("Upload is running");
+          //     break;
+        },
+        function(error) {
+          // Handle unsuccessful uploads
+        },
+        function() {
+          // Handle successful uploads on complete
+          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+          task.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+            // console.log(this.props);
+            // console.log(this.state);
+            const { organiser, eventName, images = [] } = currentEvent;
+            const docName = organiser.concat(eventName);
+            const db = firebaseConnect.firestore();
+            eventsRef = db
+              .collection("events")
+              .doc(docName)
+              .update({
+                images: [downloadURL, ...images]
+              });
+          });
+        }
+      );
+    });
   };
 
   //   handleLongCapture = async () => {
@@ -104,8 +122,8 @@ export default class CameraPage extends React.Component {
     const hasCameraPermission = camera.status === "granted";
     //    && audio.status === "granted";
 
-    this.getUser();
-    this.setState({ hasCameraPermission });
+    const event = this.props.event;
+    this.setState({ hasCameraPermission, event });
   }
 
   render() {

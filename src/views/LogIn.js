@@ -20,7 +20,7 @@ export default class LogIn extends Component {
       .doc(uid)
       .get();
     const user = userRes.data();
-    this.setState({ user: { false: true, ...user } });
+    this.setState({ user });
     return user;
   };
 
@@ -28,16 +28,15 @@ export default class LogIn extends Component {
     const firebaseArr = await firebaseConnect
       .firestore()
       .collection("events")
-      .where("attendees", "array-contains", uid)
+      .where("attendeesUids", "array-contains", uid)
       .onSnapshot(QuerySnapshot => {
         const eventArr = [];
         QuerySnapshot.forEach((doc, i) => {
-          if ((i = 0)) console.log(doc.data());
           eventArr.push(doc.data());
         });
         this.setState({ events: eventArr });
       })
-      .catch(function (error) {
+      .catch(function(error) {
         console.log("Error getting documents: ", error);
       });
   };
