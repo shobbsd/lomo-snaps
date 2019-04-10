@@ -26,17 +26,18 @@ import PhotoGallery from "./PhotoGallery";
 
 class Menu extends Component {
   state = {
-    isReady: false
+    isReady: false,
+    event: {}
   };
 
   async componentDidMount() {
-    console.log(this.props.navigation.state.param)
     await Font.loadAsync({
       Roboto: require("native-base/Fonts/Roboto.ttf"),
       Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
       ...Ionicons.font
     });
-    this.setState({ isReady: true });
+    const event = this.props.navigation.state.params.event;
+    this.setState({ isReady: true, event });
   }
   render() {
     if (!this.state.isReady) {
@@ -54,7 +55,7 @@ class Menu extends Component {
               </TabHeading>
             }
           >
-            <Camera />
+            <Camera event={this.state.event} />
           </Tab>
           <Tab
             heading={
