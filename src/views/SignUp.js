@@ -13,8 +13,8 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: "center",
+    alignItems: "center"
   }
 });
 export default class SignUp extends Component {
@@ -167,14 +167,6 @@ export default class SignUp extends Component {
               uid: user.uid
             });
           return user.uid;
-        })
-        .then(uid => {
-          firebaseConnect.auth().currentUser.updateProfile({
-            displayName: name,
-            email,
-            phoneNumber: phone
-          });
-          return uid;
         })
         .then(uid => {
           this.props.navigation.state.params.getUser(uid);

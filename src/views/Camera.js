@@ -19,17 +19,7 @@ export default class CameraPage extends React.Component {
     hasCameraPermission: null,
     cameraType: Camera.Constants.Type.back,
     flashMode: Camera.Constants.FlashMode.off,
-    user: {}
-  };
-
-  getUser = () => {
-    const db = firebaseConnect.firestore();
-    const dbRef = db.collection("users").doc("bUmnUiS6N91y4BfC2Q49");
-
-    dbRef.get().then(doc => {
-      this.setState({ user: doc.data() });
-      // console.log(this.state.user, "this");
-    });
+    event: {}
   };
 
   setFlashMode = flashMode => this.setState({ flashMode });
@@ -69,7 +59,7 @@ export default class CameraPage extends React.Component {
     // console.log(uri, "uri");
     // const response = await FileSystem.getInfoAsync(uri);
     // console.log(response, "res");
-
+    const currentEvent = this.state.event;
     this._urlToBlob(uri).then(blob => {
       const imageName = Date.now();
       const ref = firebaseConnect
@@ -101,7 +91,17 @@ export default class CameraPage extends React.Component {
           // Handle successful uploads on complete
           // For instance, get the download URL: https://firebasestorage.googleapis.com/...
           task.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+            // console.log(this.props);
+            // console.log(this.state);
+            const { organiser, eventName, images = [] } = currentEvent;
+            const docName = organiser.concat(eventName);
             const db = firebaseConnect.firestore();
+            eventsRef = db
+              .collection("events")
+              .doc(docName)
+              .update({
+                images: [downloadURL, ...images]
+              });
           });
         }
       );
@@ -122,8 +122,8 @@ export default class CameraPage extends React.Component {
     const hasCameraPermission = camera.status === "granted";
     //    && audio.status === "granted";
 
-    this.getUser();
-    this.setState({ hasCameraPermission });
+    const event = this.props.event;
+    this.setState({ hasCameraPermission, event });
   }
 
   render() {
