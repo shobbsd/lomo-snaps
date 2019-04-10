@@ -58,7 +58,7 @@ export default class NewEvent extends Component {
     // https://firebase.google.com/docs/firestore/quickstart
     // NB firestore generates unique ID eg. 8pWgaC79rQ8KbhtjTrnN
     const { user, eventName, eventEndDate, eventDevelopDate } = this.state;
-    const attendees = [user.uid]; // add first attendee who is the organiser
+    // add first attendee who is the organiser
     const docname = user.uid + eventName;
     console.log(docname);
     db.collection("events")
