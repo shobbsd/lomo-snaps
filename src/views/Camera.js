@@ -5,7 +5,12 @@ import { Camera, Permissions, FileSystem } from "expo";
 import styles from "../styles/cameraStyle";
 import Toolbar from "./toolbar.component";
 import firebaseConnect from "../../firebaseConfig";
+<<<<<<< HEAD
+import * as firebase from "firebase";
+=======
+import firebase from 'firebase';
 import { database } from "firebase";
+>>>>>>> b6dd26dfc88a67a43c49e75059880e9c6b049fd2
 
 // import * as firebase from "firebase";
 // import Gallery from "./Gallery";
@@ -70,7 +75,7 @@ export default class CameraPage extends React.Component {
       const task = ref.put(blob);
       task.on(
         "state_changed",
-        function(snapshot) {
+        function (snapshot) {
           // Observe state change events such as progress, pause, and resume
           // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
           // var progress =
@@ -84,23 +89,24 @@ export default class CameraPage extends React.Component {
           //     console.log("Upload is running");
           //     break;
         },
-        function(error) {
+        function (error) {
           // Handle unsuccessful uploads
         },
-        function() {
+        function () {
           // Handle successful uploads on complete
           // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+
           task.snapshot.ref.getDownloadURL().then(function(downloadURL) {
             // console.log(this.props);
             // console.log(this.state);
             const { organiser, eventName, images = [] } = currentEvent;
             const docName = organiser.concat(eventName);
+
             const db = firebaseConnect.firestore();
-            eventsRef = db
-              .collection("events")
+            db.collection("events")
               .doc(docName)
               .update({
-                images: [downloadURL, ...images]
+                images: firebase.firestore.FieldValue.arrayUnion(downloadURL)
               });
           });
         }

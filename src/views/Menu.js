@@ -41,17 +41,17 @@ class Menu extends Component {
     const imagesArray = this.state.event.images
 
     if (!this.state.isReady) {
-      return <Text>loading</Text>;
+      return <Loading />;
     }
     return (
       <Container>
-        <Header hasTabs />
+        <Header hasTabs>{this.state.event.eventName}</Header>
         <Tabs renderTabBar={() => <ScrollableTab />}>
           <Tab
             heading={
               <TabHeading>
                 <Icon name="camera" />
-                <Text>Camera</Text>
+                {/* <Text>Camera</Text> */}
               </TabHeading>
             }
           >
