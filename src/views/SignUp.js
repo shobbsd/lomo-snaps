@@ -170,7 +170,7 @@ export default class SignUp extends Component {
         })
         .then(uid => {
           this.props.navigation.state.params.getUser(uid);
-          this.props.navigation.navigate("EventsList", { uid });
+          this.props.navigation.navigate("EventsList", { uid: uid, events: [] });
         })
         .catch(e => console.log(e));
     } else {

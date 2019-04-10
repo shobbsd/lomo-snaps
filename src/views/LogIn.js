@@ -28,7 +28,7 @@ export default class LogIn extends Component {
     const firebaseArr = await firebaseConnect
       .firestore()
       .collection("events")
-      .where("attendeesUid", "array-contains", uid)
+      .where("attendeesUids", "array-contains", uid)
       .onSnapshot(QuerySnapshot => {
         const eventArr = [];
         QuerySnapshot.forEach((doc, i) => {
