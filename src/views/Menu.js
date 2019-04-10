@@ -30,6 +30,7 @@ class Menu extends Component {
   };
 
   async componentDidMount() {
+    console.log(this.props.navigation.state.param)
     await Font.loadAsync({
       Roboto: require("native-base/Fonts/Roboto.ttf"),
       Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),

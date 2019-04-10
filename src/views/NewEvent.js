@@ -15,7 +15,8 @@ export default class NewEvent extends Component {
       eventEndDate: new Date(),
       eventDevelopDate: new Date(),
       isEventNameError: null, // local state only.
-      hasCalendarPermission: false
+      hasCalendarPermission: false,
+      user: {},
     };
   }
 
@@ -45,9 +46,10 @@ export default class NewEvent extends Component {
   addEvent = () => {
     // https://firebase.google.com/docs/firestore/quickstart
     // NB firestore generates unique ID eg. 8pWgaC79rQ8KbhtjTrnN
-    const { eventName, eventEndDate, eventDevelopDate } = this.state;
+    const { user, eventName, eventEndDate, eventDevelopDate } = this.state;
+    const attendees = [user.uid] // add first attendee who is the organiser
     db.collection("events")
-      .add({ eventName, eventEndDate, eventDevelopDate })
+      .add({ eventName, eventEndDate, eventDevelopDate, organiser: user.uid, attendees })
       .then(function (docRef) {
         console.log("Document written with ID: ", docRef.id);
       })
@@ -57,10 +59,11 @@ export default class NewEvent extends Component {
   };
 
   async componentDidMount() {
+    const { user } = this.props.navigation.state.params;
     const calendar = await Permissions.askAsync(Permissions.CALENDAR);
     const hasCalendarPermission = calendar.status === "granted";
 
-    this.setState({ hasCalendarPermission });
+    this.setState({ user, hasCalendarPermission });
   }
 
   render() {

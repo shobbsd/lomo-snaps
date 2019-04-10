@@ -3,12 +3,14 @@ import { Text, StyleSheet, View } from "react-native";
 import FormTextInput from "../components/FormTextInput";
 import CustomButton from "../components/CustomButton";
 import firebaseConnect from "../../firebaseConfig";
+import "@firebase/firestore";
 
 export default class LogIn extends Component {
   state = {
     email: "",
     password: "",
     user: {},
+    events: []
   };
 
   getUser = async uid => {
@@ -18,10 +20,27 @@ export default class LogIn extends Component {
       .doc(uid)
       .get();
     const user = userRes.data();
-    this.setState({ user });
+    this.setState({ user: { false: true, ...user } });
     return user;
   };
 
+  getEvents = async uid => {
+    const firebaseArr = await firebaseConnect
+      .firestore()
+      .collection("events")
+      .where("attendees", "array-contains", uid)
+      .onSnapshot(QuerySnapshot => {
+        const eventArr = [];
+        QuerySnapshot.forEach((doc, i) => {
+          if ((i = 0)) console.log(doc.data());
+          eventArr.push(doc.data());
+        });
+        this.setState({ events: eventArr });
+      })
+      .catch(function (error) {
+        console.log("Error getting documents: ", error);
+      });
+  };
 
   render() {
     const { email, password } = this.state;
@@ -44,7 +63,12 @@ export default class LogIn extends Component {
         />
         <CustomButton label="Submit" onPress={this.onSubmit} />
         <CustomButton label="Facebook Sign up" onPress={this.onSubmit} />
-        <CustomButton label="Email Sign up" onPress={() => { this.props.navigation.navigate('SignUp', { getUser: this.getUser }) }} />
+        <CustomButton
+          label="Email Sign up"
+          onPress={() => {
+            this.props.navigation.navigate("SignUp", { getUser: this.getUser });
+          }}
+        />
       </View>
     );
   }
@@ -60,25 +84,31 @@ export default class LogIn extends Component {
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then(({ user }) => {
+        //
+        this.getEvents(user.uid);
         return this.getUser(user.uid);
       })
-      .then((user) => {
-        this.props.navigation.navigate("EventsList", { user: this.state.user });
-
+      .then(user => {
+        this.props.navigation.navigate("EventsList", {
+          user: this.state.user,
+          events: this.state.events
+        });
       })
-      .catch(console.log);
+      .catch(err => {
+        console.log(err, "this is the err");
+      });
   };
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 10
   },
   button: {
     borderRadius: 5,
-    backgroundColor: 'teal'
+    backgroundColor: "teal"
   }
 });
