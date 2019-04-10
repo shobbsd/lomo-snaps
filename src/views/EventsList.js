@@ -26,7 +26,7 @@ export default class EventsList extends Component {
                 <Text style={{ fontSize: 30, textAlign: 'center', color: 'black' }} >Events</Text>
                 <ScrollView>
                     {this.state.events.map((event) => {
-                        return <EventCard handleClick={() => { this.handleClick(event) }} key={event.name} name={event.name} />
+                        return <EventCard handleClick={() => { this.handleClick(event) }} key={event.eventName} name={event.eventName} />
                     })}
                 </ScrollView>
                 <TouchableOpacity onPress={() => { this.props.navigation.navigate('NewEvent', { user: this.state.user }) }} style={styles.TouchableOpacityStyle}>
