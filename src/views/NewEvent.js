@@ -71,10 +71,10 @@ export default class NewEvent extends Component {
         attendeesUids: [user.uid],
         attendeesNames: [user.name],
         images: []
-      })
-      .catch(function(error) {
-        console.error("Error adding document: ", error);
       });
+    // .catch(function(error) {
+    //   console.error("Error adding document: ", error);
+    // });
   };
 
   async componentDidMount() {
