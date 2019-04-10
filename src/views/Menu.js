@@ -20,9 +20,6 @@ import { Ionicons } from "@expo/vector-icons";
 import Camera from "./Camera";
 import UserList from "./UserList";
 import PhotoGallery from "./PhotoGallery";
-// import TabOne from "./tabOne";
-// import TabTwo from "./tabTwo";
-// import TabThree from "./tabThree";
 
 class Menu extends Component {
   state = {
@@ -40,6 +37,9 @@ class Menu extends Component {
     this.setState({ isReady: true, event });
   }
   render() {
+
+    const imagesArray = this.state.event.images
+
     if (!this.state.isReady) {
       return <Text>loading</Text>;
     }
@@ -61,7 +61,7 @@ class Menu extends Component {
             heading={
               <TabHeading>
                 <Icon name="person" />
-                {/* <Text>Users</Text> */}
+                <Text>People</Text>
               </TabHeading>
             }
           >
@@ -70,16 +70,13 @@ class Menu extends Component {
           <Tab
             heading={
               <TabHeading>
-                <Icon name="apps" />
+                <Icon name="md-photos" />
+                <Text>Album</Text>
               </TabHeading>
             }
           >
-            <PhotoGallery />
-            {/* <Text>3</Text> */}
+            <PhotoGallery imagesArray={imagesArray} />
           </Tab>
-          {/* <Tab heading="Tab5">
-            <Text>3</Text>
-          </Tab> */}
         </Tabs>
       </Container>
     );
@@ -87,5 +84,3 @@ class Menu extends Component {
 }
 
 export default Menu;
-
-// Later on in your component
