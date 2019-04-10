@@ -32,16 +32,13 @@ class Menu extends Component {
   };
 
   async componentDidMount() {
-    console.log(this.props.navigation.state.params)
     await Font.loadAsync({
       Roboto: require("native-base/Fonts/Roboto.ttf"),
       Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
       ...Ionicons.font
     });
-    this.setState({
-      isReady: true,
-      event: this.props.navigation.state.params
-    });
+    const event = this.props.navigation.state.params.event;
+    this.setState({ isReady: true, event });
   }
   render() {
     if (!this.state.isReady) {

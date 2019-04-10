@@ -1,23 +1,29 @@
-
-import React, { Component } from 'react';
-import { View, Text, ScrollView, StyleSheet, Header, TouchableOpacity, Image } from 'react-native';
-import EventCard from '../components/EventCard';
+import React, { Component } from "react";
+import {
+    View,
+    Text,
+    ScrollView,
+    StyleSheet,
+    Header,
+    TouchableOpacity,
+    Image
+} from "react-native";
+import EventCard from "../components/EventCard";
 import { createStackNavigator, createAppContainer } from "react-navigation";
-import Photos from './Photos';
-import '@firebase/firestore';
-import firebaseConnect from '../../firebaseConfig';
+import Photos from "./Photos";
+import "@firebase/firestore";
+import firebaseConnect from "../../firebaseConfig";
 
 export default class EventsList extends Component {
-
     state = {
         events: [],
         loadedUser: false,
         user: {}
-    }
+    };
 
     componentDidMount() {
-        const { user, events } = this.props.navigation.state.params
-        this.setState({ user, events })
+        const { user, events } = this.props.navigation.state.params;
+        this.setState({ user, events });
     }
 
     componentWillUnmount() {
@@ -27,49 +33,68 @@ export default class EventsList extends Component {
     render() {
         return (
             <View style={{ flex: 1 }}>
-                <Text style={{ fontSize: 30, textAlign: 'center', color: 'black' }} >Events</Text>
+                <Text style={{ fontSize: 30, textAlign: "center", color: "black" }}>
+                    Events
+        </Text>
                 <ScrollView>
-                    {this.state.events.map((event) => {
-                        return <EventCard handleClick={() => { this.handleClick(event) }} key={event.eventName} name={event.eventName} />
+                    {this.state.events.map(event => {
+                        return (
+                            <EventCard
+                                handleClick={() => {
+                                    this.handleClick(event);
+                                }}
+                                key={event.eventName}
+                                name={event.eventName}
+                            />
+                        );
                     })}
                 </ScrollView>
-                <TouchableOpacity onPress={() => { this.props.navigation.navigate('NewEvent', { user: this.state.user }) }} style={styles.TouchableOpacityStyle}>
-                    <Image source={{
-                        uri: 'https://img.icons8.com/cotton/2x/plus--v1.png',
-                    }} style={styles.FloatingButtonStyle} />
+                <TouchableOpacity
+                    onPress={() => {
+                        this.props.navigation.navigate("NewEvent", {
+                            user: this.state.user
+                        });
+                    }}
+                    style={styles.TouchableOpacityStyle}
+                >
+                    <Image
+                        source={{
+                            uri: "https://img.icons8.com/cotton/2x/plus--v1.png"
+                        }}
+                        style={styles.FloatingButtonStyle}
+                    />
                 </TouchableOpacity>
             </View>
-        )
+        );
     }
 
-    handleClick = (event) => {
-        console.log(event)
-        this.props.navigation.navigate('Menu', { event })
-    }
+    handleClick = event => {
+        this.props.navigation.navigate("Menu", { event });
+    };
 }
 
 const styles = StyleSheet.create({
     MainContainer: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F5F5F5',
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#F5F5F5"
     },
 
     TouchableOpacityStyle: {
-        position: 'absolute',
+        position: "absolute",
         width: 60,
         height: 60,
-        alignItems: 'center',
-        justifyContent: 'center',
+        alignItems: "center",
+        justifyContent: "center",
         right: 30,
-        bottom: 30,
+        bottom: 30
     },
 
     FloatingButtonStyle: {
-        resizeMode: 'contain',
+        resizeMode: "contain",
         width: 60,
-        height: 60,
+        height: 60
         //backgroundColor:'black'
-    },
+    }
 });

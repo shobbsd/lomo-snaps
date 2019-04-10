@@ -47,11 +47,7 @@ export default class CameraPage extends React.Component {
       capturing: false,
       captures: [uri, ...this.state.captures]
     });
-    this.uploadImage(uri)
-      .then(res => {
-        // console.log(res, "success");
-      })
-      .catch(console.log);
+    this.uploadImage(uri);
     // console.log(this.state.captures, "this");
   };
 
@@ -75,56 +71,42 @@ export default class CameraPage extends React.Component {
     // const response = await FileSystem.getInfoAsync(uri);
     // console.log(response, "res");
 
-    this._urlToBlob(uri)
-      .then(blob => {
-        const imageName = Date.now();
-        const ref = firebaseConnect
-          .storage()
-          .ref()
-          .child("images/" + imageName);
+    this._urlToBlob(uri).then(blob => {
+      const imageName = Date.now();
+      const ref = firebaseConnect
+        .storage()
+        .ref()
+        .child("images/" + imageName);
 
-        ref.put(blob);
-        ref.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
-          function (snapshot) {
-            console.log('inside listener')
-            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log('Upload is ' + progress + '% done');
-            switch (snapshot.state) {
-              case firebase.storage.TaskState.PAUSED: // or 'paused'
-                console.log('Upload is paused');
-                break;
-              case firebase.storage.TaskState.RUNNING: // or 'running'
-                console.log('Upload is running');
-                break;
-            }
-          }, function (error) {
-
-            // A full list of error codes is available at
-            // https://firebase.google.com/docs/storage/web/handle-errors
-            switch (error.code) {
-              case 'storage/unauthorized':
-                // User doesn't have permission to access the object
-                break;
-
-              case 'storage/canceled':
-                // User canceled the upload
-                break;
-              case 'storage/unknown':
-                // Unknown error occurred, inspect error.serverResponse
-                break;
-            }
-          }, function () {
-            // Upload completed successfully, now we can get the download URL
-            reft.snapshot.ref.getDownloadURL().then(function (downloadURL) {
-              console.log('File available at', downloadURL);
-            });
+      const task = ref.put(blob);
+      task.on(
+        "state_changed",
+        function (snapshot) {
+          // Observe state change events such as progress, pause, and resume
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          // var progress =
+          //   (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          // console.log("Upload is " + progress + "% done");
+          // switch (snapshot.state) {
+          //   case firebaseConnect.storage.TaskState.PAUSED: // or 'paused'
+          //     console.log("Upload is paused");
+          //     break;
+          //   case firebaseConnect.storage.TaskState.RUNNING: // or 'running'
+          //     console.log("Upload is running");
+          //     break;
+        },
+        function (error) {
+          // Handle unsuccessful uploads
+        },
+        function () {
+          // Handle successful uploads on complete
+          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+          task.snapshot.ref.getDownloadURL().then(function (downloadURL) {
+            const db = firebaseConnect.firestore();
           });
-      })
-      .then(res => {
-        console.log(res);
-      })
-      .catch(console.log);
+        }
+      );
+    });
   };
 
   //   handleLongCapture = async () => {
