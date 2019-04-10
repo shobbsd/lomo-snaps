@@ -37,13 +37,9 @@ export default class LogIn extends Component {
         });
         this.setState({ events: eventArr });
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log("Error getting documents: ", error);
       });
-    // const arr = firebaseArr.map(event => {
-    //   return event.doc();
-    // });
-    // console.log(eventsArr);
   };
 
   render() {
