@@ -34,9 +34,12 @@ export default class EventsList extends Component {
     //         .collection('events')
     // }
 
-    componentDidMount() {
-        const user = this.props.navigation.getParam('user')
-        this.setState({ user })
+    async componentDidMount() {
+        const user = await this.props.navigation.getParam('user')
+        console.log(user, '<< user');
+        this.setState({ user: user }).then(() => {
+            console.log(this.state, '<< state')
+        })
     }
 
     render() {
@@ -48,7 +51,7 @@ export default class EventsList extends Component {
                         return <EventCard handleClick={this.handleClick} key={event.key} name={event.name} />
                     })}
                 </ScrollView>
-                <TouchableOpacity onPress={() => { this.props.navigation.navigate('NewEvent') }} style={styles.TouchableOpacityStyle}>
+                <TouchableOpacity onPress={() => { this.props.navigation.navigate('NewEvent', { user: this.state.user }) }} style={styles.TouchableOpacityStyle}>
                     <Image source={{
                         uri: 'https://img.icons8.com/cotton/2x/plus--v1.png',
                     }} style={styles.FloatingButtonStyle} />
