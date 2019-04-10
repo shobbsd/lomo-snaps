@@ -4,13 +4,15 @@ import FormTextInput from "../components/FormTextInput";
 import CustomButton from "../components/CustomButton";
 import firebaseConnect from "../../firebaseConfig";
 import "@firebase/firestore";
+import Loading from '../components/Loading';
 
 export default class LogIn extends Component {
   state = {
     email: "",
     password: "",
     user: {},
-    events: []
+    events: [],
+    isLoading: false
   };
 
   getUser = async uid => {
@@ -44,6 +46,7 @@ export default class LogIn extends Component {
 
   render() {
     const { email, password } = this.state;
+    if (this.state.isLoading) return <Loading />
     return (
       <View style={styles.container}>
         <Text>Email Address</Text>
@@ -78,6 +81,7 @@ export default class LogIn extends Component {
   };
 
   onSubmit = event => {
+    this.setState({ isLoading: true })
     const { email, password } = this.state;
     event.preventDefault();
     firebaseConnect
