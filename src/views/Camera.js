@@ -49,7 +49,7 @@ export default class CameraPage extends React.Component {
     });
     this.uploadImage(uri)
       .then(res => {
-        console.log(res, "success");
+        // console.log(res, "success");
       })
       .catch(console.log);
     // console.log(this.state.captures, "this");
