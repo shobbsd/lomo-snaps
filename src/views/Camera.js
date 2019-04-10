@@ -5,7 +5,7 @@ import { Camera, Permissions, FileSystem } from "expo";
 import styles from "../styles/cameraStyle";
 import Toolbar from "./toolbar.component";
 import firebaseConnect from "../../firebaseConfig";
-import { database } from "firebase";
+import * as firebase from "firebase";
 
 // import * as firebase from "firebase";
 // import Gallery from "./Gallery";
@@ -96,11 +96,10 @@ export default class CameraPage extends React.Component {
             const { organiser, eventName, images = [] } = currentEvent;
             const docName = organiser.concat(eventName);
             const db = firebaseConnect.firestore();
-            eventsRef = db
-              .collection("events")
+            db.collection("events")
               .doc(docName)
               .update({
-                images: [downloadURL, ...images]
+                images: firebase.firestore.FieldValue.arrayUnion(downloadURL)
               });
           });
         }
