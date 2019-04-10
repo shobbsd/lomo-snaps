@@ -49,6 +49,7 @@ class Menu extends Component {
     }
     return (
       <Container>
+
         <Header hasTabs>
           <Left />
           <Body>
@@ -57,6 +58,7 @@ class Menu extends Component {
           </Body>
           <Right />
         </Header>
+
         <Tabs renderTabBar={() => <ScrollableTab />}>
           <Tab
             heading={
