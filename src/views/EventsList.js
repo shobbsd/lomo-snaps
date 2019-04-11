@@ -64,7 +64,7 @@ export default class EventsList extends Component {
             return (
               <EventCard
                 handleClick={() => {
-                  this.handleClick(event);
+                  this.handleClick(event, this.state.user);
                 }}
                 key={event.eventName}
                 name={event.eventName}
@@ -91,8 +91,8 @@ export default class EventsList extends Component {
     );
   }
 
-  handleClick = event => {
-    this.props.navigation.navigate("Menu", { event });
+  handleClick = (event, user) => {
+    this.props.navigation.navigate("Menu", { event, user });
   };
 }
 

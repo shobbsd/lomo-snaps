@@ -25,7 +25,8 @@ import Loading from "../components/Loading";
 class Menu extends Component {
   state = {
     isReady: false,
-    event: {}
+    event: {},
+    photosleft: 0
   };
 
   async componentDidMount() {
@@ -34,9 +35,18 @@ class Menu extends Component {
       Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
       ...Ionicons.font
     });
-    const event = this.props.navigation.state.params.event;
-    this.setState({ isReady: true, event });
+    const { event, user } = this.props.navigation.state.params;
+    const photosleft = event.photosleft[user.uid]
+
+    this.setState({ isReady: true, event, photosleft, user });
   }
+
+  depreciatePhotosLeft = () => {
+    this.setState((prevState) => {
+      return { photosleft: prevState.photosleft - 1 }
+    })
+  }
+
   render() {
     const {
       eventName,
@@ -45,7 +55,6 @@ class Menu extends Component {
     } = this.state.event;
     // const eventDevelopDate = this.state.event.eventDevelopDate
     // const devDate = new (Date).toLocaleDateString('en-GB')
-
     if (!this.state.isReady) {
       return <Loading />;
     }
@@ -57,7 +66,9 @@ class Menu extends Component {
             <Title>{eventName}</Title>
             {/* <Subtitle>Released on : {devDate}</Subtitle> */}
           </Body>
-          <Right />
+          <Right>
+            <Text>{this.state.photosleft}</Text>
+          </Right>
         </Header>
 
         <Tabs renderTabBar={() => <ScrollableTab />}>
@@ -69,7 +80,7 @@ class Menu extends Component {
               </TabHeading>
             }
           >
-            <Camera event={this.state.event} />
+            <Camera event={this.state.event} depreciatePhotosLeft={this.depreciatePhotosLeft} />
           </Tab>
           <Tab
             heading={
