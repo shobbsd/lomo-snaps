@@ -70,9 +70,9 @@ export default class NewEvent extends Component {
         eventName,
         eventEndDate,
         eventDevelopDate,
-        organiser: user.uid,
-        attendeesUids: [user.uid],
-        attendeesNames: [user.name],
+        organiser: uid,
+        attendeesUids: [uid],
+        attendeesNames: { [uid]: user.name },
         images: [],
         limit: +limit,
         photosleft: { [uid]: +limit }

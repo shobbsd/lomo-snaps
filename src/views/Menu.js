@@ -79,7 +79,7 @@ class Menu extends Component {
               </TabHeading>
             }
           >
-            <UserList />
+            <UserList event={this.state.event} />
           </Tab>
           <Tab
             heading={
