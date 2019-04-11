@@ -56,7 +56,7 @@ class Menu extends Component {
         <Header hasTabs>
           <Left />
           <Body>
-            <Title style={{ justifyContent: 'center' }}>{eventName}</Title>
+            <Title>{eventName}</Title>
             {/* <Subtitle>Released on : {devDate}</Subtitle> */}
           </Body>
           <Right>
