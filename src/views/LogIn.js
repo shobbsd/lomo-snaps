@@ -3,29 +3,25 @@ import {
   Text,
   View,
   StyleSheet,
-  // Button,
+
+  Button,
   Alert,
   ImageBackground,
-  Dimensions
+  Dimensions,
+  TextInput,
+  TouchableHighlight,
+  Image
 } from "react-native";
 import { Constants, Facebook, Google } from "expo";
 // import FormTextInput from "../components/FormTextInput";
-import CustomButton from "../components/CustomButton";
+
+
 import firebaseConnect from "../../firebaseConfig";
 import "@firebase/firestore";
 import Loading from "../components/Loading";
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
-import {
-  Container,
-  Header,
-  Content,
-  Form,
-  Item,
-  Input,
-  Label,
-  Button
-} from "native-base";
+
 
 const BG_IMAGE = require("../assets/bg_screen1.jpg");
 
@@ -124,10 +120,7 @@ export default class LogIn extends Component {
           eventArr.push(doc.data());
         });
         this.setState({ events: eventArr });
-      })
-    // .catch(function(error) {
-    //   console.log("Error getting documents: ", error);
-    // });
+      });
   };
 
   render() {
@@ -136,76 +129,51 @@ export default class LogIn extends Component {
     return (
       <View style={styles.container}>
         <ImageBackground source={BG_IMAGE} style={styles.bgImage}>
-          {/* <Text>Email Address</Text> */}
-          <Form>
-            <Item stackedLabel>
-              <Label>Login</Label>
-              <Input
-                placeholder="Enter your email address here"
-                onChangeText={event => this.onChangeText(event, "email")}
-                autoCapitalize="none"
-                value={email}
-              />
-            </Item>
-            <Item stackedLabel last>
-              <Label>Password</Label>
-              <Input
-                style={styles.password}
-                secureTextEntry
-                placeholder="Enter your password here"
-                onChangeText={event => this.onChangeText(event, "password")}
-                password={true}
-                autoCapitalize="none"
-                value={password}
-              />
-            </Item>
-          </Form>
-          {/* <FormTextInput
-            placeholder="Enter your email address here"
-            onChangeText={event => this.onChangeText(event, "email")}
-            autoCapitalize="none"
-            value={email}
-          /> */}
-          {/* <Text>Password:</Text>
-          <FormTextInput
-            placeholder="Enter your password number here"
-            onChangeText={event => this.onChangeText(event, "password")}
-            password={true}
-            autoCapitalize="none"
-            value={password}
-          /> */}
-          {/* <Button
-            primary
-            style={{
-              margin: 15,
-              alignContent: "center",
-              justifyContent: "center"
+          <View style={styles.inputContainer}>
+            {/* <Image
+            style={styles.inputIcon}
+            source={{
+              uri: "https://png.icons8.com/message/ultraviolet/50/3498db"
             }}
+            /> */}
+            <TextInput
+              style={styles.inputs}
+              placeholder="Email"
+              keyboardType="email-address"
+              underlineColorAndroid="transparent"
+              onChangeText={event => this.onChangeText(event, "email")}
+            />
+          </View>
+
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.inputs}
+              placeholder="Password"
+              secureTextEntry={true}
+              underlineColorAndroid="transparent"
+              onChangeText={event => this.onChangeText(event, "password")}
+            />
+          </View>
+
+          <TouchableHighlight
+            style={[styles.buttonContainer, styles.loginButton]}
             onPress={this.onSubmit}
           >
-            <Text>Submit</Text>
-          </Button> */}
-          <CustomButton
-            style={styles.button}
-            label="Submit"
-            onPress={this.onSubmit}
-          />
-          {/* <CustomButton
-            label="Facebook Sign up"
-            onPress={this._handleFacebookLogin}
-          />
-          <CustomButton
-            label="Google Sign up"
-            onPress={this._handleGoogleLogin}
-          /> */}
-          <CustomButton
-            label="Email Sign up"
+            <Text style={styles.loginText}>Login</Text>
+          </TouchableHighlight>
+
+          <TouchableHighlight
+            style={styles.buttonContainer}
+
             onPress={() => {
               this.props.navigation.navigate("SignUp", {
                 getUser: this.getUser
               });
             }}
-          />
+          >
+            <Text style={styles.loginText}>Register</Text>
+          </TouchableHighlight>
+
         </ImageBackground>
       </View>
     );
@@ -245,9 +213,46 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#DCDCDC"
+  },
+  inputContainer: {
+    borderBottomColor: "#F5FCFF",
+    backgroundColor: "#FFFFFF",
+    borderRadius: 30,
+    borderBottomWidth: 1,
+    width: 250,
+    height: 30,
+    marginBottom: 10,
+    flexDirection: "row",
     alignItems: "center"
-    // height: 50
-    // margin: 10
+  },
+  inputs: {
+    height: 25,
+    marginLeft: 16,
+    borderBottomColor: "#FFFFFF",
+    flex: 1
+  },
+  inputIcon: {
+    width: 30,
+    height: 30,
+    marginLeft: 15,
+    justifyContent: "center"
+  },
+  buttonContainer: {
+    height: 45,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 20,
+    width: 250,
+    borderRadius: 30
+  },
+  loginButton: {
+    backgroundColor: "#00b5ec"
+  },
+  loginText: {
+    color: "white"
   },
   bgImage: {
     flex: 1,
@@ -257,12 +262,6 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT,
     justifyContent: "center",
     alignItems: "center"
-  },
-  button: {
-    borderRadius: 5,
-    backgroundColor: "white"
-  },
-  password: {
-    fontSize: 15
+
   }
 });
