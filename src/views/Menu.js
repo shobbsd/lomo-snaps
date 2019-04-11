@@ -72,7 +72,7 @@ class Menu extends Component {
       return <Loading />;
     }
     return (
-      <Container>
+      <Container style={{ color: '#E48B74' }}>
         <StatusBar hidden={true} />
         <Header hasTabs>
           <Left />
@@ -94,7 +94,7 @@ class Menu extends Component {
               </TabHeading>
             }
           >
-            <Camera event={this.state.event} depreciatePhotosLeft={this.depreciatePhotosLeft} />
+            <Camera event={this.state.event} photosleft={this.state.photosleft} depreciatePhotosLeft={this.depreciatePhotosLeft} />
           </Tab>
           <Tab
             heading={
