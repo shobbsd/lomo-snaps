@@ -42,6 +42,7 @@ export default class CameraPage extends React.Component {
     this.setState({
       shutter: false
     })
+    this.props.depreciatePhotosLeft();
     // console.log(this.state.captures, "this");
   };
 
@@ -134,8 +135,6 @@ export default class CameraPage extends React.Component {
   }
 
   render() {
-    const { photosleft } = this.props.event
-    const { uid } = this.props.user
     const {
       hasCameraPermission,
       flashMode,
@@ -143,7 +142,6 @@ export default class CameraPage extends React.Component {
       capturing,
       captures
     } = this.state;
-    console.log(photosleft[uid])
 
     if (hasCameraPermission === null) {
       return <View />;

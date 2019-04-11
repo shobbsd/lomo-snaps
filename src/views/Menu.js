@@ -40,6 +40,13 @@ class Menu extends Component {
 
     this.setState({ isReady: true, event, photosleft, user });
   }
+
+  depreciatePhotosLeft = () => {
+    this.setState((prevState) => {
+      return { photosleft: prevState.photosleft - 1 }
+    })
+  }
+
   render() {
     const {
       eventName,
@@ -73,7 +80,7 @@ class Menu extends Component {
               </TabHeading>
             }
           >
-            <Camera event={this.state.event} user={this.props.navigation.state.params.user} />
+            <Camera event={this.state.event} depreciatePhotosLeft={this.depreciatePhotosLeft} />
           </Tab>
           <Tab
             heading={
