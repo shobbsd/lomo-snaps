@@ -32,23 +32,31 @@ export default class UserList extends Component {
 
   updateEvent = (name, uid) => {
     let newEvent = { ...this.state.event };
-    newEvent.attendeesNames = [name, ...this.state.event.attendeesNames];
+    newEvent.attendeesNames = {
+      [uid]: name,
+      ...this.state.event.attendeesNames
+    };
     newEvent.attendeesUids = [uid, ...this.state.event.attendeesUids];
     this.setState({
       event: newEvent
     });
     const db = firebaseConnect.firestore();
     console.log(name, uid);
+    const attendeesObj = `attendeesNames.${uid}`;
     db.collection("events")
       .doc(newEvent.eventUid)
       .update({
-        attendeesNames: firebase.firestore.FieldValue.arrayUnion(name),
+        attendeesObj: name,
         attendeesUids: firebase.firestore.FieldValue.arrayUnion(uid)
       });
   };
 
   render() {
-    const attendeesNames = this.state.event.attendeesNames;
+    const attendeesObj = this.state.event.attendeesNames;
+    const attendeesNames = [];
+    for (const uid in attendeesObj) {
+      attendeesNames.push(attendeesObj[uid]);
+    }
 
     // const arr = attendeesNames.map(element => {
     //   return (
