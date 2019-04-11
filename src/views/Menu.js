@@ -94,7 +94,7 @@ class Menu extends Component {
               </TabHeading>
             }
           >
-            <Camera event={this.state.event} depreciatePhotosLeft={this.depreciatePhotosLeft} />
+            <Camera event={this.state.event} photosleft={this.state.photosleft} depreciatePhotosLeft={this.depreciatePhotosLeft} />
           </Tab>
           <Tab
             heading={

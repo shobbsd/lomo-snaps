@@ -7,7 +7,7 @@ import {
   Alert,
   Picker
 } from "react-native";
-import { Contacts } from "expo";
+import { Contacts, Permissions } from "expo";
 import { Button } from "native-base";
 import firebaseConnect from "../../firebaseConfig";
 
@@ -80,6 +80,7 @@ export default class AddFriend extends Component {
   }
 
   async componentDidMount() {
+    const { status } = await Permissions.askAsync(Permissions.CONTACTS)
     const contacts = await Contacts.getContactsAsync();
     this.setState({ contacts: contacts.data });
   }
