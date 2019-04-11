@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import { StatusBar } from 'react-native';
 import {
   Container,
   Header,
@@ -21,12 +21,15 @@ import Camera from "./Camera";
 import UserList from "./UserList";
 import PhotoGallery from "./PhotoGallery";
 import Loading from "../components/Loading";
+import firebaseConnect from "../../firebaseConfig";
+import "@firebase/firestore";
 
 class Menu extends Component {
   state = {
     isReady: false,
     event: {},
-    photosleft: 0
+    photosleft: 0,
+    user: {}
   };
 
   async componentDidMount() {
@@ -42,9 +45,19 @@ class Menu extends Component {
   }
 
   depreciatePhotosLeft = () => {
+    const db = firebaseConnect.firestore();
+    const { event } = this.state
+    const docname = event.organiser + event.eventName
+    const photosleftObj = `photosleft.${this.state.user.uid}`
     this.setState((prevState) => {
       return { photosleft: prevState.photosleft - 1 }
     })
+    db.collection('events')
+      .doc(docname)
+      .update({
+        [photosleftObj]: this.state.photosleft
+      })
+
   }
 
   render() {
@@ -60,6 +73,7 @@ class Menu extends Component {
     }
     return (
       <Container>
+        <StatusBar hidden={true} />
         <Header hasTabs>
           <Left />
           <Body>
@@ -67,7 +81,7 @@ class Menu extends Component {
             {/* <Subtitle>Released on : {devDate}</Subtitle> */}
           </Body>
           <Right>
-            <Text>{this.state.photosleft}</Text>
+            <Text style={{ color: 'white' }}>{this.state.photosleft}</Text>
           </Right>
         </Header>
 
@@ -80,7 +94,7 @@ class Menu extends Component {
               </TabHeading>
             }
           >
-            <Camera event={this.state.event} depreciatePhotosLeft={this.depreciatePhotosLeft} />
+            <Camera event={this.state.event} photosleft={this.state.photosleft} depreciatePhotosLeft={this.depreciatePhotosLeft} />
           </Tab>
           <Tab
             heading={

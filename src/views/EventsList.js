@@ -6,7 +6,8 @@ import {
   StyleSheet,
   Header,
   TouchableOpacity,
-  Image
+  Image,
+  StatusBar
 } from "react-native";
 import EventCard from "../components/EventCard";
 import { createStackNavigator, createAppContainer } from "react-navigation";
@@ -56,6 +57,7 @@ export default class EventsList extends Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
+        <StatusBar hidden={true} />
         <Text style={{ fontSize: 30, textAlign: "center", color: "black" }}>
           Events
         </Text>

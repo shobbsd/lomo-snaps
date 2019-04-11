@@ -6,6 +6,8 @@ import styles from "../styles/cameraStyle";
 import Toolbar from "./toolbar.component";
 import firebaseConnect from "../../firebaseConfig";
 import * as firebase from "firebase";
+import NoPhotos from '../components/NoPhotos';
+import EventEnded from '../components/EventEnded';
 
 // import * as firebase from "firebase";
 // import Gallery from "./Gallery";
@@ -140,7 +142,8 @@ export default class CameraPage extends React.Component {
       flashMode,
       cameraType,
       capturing,
-      captures
+      captures,
+      event
     } = this.state;
 
     if (hasCameraPermission === null) {
@@ -148,7 +151,9 @@ export default class CameraPage extends React.Component {
     } else if (hasCameraPermission === false) {
       return <Text>Access to camera has been denied.</Text>;
     }
-
+    console.log(Date.now())
+    if (event.eventEndDate.toMillis() < Date.now()) return <EventEnded />
+    if (this.props.photosleft === 0) return <NoPhotos />
     return (
       <React.Fragment>
         <View>
