@@ -10,10 +10,20 @@ import {
   Right,
   Icon
 } from "native-base";
-import { StyleSheet, Image, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Dimensions,
+  ImageBackground
+} from "react-native";
 import AddFriend from "./addFriend";
 import firebaseConnect from "../../firebaseConfig";
 import * as firebase from "firebase";
+
+const SCREEN_WIDTH = Dimensions.get("window").width;
+const SCREEN_HEIGHT = Dimensions.get("window").height;
+const BG_IMAGE = require("../assets/bg_screen.jpg");
 
 export default class UserList extends Component {
   state = {
@@ -85,7 +95,7 @@ export default class UserList extends Component {
                 return (
                   <ListItem key={element}>
                     <Left>
-                      <Text>{element}</Text>
+                      <Text style={styles.name} >{element}</Text>
                     </Left>
                   </ListItem>
                 );
@@ -135,7 +145,9 @@ const styles = StyleSheet.create({
     right: 30,
     bottom: 30
   },
-
+  name: {
+    fontSize: 30
+  },
   FloatingButtonStyle: {
     resizeMode: "contain",
     width: 60,

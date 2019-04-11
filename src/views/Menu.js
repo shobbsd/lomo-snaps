@@ -81,7 +81,7 @@ class Menu extends Component {
             {/* <Subtitle>Released on : {devDate}</Subtitle> */}
           </Body>
           <Right>
-            <Text style={{ color: 'white' }}>{this.state.photosleft}</Text>
+            <Text style={{ color: '#2A4F40' }}>{this.state.photosleft}</Text>
           </Right>
         </Header>
 

@@ -60,6 +60,7 @@ export default class AddFriend extends Component {
   async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.CONTACTS)
     const contacts = await Contacts.getContactsAsync();
+    console.log(contacts)
     this.setState({ contacts: contacts.data });
   }
 
