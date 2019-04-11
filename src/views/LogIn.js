@@ -15,13 +15,11 @@ import {
 import { Constants, Facebook, Google } from "expo";
 // import FormTextInput from "../components/FormTextInput";
 
-
 import firebaseConnect from "../../firebaseConfig";
 import "@firebase/firestore";
 import Loading from "../components/Loading";
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
-
 
 const BG_IMAGE = require("../assets/bg_screen1.jpg");
 
