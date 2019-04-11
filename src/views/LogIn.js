@@ -3,6 +3,7 @@ import {
   Text,
   View,
   StyleSheet,
+
   Button,
   Alert,
   ImageBackground,
@@ -161,6 +162,7 @@ export default class LogIn extends Component {
 
           <TouchableHighlight
             style={styles.buttonContainer}
+
             onPress={() => {
               this.props.navigation.navigate("SignUp", {
                 getUser: this.getUser
@@ -169,6 +171,7 @@ export default class LogIn extends Component {
           >
             <Text style={styles.loginText}>Register</Text>
           </TouchableHighlight>
+
         </ImageBackground>
       </View>
     );
@@ -257,5 +260,6 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT,
     justifyContent: "center",
     alignItems: "center"
+
   }
 });

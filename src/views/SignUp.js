@@ -3,6 +3,8 @@ import {
   Text,
   View,
   StyleSheet,
+
+  Button,
   Alert,
   ImageBackground,
   Dimensions,
@@ -10,7 +12,11 @@ import {
   TouchableHighlight,
   Image
 } from "react-native";
+
 import { Facebook, Google } from "expo";
+import FormTextInput from "../components/FormTextInput";
+import CustomButton from "../components/CustomButton";
+
 import firebaseConnect from "../../firebaseConfig";
 import "@firebase/firestore";
 import verifySignUp from "../utils/verifySignUp";
@@ -20,7 +26,6 @@ const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
 
 const BG_IMAGE = require("../assets/image.png");
-
 export default class SignUp extends Component {
   constructor() {
     super();
@@ -45,8 +50,10 @@ export default class SignUp extends Component {
     } = this.state;
     return (
       <View style={styles.container}>
+
         <ImageBackground source={BG_IMAGE} style={styles.bgImage}>
         <View style={styles.contentContainer}>
+
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.inputs}
@@ -58,6 +65,7 @@ export default class SignUp extends Component {
             value={name}
           />
           {toFill.name && (
+
             <Text style={styles.red}>!</Text>
           )}
         </View>
@@ -87,6 +95,7 @@ export default class SignUp extends Component {
             value={phone}
           />
           {toFill.name && (
+
             <Text style={styles.red}>!</Text>
           )}
         </View>
@@ -122,6 +131,7 @@ export default class SignUp extends Component {
             case, one lower case and one special character
           </Text>
         )} */}
+
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.inputs}
@@ -136,6 +146,7 @@ export default class SignUp extends Component {
         )}
         </View>
         {/* <Text>Confirm Password:</Text>
+
         <FormTextInput
           placeholder="Confirm your password number here"
           onChangeText={event =>
@@ -307,6 +318,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#DCDCDC"
   },
+
   contentContainer: {
     justifyContent: "center",
     alignItems: "center",
@@ -329,6 +341,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "#FFFFFF",
     flex: 1
   },
+
   thumbnail: {
     height: 18,
     width: 18
@@ -348,6 +361,8 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "#00b5ec"
   },
+
+
   inputIcon: {
     width: 30,
     height: 30,
@@ -359,8 +374,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+
     marginBottom: 10,
     marginTop: 10,
+
     width: 250,
     borderRadius: 30
   },
@@ -368,10 +385,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#00b5ec"
   },
   loginText: {
+
     color: "white",
     textAlign: 'center',
     paddingLeft: 5,
     marginLeft: 5
+
   },
   bgImage: {
     flex: 1,

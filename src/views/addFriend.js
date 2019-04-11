@@ -36,40 +36,18 @@ export default class AddFriend extends Component {
   };
 
   pickerOptions = () => {
-    const multiple = this.state.contacts.map(contact => {
-      if (contact.phoneNumbers.length > 1) {
-        return contact.phoneNumbers.map(phoneNumber => {
-          return (
-            <Picker.Item
-              key={phoneNumber.digits}
-              label={`${contact.name}: ${phoneNumber.digits}`}
-              value={phoneNumber.digits}
-            />
-          );
-        });
-      }
-    });
 
     const single = this.state.contacts.map(contact => {
-      return (
-        <Picker.Item
-          key={contact.phoneNumbers[0].digits}
-          label={`${contact.name}`}
-          value={contact.phoneNumbers[0].digits}
-        />
-      );
+      if (contact.phoneNumbers) {
+        return (
+          <Picker.Item
+            key={contact.phoneNumbers[0].digits}
+            label={`${contact.name}`}
+            value={contact.phoneNumbers[0].digits}
+          />
+        );
+      } // if
     });
-
-    multiple.forEach(element => {
-      if (element) {
-        if (Array.isArray(element)) {
-          element.forEach(number => {
-            single.push(number);
-          });
-        } else single.push(element);
-      }
-    });
-
     return single;
   };
 
@@ -90,7 +68,7 @@ export default class AddFriend extends Component {
   }
 
   render() {
-    if (this.state.contacts) this.pickerOptions();
+    // if (this.state.contacts) this.pickerOptions();
     return (
       <View style={{ marginTop: 22 }}>
         <Modal
