@@ -3,6 +3,7 @@ import {
   Text,
   View,
   StyleSheet,
+
   Button,
   Alert,
   ImageBackground,
@@ -14,11 +15,13 @@ import {
 import { Constants, Facebook, Google } from "expo";
 // import FormTextInput from "../components/FormTextInput";
 
+
 import firebaseConnect from "../../firebaseConfig";
 import "@firebase/firestore";
 import Loading from "../components/Loading";
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
+
 
 const BG_IMAGE = require("../assets/bg_screen1.jpg");
 
@@ -161,6 +164,7 @@ export default class LogIn extends Component {
 
           <TouchableHighlight
             style={styles.buttonContainer}
+
             onPress={() => {
               this.props.navigation.navigate("SignUp", {
                 getUser: this.getUser
@@ -169,6 +173,7 @@ export default class LogIn extends Component {
           >
             <Text style={styles.loginText}>Register</Text>
           </TouchableHighlight>
+
         </ImageBackground>
       </View>
     );
@@ -257,5 +262,6 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT,
     justifyContent: "center",
     alignItems: "center"
+
   }
 });

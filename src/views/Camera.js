@@ -1,11 +1,13 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { Camera, Permissions, FileSystem } from "expo";
 
 import styles from "../styles/cameraStyle";
 import Toolbar from "./toolbar.component";
 import firebaseConnect from "../../firebaseConfig";
 import * as firebase from "firebase";
+import NoPhotos from '../components/NoPhotos';
+import EventEnded from '../components/EventEnded';
 
 // import * as firebase from "firebase";
 // import Gallery from "./Gallery";
@@ -19,7 +21,8 @@ export default class CameraPage extends React.Component {
     hasCameraPermission: null,
     cameraType: Camera.Constants.Type.back,
     flashMode: Camera.Constants.FlashMode.off,
-    event: {}
+    event: {},
+    user: {}
   };
 
   setFlashMode = flashMode => this.setState({ flashMode });
@@ -34,9 +37,14 @@ export default class CameraPage extends React.Component {
     const { uri } = await this.camera.takePictureAsync();
     this.setState({
       capturing: false,
-      captures: [uri, ...this.state.captures]
+      captures: [uri, ...this.state.captures],
+      shutter: true
     });
     this.uploadImage(uri);
+    this.setState({
+      shutter: false
+    })
+    this.props.depreciatePhotosLeft();
     // console.log(this.state.captures, "this");
   };
 
@@ -70,7 +78,7 @@ export default class CameraPage extends React.Component {
       const task = ref.put(blob);
       task.on(
         "state_changed",
-        function(snapshot) {
+        function (snapshot) {
           // Observe state change events such as progress, pause, and resume
           // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
           // var progress =
@@ -84,10 +92,10 @@ export default class CameraPage extends React.Component {
           //     console.log("Upload is running");
           //     break;
         },
-        function(error) {
+        function (error) {
           // Handle unsuccessful uploads
         },
-        function() {
+        function () {
           // Handle successful uploads on complete
           // For instance, get the download URL: https://firebasestorage.googleapis.com/...
 
@@ -124,7 +132,8 @@ export default class CameraPage extends React.Component {
     //    && audio.status === "granted";
 
     const event = this.props.event;
-    this.setState({ hasCameraPermission, event });
+    const { user } = this.props;
+    this.setState({ hasCameraPermission, event, user });
   }
 
   render() {
@@ -133,7 +142,8 @@ export default class CameraPage extends React.Component {
       flashMode,
       cameraType,
       capturing,
-      captures
+      captures,
+      event
     } = this.state;
 
     if (hasCameraPermission === null) {
@@ -141,7 +151,9 @@ export default class CameraPage extends React.Component {
     } else if (hasCameraPermission === false) {
       return <Text>Access to camera has been denied.</Text>;
     }
-
+    console.log(Date.now())
+    if (event.eventEndDate.toMillis() < Date.now()) return <EventEnded />
+    if (this.props.photosleft === 0) return <NoPhotos />
     return (
       <React.Fragment>
         <View>

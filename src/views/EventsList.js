@@ -6,7 +6,8 @@ import {
   StyleSheet,
   Header,
   TouchableOpacity,
-  Image
+  Image,
+  StatusBar
 } from "react-native";
 import EventCard from "../components/EventCard";
 import { createStackNavigator, createAppContainer } from "react-navigation";
@@ -56,18 +57,21 @@ export default class EventsList extends Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
+        <StatusBar hidden={true} />
         <Text style={{ fontSize: 30, textAlign: "center", color: "black" }}>
           Events
         </Text>
         <ScrollView>
-          {this.state.events.map(event => {
+          {this.state.events.map((event, idx) => {
             return (
               <EventCard
                 handleClick={() => {
-                  this.handleClick(event);
+                  this.handleClick(event, this.state.user);
                 }}
-                key={event.eventName}
-                name={event.eventName}
+                key={idx}
+                eventName={event.eventName}
+                eventEndDate={(event.eventEndDate.seconds)}
+                eventDevelopDate={event.eventDevelopDate.seconds}
               />
             );
           })}
@@ -91,8 +95,8 @@ export default class EventsList extends Component {
     );
   }
 
-  handleClick = event => {
-    this.props.navigation.navigate("Menu", { event });
+  handleClick = (event, user) => {
+    this.props.navigation.navigate("Menu", { event, user });
   };
 }
 
