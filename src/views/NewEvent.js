@@ -59,11 +59,16 @@ export default class NewEvent extends Component {
   addEvent = () => {
     // https://firebase.google.com/docs/firestore/quickstart
     // NB firestore generates unique ID eg. 8pWgaC79rQ8KbhtjTrnN
-    const { user, eventName, eventEndDate, eventDevelopDate, limit } = this.state;
+    const {
+      user,
+      eventName,
+      eventEndDate,
+      eventDevelopDate,
+      limit
+    } = this.state;
     // add first attendee who is the organiser
-    const { uid } = user
+    const { uid } = user;
     const docname = uid + eventName;
-    console.log(docname);
     db.collection("events")
       .doc(docname)
       .set({
@@ -75,7 +80,8 @@ export default class NewEvent extends Component {
         attendeesNames: { [uid]: user.name },
         images: [],
         limit: +limit,
-        photosleft: { [uid]: +limit }
+        photosleft: { [uid]: +limit },
+        eventUid: docname
       });
     // .catch(function(error) {
     //   console.error("Error adding document: ", error);
@@ -169,9 +175,8 @@ export default class NewEvent extends Component {
           <Picker
             selectedValue={this.state.limit}
             style={{ height: 50, width: 100 }}
-            onValueChange={(limit) =>
-              this.setState({ limit })
-            }>
+            onValueChange={limit => this.setState({ limit })}
+          >
             <Picker.Item label="24" value="24" />
             <Picker.Item label="48" value="48" />
             <Picker.Item label="72" value="72" />
