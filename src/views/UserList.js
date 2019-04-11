@@ -46,7 +46,7 @@ export default class UserList extends Component {
     db.collection("events")
       .doc(newEvent.eventUid)
       .update({
-        attendeesObj: name,
+        [attendeesObj]: name,
         attendeesUids: firebase.firestore.FieldValue.arrayUnion(uid)
       });
   };
