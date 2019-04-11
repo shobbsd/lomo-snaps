@@ -142,7 +142,7 @@ export default class NewEvent extends Component {
             <DatePickerIOS
               minimumDate={this.state.eventEndDate}
               date={this.state.eventDevelopDate}
-              onChangeText={eventDevelopDate =>
+              onDateChange={eventDevelopDate =>
                 this.setState({ eventDevelopDate })
               }
             />

@@ -43,8 +43,8 @@ export default class EventsList extends Component {
         });
         this.setState(state => {
           if (state.events !== updateEvents)
-            return { events: [...updateEvents, ...state.events] };
-          else return { events: updateEvents };
+            return { events: [...updateEvents, ...state.events], user };
+          else return { events: updateEvents, user };
         });
       });
   }
