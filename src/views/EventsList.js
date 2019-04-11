@@ -23,17 +23,25 @@ export default class EventsList extends Component {
 
   componentDidMount() {
     const { user, events } = this.props.navigation.state.params;
-    this.setState({ user });
+    // this.setState({ user });
     const db = firebaseConnect.firestore();
     db.collection("events")
       .where("attendeesUids", "array-contains", user.uid)
       .onSnapshot(snapshot => {
         const updateEvents = [];
         snapshot.docChanges().forEach(change => {
-          updateEvents.push(change.doc.data());
+          if (change.type === "added") {
+            updateEvents.push(change.doc.data());
+          } else if (change.type === "modified") {
+            const update = change.doc.data();
+            updateEvents.reduce((acc, curr) => {
+              if (curr.eventName === update.eventName) {
+                return update;
+              } else return curr;
+            }, []);
+          }
         });
         this.setState(state => {
-          console.log(state);
           if (state.events !== updateEvents)
             return { events: [...updateEvents, ...state.events] };
           else return { events: updateEvents };
