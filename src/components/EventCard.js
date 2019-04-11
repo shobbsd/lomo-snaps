@@ -10,12 +10,14 @@ export default class EventCard extends Component {
     render() {
 
         const { eventName, eventEndDate, eventDevelopDate } = this.props
+        const endDate = eventEndDate.toDate()
+        const devDate = eventDevelopDate.toDate()
 
         return (
             <TouchableOpacity style={styles.eventCard} onPress={this.props.handleClick} >
                 <Text style={{ color: 'white', fontSize: 24 }} >{eventName}</Text>
-                <Text style={{ color: 'white' }}>This Event ends on:{new Date(eventEndDate).toLocaleDateString('en-GB')}</Text>
-                <Text style={{ color: 'white' }}>Photos available on :{new Date(eventDevelopDate).toLocaleDateString('en-GB')}</Text>
+                <Text style={{ color: 'white' }}>This Event ends on: {endDate.toLocaleDateString('en-GB')}</Text>
+                <Text style={{ color: 'white' }}>Photos available on : {devDate.toLocaleDateString('en-GB')}</Text>
             </TouchableOpacity>
         )
     }

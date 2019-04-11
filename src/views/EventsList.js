@@ -70,6 +70,7 @@ export default class EventsList extends Component {
         </Text>
           <ScrollView>
             {this.state.events.map((event, idx) => {
+              console.log(event, '<< EVENT')
               return (
                 <EventCard
                   handleClick={() => {
@@ -77,9 +78,9 @@ export default class EventsList extends Component {
                   }}
                   key={idx}
                   eventName={event.eventName}
-                  eventEndDate={(event.eventEndDate.seconds)}
-                  eventDevelopDate={event.eventDevelopDate.seconds}
-                />
+                  eventEndDate={(event.eventEndDate)}
+                  eventDevelopDate={event.eventDevelopDate}
+                  />
               );
             })}
           </ScrollView>
