@@ -10,35 +10,48 @@ import {
   Right,
   Icon
 } from "native-base";
+import "@firebase/firestore";
+import firebaseConnect from "../../firebaseConfig";
+import Loading from '../components/Loading';
+
+
 export default class UserList extends Component {
+
+  state = {
+    attendees: {},
+    event: {}
+  }
+
+  componentDidMount() {
+    const { event } = this.props
+    this.setState({ event })
+  }
+
+
   render() {
-    return (
-      <Container>
-        <Content>
-          <List>
-            <ListItem>
-              <Left>
-                <Text>Mohammed</Text>
-              </Left>
-            </ListItem>
-            <ListItem>
-              <Left>
-                <Text>Shaq</Text>
-              </Left>
-            </ListItem>
-            <ListItem>
-              <Left>
-                <Text>Phil</Text>
-              </Left>
-            </ListItem>
-            <ListItem>
-              <Left>
-                <Text>Chris</Text>
-              </Left>
-            </ListItem>
-          </List>
-        </Content>
-      </Container>
-    );
+    const { event } = this.props
+    if (!event) return <Loading />
+    else {
+      return (
+        <Container>
+          <Content>
+            <List>
+              {event.attendeesUids.map(attendee => {
+                console.log(attendee)
+                return <ListItem>
+                  <Left>
+                    <Text>{event.attendeesNames[attendee]}</Text>
+                  </Left>
+                  <Right>
+                    <Text>{event.photosleft[attendee]}</Text>
+                  </Right>
+                </ListItem>
+              })}
+
+            </List>
+          </Content>
+        </Container>
+      );
+    }
   }
 }
