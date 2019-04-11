@@ -20,7 +20,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Camera from "./Camera";
 import UserList from "./UserList";
 import PhotoGallery from "./PhotoGallery";
-import Loading from '../components/Loading'
+import Loading from "../components/Loading";
 
 class Menu extends Component {
   state = {
@@ -38,9 +38,11 @@ class Menu extends Component {
     this.setState({ isReady: true, event });
   }
   render() {
-
-    const imagesArray = this.state.event.images
-    const { eventName } = this.state.event
+    const {
+      eventName,
+      images: imagesArray,
+      eventDevelopDate
+    } = this.state.event;
     // const eventDevelopDate = this.state.event.eventDevelopDate
     // const devDate = new (Date).toLocaleDateString('en-GB')
 
@@ -49,7 +51,6 @@ class Menu extends Component {
     }
     return (
       <Container>
-
         <Header hasTabs>
           <Left />
           <Body>
@@ -78,7 +79,7 @@ class Menu extends Component {
               </TabHeading>
             }
           >
-            <UserList />
+            <UserList event={this.state.event} />
           </Tab>
           <Tab
             heading={
@@ -88,7 +89,10 @@ class Menu extends Component {
               </TabHeading>
             }
           >
-            <PhotoGallery imagesArray={imagesArray} />
+            <PhotoGallery
+              imagesArray={imagesArray}
+              eventDevelopDate={eventDevelopDate}
+            />
           </Tab>
         </Tabs>
       </Container>

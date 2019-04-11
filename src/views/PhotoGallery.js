@@ -17,7 +17,7 @@ export default class PhotoGallery extends React.Component {
   state = {
     imageuri: "",
     ModalVisibleStatus: false,
-    items: [{ id: 0, src: 'http://placehold.it/200x200?text=due%20soon' }]
+    items: [{ id: 0, src: "http://placehold.it/200x200?text=due%20soon" }]
 
     // http://placehold.it/200x200?text=due%20soon...
   };
@@ -39,16 +39,19 @@ export default class PhotoGallery extends React.Component {
   // }
 
   componentDidMount() {
-
-    const imagesArray = this.props.imagesArray
+    const imagesArray = this.props.imagesArray;
 
     if (imagesArray.length !== 0) {
       const updateGallery = imagesArray.map((imgSRC, i) => {
-        return { id: i, src: imgSRC } // make objects
-      })
+        return { id: i, src: imgSRC }; // make objects
+      });
 
-      this.setState({ items: updateGallery })
+      this.setState({ items: updateGallery });
     } // end if
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log(prevProps);
   }
 
   //   renderHeader() {

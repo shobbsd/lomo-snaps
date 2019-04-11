@@ -5,7 +5,8 @@ import {
   TextInput,
   Button,
   DatePickerIOS,
-  DatePickerAndroid
+  DatePickerAndroid,
+  Picker
 } from "react-native";
 import firebaseConnect from "../../firebaseConfig";
 import "@firebase/firestore";
@@ -23,7 +24,8 @@ export default class NewEvent extends Component {
       eventDevelopDate: new Date(),
       isEventNameError: null, // local state only.
       hasCalendarPermission: false,
-      user: {}
+      user: {},
+      limit: "24"
     };
   }
 
@@ -57,9 +59,10 @@ export default class NewEvent extends Component {
   addEvent = () => {
     // https://firebase.google.com/docs/firestore/quickstart
     // NB firestore generates unique ID eg. 8pWgaC79rQ8KbhtjTrnN
-    const { user, eventName, eventEndDate, eventDevelopDate } = this.state;
+    const { user, eventName, eventEndDate, eventDevelopDate, limit } = this.state;
     // add first attendee who is the organiser
-    const docname = user.uid + eventName;
+    const { uid } = user
+    const docname = uid + eventName;
     console.log(docname);
     db.collection("events")
       .doc(docname)
@@ -67,10 +70,12 @@ export default class NewEvent extends Component {
         eventName,
         eventEndDate,
         eventDevelopDate,
-        organiser: user.uid,
-        attendeesUids: [user.uid],
-        attendeesNames: [user.name],
-        images: []
+        organiser: uid,
+        attendeesUids: [uid],
+        attendeesNames: { [uid]: user.name },
+        images: [],
+        limit: +limit,
+        photosleft: { [uid]: +limit }
       });
     // .catch(function(error) {
     //   console.error("Error adding document: ", error);
@@ -142,7 +147,7 @@ export default class NewEvent extends Component {
             <DatePickerIOS
               minimumDate={this.state.eventEndDate}
               date={this.state.eventDevelopDate}
-              onChangeText={eventDevelopDate =>
+              onDateChange={eventDevelopDate =>
                 this.setState({ eventDevelopDate })
               }
             />
@@ -160,6 +165,18 @@ export default class NewEvent extends Component {
               onPress={this.handleAndroidDevelopDate}
             />
           )}
+          <Text>Choose a photo limit:</Text>
+          <Picker
+            selectedValue={this.state.limit}
+            style={{ height: 50, width: 100 }}
+            onValueChange={(limit) =>
+              this.setState({ limit })
+            }>
+            <Picker.Item label="24" value="24" />
+            <Picker.Item label="48" value="48" />
+            <Picker.Item label="72" value="72" />
+            <Picker.Item label="96" value="96" />
+          </Picker>
 
           <Button
             style={{

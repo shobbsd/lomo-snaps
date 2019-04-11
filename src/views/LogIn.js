@@ -124,7 +124,7 @@ export default class LogIn extends Component {
           eventArr.push(doc.data());
         });
         this.setState({ events: eventArr });
-      });
+      })
     // .catch(function(error) {
     //   console.log("Error getting documents: ", error);
     // });
