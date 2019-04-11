@@ -60,14 +60,16 @@ export default class EventsList extends Component {
           Events
         </Text>
         <ScrollView>
-          {this.state.events.map(event => {
+          {this.state.events.map((event, idx) => {
             return (
               <EventCard
                 handleClick={() => {
                   this.handleClick(event, this.state.user);
                 }}
-                key={event.eventName}
-                name={event.eventName}
+                key={idx}
+                eventName={event.eventName}
+                eventEndDate={(event.eventEndDate.seconds)}
+                eventDevelopDate={event.eventDevelopDate.seconds}
               />
             );
           })}
