@@ -10,18 +10,77 @@ import {
   Right,
   Icon
 } from "native-base";
+import { StyleSheet, Image, TouchableOpacity } from "react-native";
+import AddFriend from "./addFriend";
+import firebaseConnect from "../../firebaseConfig";
+import * as firebase from "firebase";
+
 export default class UserList extends Component {
+  state = {
+    event: {},
+    showModal: false
+  };
+
+  componentDidMount() {
+    const event = this.props.event;
+    this.setState({ event });
+  }
+
+  closeModal = () => {
+    this.setState({ showModal: false });
+  };
+
+  updateEvent = (name, uid) => {
+    let newEvent = { ...this.state.event };
+    newEvent.attendeesNames = [name, ...this.state.event.attendeesNames];
+    newEvent.attendeesUids = [uid, ...this.state.event.attendeesUids];
+    this.setState({
+      event: newEvent
+    });
+    const db = firebaseConnect.firestore();
+    console.log(name, uid);
+    db.collection("events")
+      .doc(newEvent.eventUid)
+      .update({
+        attendeesNames: firebase.firestore.FieldValue.arrayUnion(name),
+        attendeesUids: firebase.firestore.FieldValue.arrayUnion(uid)
+      });
+  };
+
   render() {
+    const attendeesNames = this.state.event.attendeesNames;
+
+    // const arr = attendeesNames.map(element => {
+    //   return (
+    //     <ListItem>
+    //       <Left>
+    //         <Text>{element}</Text>
+    //       </Left>
+    //     </ListItem>
+    //   );
+    // });
+    // console.log(arr);
+
     return (
       <Container>
+        <AddFriend
+          isVisible={this.state.showModal}
+          closeModal={this.closeModal}
+          updateEvent={this.updateEvent}
+        />
         <Content>
           <List>
-            <ListItem>
-              <Left>
-                <Text>Mohammed</Text>
-              </Left>
-            </ListItem>
-            <ListItem>
+            {this.state.event.attendeesNames &&
+              attendeesNames.map(element => {
+                return (
+                  <ListItem key={element}>
+                    <Left>
+                      <Text>{element}</Text>
+                    </Left>
+                  </ListItem>
+                );
+              })}
+            {/* <ListItem>
               <Left>
                 <Text>Shaq</Text>
               </Left>
@@ -35,10 +94,42 @@ export default class UserList extends Component {
               <Left>
                 <Text>Chris</Text>
               </Left>
-            </ListItem>
+            </ListItem> */}
           </List>
         </Content>
+        <TouchableOpacity
+          onPress={() => {
+            this.setState({ showModal: true });
+          }}
+          style={styles.TouchableOpacityStyle}
+        >
+          <Image
+            source={{
+              uri: "https://img.icons8.com/cotton/2x/plus--v1.png"
+            }}
+            style={styles.FloatingButtonStyle}
+          />
+        </TouchableOpacity>
       </Container>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  TouchableOpacityStyle: {
+    position: "absolute",
+    width: 60,
+    height: 60,
+    alignItems: "center",
+    justifyContent: "center",
+    right: 30,
+    bottom: 30
+  },
+
+  FloatingButtonStyle: {
+    resizeMode: "contain",
+    width: 60,
+    height: 60
+    //backgroundColor:'black'
+  }
+});

@@ -39,11 +39,8 @@ export default class PhotoGallery extends React.Component {
   // }
 
   componentDidMount() {
-<<<<<<< HEAD
     const { imagesArray, eventDevelopDate } = this.props;
 
-    console.log(eventDevelopDate.toMillis());
-    console.log(Date.now());
     if (imagesArray.length > 0) {
       if (
         imagesArray.length !== 0 &&
@@ -75,21 +72,11 @@ export default class PhotoGallery extends React.Component {
         };
         this.setState({ items });
       }
-=======
-    const imagesArray = this.props.imagesArray;
-
-    if (imagesArray.length !== 0) {
-      const updateGallery = imagesArray.map((imgSRC, i) => {
-        return { id: i, src: imgSRC }; // make objects
-      });
-
-      this.setState({ items: updateGallery });
->>>>>>> bd96b3979623e12dcfae6761b23269a142d6cea5
     } // end if
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log(prevProps);
+    console.log(prevState);
   }
 
   //   renderHeader() {

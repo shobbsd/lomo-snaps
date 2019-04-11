@@ -70,7 +70,8 @@ export default class NewEvent extends Component {
         organiser: user.uid,
         attendeesUids: [user.uid],
         attendeesNames: [user.name],
-        images: []
+        images: [],
+        eventUid: docname
       });
     // .catch(function(error) {
     //   console.error("Error adding document: ", error);
