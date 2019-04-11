@@ -166,13 +166,9 @@ export default class LogIn extends Component {
                 getUser: this.getUser
               });
             }}
-<<<<<<< HEAD
-          />
-=======
           >
             <Text style={styles.loginText}>Register</Text>
           </TouchableHighlight>
->>>>>>> 5325f50321664429663adb1846f6e45b7f26b8e7
         </ImageBackground>
       </View>
     );
@@ -212,27 +208,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-<<<<<<< HEAD
-    alignItems: "center"
-    // height: 50
-    // margin: 10
-  },
-  bgImage: {
-    flex: 1,
-    top: 0,
-    left: 0,
-    width: SCREEN_WIDTH,
-    height: SCREEN_HEIGHT,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  button: {
-    borderRadius: 5,
-    backgroundColor: "white"
-  },
-  password: {
-    fontSize: 15
-=======
     alignItems: "center",
     backgroundColor: "#DCDCDC"
   },
@@ -282,6 +257,5 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT,
     justifyContent: "center",
     alignItems: "center"
->>>>>>> 5325f50321664429663adb1846f6e45b7f26b8e7
   }
 });

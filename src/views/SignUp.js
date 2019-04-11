@@ -3,7 +3,6 @@ import {
   Text,
   View,
   StyleSheet,
-  Button,
   Alert,
   ImageBackground,
   Dimensions,
@@ -11,18 +10,16 @@ import {
   TouchableHighlight,
   Image
 } from "react-native";
-import FormTextInput from "../components/FormTextInput";
-import CustomButton from "../components/CustomButton";
+import { Facebook, Google } from "expo";
 import firebaseConnect from "../../firebaseConfig";
 import "@firebase/firestore";
 import verifySignUp from "../utils/verifySignUp";
 import { signInWithFacebook } from "../utils/facebookSignUp";
-import createCalendar from "../utils/createCalendar";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
 
-const BG_IMAGE = require("../assets/bg_screen.jpg");
+const BG_IMAGE = require("../assets/image.png");
 
 export default class SignUp extends Component {
   constructor() {
@@ -48,7 +45,8 @@ export default class SignUp extends Component {
     } = this.state;
     return (
       <View style={styles.container}>
-        {/* <ImageBackground source={BG_IMAGE} style={styles.bgImage} /> */}
+        <ImageBackground source={BG_IMAGE} style={styles.bgImage}>
+        <View style={styles.contentContainer}>
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.inputs}
@@ -60,7 +58,7 @@ export default class SignUp extends Component {
             value={name}
           />
           {toFill.name && (
-            <Text style={styles.red}>Please enter your full name</Text>
+            <Text style={styles.red}>!</Text>
           )}
         </View>
 
@@ -75,7 +73,7 @@ export default class SignUp extends Component {
             value={email}
           />
           {toFill.name && (
-            <Text style={styles.red}>Please enter a valid email address</Text>
+            <Text style={styles.red}>!</Text>
           )}
         </View>
         <View style={styles.inputContainer}>
@@ -89,7 +87,7 @@ export default class SignUp extends Component {
             value={phone}
           />
           {toFill.name && (
-            <Text style={styles.red}>Please enter a valid phone number</Text>
+            <Text style={styles.red}>!</Text>
           )}
         </View>
 
@@ -124,7 +122,20 @@ export default class SignUp extends Component {
             case, one lower case and one special character
           </Text>
         )} */}
-        <Text>Confirm Password:</Text>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.inputs}
+            placeholder="Confirm your password"
+            secureTextEntry={true}
+            underlineColorAndroid="transparent"
+            onChangeText={event => this.onChangeText(event, "passwordConfirmation")}
+            value={passwordConfirmation}
+          />
+          {toFill.passwordConfirmation && (
+          <Text style={styles.red}>Passwords do not match</Text>
+        )}
+        </View>
+        {/* <Text>Confirm Password:</Text>
         <FormTextInput
           placeholder="Confirm your password number here"
           onChangeText={event =>
@@ -133,15 +144,113 @@ export default class SignUp extends Component {
           password={true}
           autoCapitalize="none"
           value={passwordConfirmation}
-        />
-        {toFill.passwordConfirmation && (
-          <Text style={styles.red}>Your passwords do not match</Text>
-        )}
-        <CustomButton label="Submit" onPress={this.onSubmit} />
-        <CustomButton label="Facebook Sign up" onPress={this.handleFacebook} />
+        /> */}
+
+          {/* <TouchableHighlight
+            style={[styles.buttonContainer, styles.loginButton]}
+            onPress={this.onSubmit}
+          >
+            <Text style={styles.loginText}>Login</Text>
+          </TouchableHighlight> */}
+
+          <TouchableHighlight
+            style={[styles.buttonContainer, styles.loginButton]}
+            onPress={this.onSubmit}
+          >
+            <Text style={styles.loginText}>Submit</Text>
+          </TouchableHighlight>
+
+          <Text style={styles.loginText}>Or</Text>
+
+          <TouchableHighlight
+            style={[styles.buttonContainer, styles.loginButton]}
+            onPress={this._handleFacebookLogin}
+          >
+            <Text style={styles.loginText}>
+            <Image
+              source={require('../assets/facebook_logo.png')}
+              style={styles.thumbnail}
+            />
+            Sign In With Facebook</Text>
+          </TouchableHighlight>
+          
+          <TouchableHighlight
+            style={[styles.buttonContainer, styles.loginButton]}
+            onPress={this._handleGoogleLogin}
+          >
+            <Text style={styles.loginText}>
+            <Image
+              source={require('../assets/google_logo.png')}
+              style={styles.thumbnail}
+            />
+            Sign In With Google</Text>
+          </TouchableHighlight>
+        
+        </View>
+        </ImageBackground>
       </View>
     );
   }
+
+  _handleFacebookLogin = async () => {
+    try {
+      const { type, token } = await Facebook.logInWithReadPermissionsAsync(
+        "1201211719949057", // Replace with your own app id in standalone app
+        { permissions: ["public_profile"] }
+      );
+
+      switch (type) {
+        case "success": {
+          // Get the user's name using Facebook's Graph API
+          const response = await fetch(
+            `https://graph.facebook.com/me?access_token=${token}`
+          );
+          const profile = await response.json();
+          Alert.alert("Logged in!", `Hi ${profile.name}!`);
+          break;
+        }
+        case "cancel": {
+          Alert.alert("Cancelled!", "Login was cancelled!");
+          break;
+        }
+        default: {
+          Alert.alert("Oops!", "Login failed!");
+        }
+      }
+    } catch (e) {
+      Alert.alert("Oops!", "Login failed!");
+    }
+  };
+
+  _handleGoogleLogin = async () => {
+    try {
+      const { type, user } = await Google.logInAsync({
+        androidStandaloneAppClientId: "<ANDROID_CLIENT_ID>",
+        iosStandaloneAppClientId: "<IOS_CLIENT_ID>",
+        androidClientId:
+          "603386649315-9rbv8vmv2vvftetfbvlrbufcps1fajqf.apps.googleusercontent.com",
+        iosClientId:
+          "603386649315-vp4revvrcgrcjme51ebuhbkbspl048l9.apps.googleusercontent.com",
+        scopes: ["profile", "email"]
+      });
+
+      switch (type) {
+        case "success": {
+          Alert.alert("Logged in!", `Hi ${user.name}!`);
+          break;
+        }
+        case "cancel": {
+          Alert.alert("Cancelled!", "Login was cancelled!");
+          break;
+        }
+        default: {
+          Alert.alert("Oops!", "Login failed!");
+        }
+      }
+    } catch (e) {
+      Alert.alert("Oops!", "Login failed!");
+    }
+  };
 
   onChangeText = (event, stateKey) => {
     this.setState({ [stateKey]: event });
@@ -198,6 +307,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#DCDCDC"
   },
+  contentContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 60
+  },
   inputContainer: {
     borderBottomColor: "#F5FCFF",
     backgroundColor: "#FFFFFF",
@@ -215,6 +329,25 @@ const styles = StyleSheet.create({
     borderBottomColor: "#FFFFFF",
     flex: 1
   },
+  thumbnail: {
+    height: 18,
+    width: 18
+  },
+  red: {
+    color: 'red'
+  },
+  buttonContainer: {
+    height: 45,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 10,
+    width: 250,
+    borderRadius: 30
+  },
+  button: {
+    backgroundColor: "#00b5ec"
+  },
   inputIcon: {
     width: 30,
     height: 30,
@@ -226,7 +359,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 20,
+    marginBottom: 10,
+    marginTop: 10,
     width: 250,
     borderRadius: 30
   },
@@ -234,7 +368,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#00b5ec"
   },
   loginText: {
-    color: "white"
+    color: "white",
+    textAlign: 'center',
+    paddingLeft: 5,
+    marginLeft: 5
   },
   bgImage: {
     flex: 1,

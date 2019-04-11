@@ -3,7 +3,10 @@ import {
   Platform,
   Text,
   TextInput,
+  ImageBackground,
   Button,
+  StyleSheet,
+  Dimensions,
   Modal,
   TouchableHighlight,
   DatePickerIOS,
@@ -13,6 +16,10 @@ import {
 import firebaseConnect from "../../firebaseConfig";
 import "@firebase/firestore";
 import { Permissions } from "expo";
+
+const BG_IMAGE = require("../assets/bg_screen.jpg");
+const SCREEN_WIDTH = Dimensions.get("window").width;
+const SCREEN_HEIGHT = Dimensions.get("window").height;
 
 const db = firebaseConnect.firestore();
 const pf = Platform.OS;
@@ -119,15 +126,20 @@ export default class NewEvent extends Component {
       return <Text>Calendar permissions not given</Text>;
     else {
       return (
+        <ImageBackground source={BG_IMAGE} style={styles.bgImage}>
         <>
-          <Text style={{ textAlign: "center", padding: 40, fontSize: 18 }}>Enter your Event Name</Text>
+          <Text style={{ textAlign: "center", padding: 10, color: 'white', fontSize: 18 }}>Enter your Event Name</Text>
           <TextInput
             style={{
               height: 40,
+              width: 200,
               borderColor: "gray",
               borderWidth: 1,
-              margin: 20,
-              marginTop: 0
+              marginBottom: 20,
+              marginTop: 0,
+              backgroundColor: '#E48B74',
+              borderRadius: 10,
+              color: 'white'
             }}
             placeholder="Enter your event name, at least 5 characters..."
             onChangeText={eventName =>
@@ -145,7 +157,7 @@ export default class NewEvent extends Component {
             onPress={() => {
               this.setModalVisiblePhotoLimit(true);
             }}>
-            <Text style={{ textAlign: "center", padding: 40, fontSize: 18 }}>Choose a photo limit...</Text>
+            <Text style={{ textAlign: "center", paddingTop: 40, paddingBottom: 10, color: 'white', fontSize: 18 }}>Choose a photo limit...</Text>
           </TouchableHighlight>
 
           <Modal
@@ -157,7 +169,7 @@ export default class NewEvent extends Component {
             }}
           >
 
-            <Text style={{ textAlign: "center", padding: 40, fontSize: 18 }}>How many photos each ?</Text>
+            <Text style={{ textAlign: "center", paddingTop: 40, paddingBottom: 10, color: 'white', fontSize: 18 }}>How many photos each ?</Text>
             <Picker style={{ textAlign: "center", padding: 10 }}
               selectedValue={this.state.limit}
               style={{ height: 200, margin: 20 }}
@@ -169,23 +181,23 @@ export default class NewEvent extends Component {
               <Picker.Item label="72" value="72" />
               <Picker.Item label="96" value="96" />
             </Picker>
-
+            
             <TouchableHighlight
+              style={[styles.buttonContainer, styles.loginButton]}
               onPress={() => {
                 this.setModalVisiblePhotoLimit(!this.state.modalVisiblePhotoLimit);
               }}>
-              <Text style={{ textAlign: "center", padding: 10 }}>DONE</Text>
+              <Text style={styles.loginText}>DONE</Text>
             </TouchableHighlight>
 
           </Modal>
-
           {pf === "ios" && (
             <>
               <TouchableHighlight
                 onPress={() => {
                   this.setModalVisibleEventEndDate(true);
                 }}>
-                <Text style={{ textAlign: "center", padding: 40, fontSize: 18 }}>Event End Date:</Text>
+                <Text style={{ textAlign: "center", paddingTop: 40, paddingBottom: 10, color: 'white', fontSize: 18 }}>Event End Date:</Text>
               </TouchableHighlight>
 
               <Modal
@@ -205,10 +217,11 @@ export default class NewEvent extends Component {
                 />
 
                 <TouchableHighlight
+                  style={[styles.buttonContainer, styles.loginButton]}
                   onPress={() => {
                     this.setModalVisibleEventEndDate(!this.state.modalVisibleEventEndDate);
                   }}>
-                  <Text style={{ textAlign: "center", padding: 10 }}>DONE</Text>
+                  <Text style={styles.loginText}>DONE</Text>
                 </TouchableHighlight>
 
               </Modal>
@@ -241,7 +254,7 @@ export default class NewEvent extends Component {
                 onPress={() => {
                   this.setModalVisibleDevelopEndDate(true);
                 }}>
-                <Text style={{ textAlign: "center", padding: 40, fontSize: 18 }}>Develop End Date:</Text>
+                <Text style={{ textAlign: "center", paddingTop: 40, paddingBottom: 10, color: 'white', fontSize: 18 }}>Develop End Date:</Text>
               </TouchableHighlight>
 
               <Modal
@@ -263,10 +276,11 @@ export default class NewEvent extends Component {
                 />
 
                 <TouchableHighlight
+                  style={[styles.buttonContainer, styles.loginButton]}
                   onPress={() => {
                     this.setModalVisibleDevelopEndDate(!this.state.modalVisibleDevelopEndDate);
                   }}>
-                  <Text style={{ textAlign: "center", padding: 10 }}>DONE</Text>
+                  <Text style={styles.loginText}>DONE</Text>
                 </TouchableHighlight>
 
               </Modal>
@@ -281,23 +295,20 @@ export default class NewEvent extends Component {
                 borderWidth: 1,
                 margin: 40
               }}
-              title="Develop Photos Date.."
+              title="Develop Photos Date..."
               onPress={this.handleAndroidDevelopDate}
             />
           )}
 
-
-          <Button
-            style={{
-              color: 'red',
-              padding: 20,
-              borderWidth: 1,
-              marginBottom: 40
-            }}
-            title="Submit your event"
+          <TouchableHighlight
+            style={[styles.buttonContainer, styles.loginButton]}
             onPress={this.handleEventSubmit}
-          />
+          >
+            <Text style={styles.loginText}>Submit your event</Text>
+          </TouchableHighlight>
+          
         </>
+        </ImageBackground>
       );
     }
   }
@@ -321,3 +332,59 @@ async function loadAndroidDatePicker() {
 // TODO can not style react-native <Button /> goto https://facebook.github.io/react-native/docs/touchableopacity.html
 // TODO simplify IOS date picker ( no time required )
 // TODO default time of events is midday
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#DCDCDC"
+  },
+  inputContainer: {
+    borderBottomColor: "#F5FCFF",
+    backgroundColor: "#FFFFFF",
+    borderRadius: 30,
+    borderBottomWidth: 1,
+    width: 250,
+    height: 30,
+    marginBottom: 10,
+    flexDirection: "row",
+    alignItems: "center"
+  },
+  inputs: {
+    height: 25,
+    marginLeft: 16,
+    borderBottomColor: "#FFFFFF",
+    flex: 1
+  },
+  inputIcon: {
+    width: 30,
+    height: 30,
+    marginLeft: 15,
+    justifyContent: "center"
+  },
+  buttonContainer: {
+    height: 45,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 20,
+    width: 250,
+    borderRadius: 30
+  },
+  loginButton: {
+    backgroundColor: "#00b5ec"
+  },
+  loginText: {
+    color: "white"
+  },
+  bgImage: {
+    flex: 1,
+    top: 0,
+    left: 0,
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
+    justifyContent: "center",
+    alignItems: "center"
+  }
+});
