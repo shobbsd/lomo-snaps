@@ -83,25 +83,24 @@ export default class UserList extends Component {
 
     return (
       <Container>
-        <ImageBackground source={BG_IMAGE} style={styles.bgImage}>
-          <AddFriend
-            isVisible={this.state.showModal}
-            closeModal={this.closeModal}
-            updateEvent={this.updateEvent}
-          />
-          <Content>
-            <List>
-              {this.state.event.attendeesNames &&
-                attendeesNames.map(element => {
-                  return (
-                    <ListItem key={element}>
-                      <Left>
-                        <Text>{element}</Text>
-                      </Left>
-                    </ListItem>
-                  );
-                })}
-              {/* <ListItem>
+        <AddFriend
+          isVisible={this.state.showModal}
+          closeModal={this.closeModal}
+          updateEvent={this.updateEvent}
+        />
+        <Content>
+          <List>
+            {this.state.event.attendeesNames &&
+              attendeesNames.map(element => {
+                return (
+                  <ListItem key={element}>
+                    <Left>
+                      <Text style={styles.name} >{element}</Text>
+                    </Left>
+                  </ListItem>
+                );
+              })}
+            {/* <ListItem>
               <Left>
                 <Text>Shaq</Text>
               </Left>
@@ -116,22 +115,21 @@ export default class UserList extends Component {
                 <Text>Chris</Text>
               </Left>
             </ListItem> */}
-            </List>
-          </Content>
-          <TouchableOpacity
-            onPress={() => {
-              this.setState({ showModal: true });
+          </List>
+        </Content>
+        <TouchableOpacity
+          onPress={() => {
+            this.setState({ showModal: true });
+          }}
+          style={styles.TouchableOpacityStyle}
+        >
+          <Image
+            source={{
+              uri: "https://img.icons8.com/cotton/2x/plus--v1.png"
             }}
-            style={styles.TouchableOpacityStyle}
-          >
-            <Image
-              source={{
-                uri: "https://img.icons8.com/cotton/2x/plus--v1.png"
-              }}
-              style={styles.FloatingButtonStyle}
-            />
-          </TouchableOpacity>
-        </ImageBackground>
+            style={styles.FloatingButtonStyle}
+          />
+        </TouchableOpacity>
       </Container>
     );
   }
@@ -147,15 +145,8 @@ const styles = StyleSheet.create({
     right: 30,
     bottom: 30
   },
-  bgImage: {
-    flex: 1,
-    top: 0,
-    left: 0,
-    width: SCREEN_WIDTH,
-    height: SCREEN_HEIGHT,
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: -1
+  name: {
+    fontSize: 30
   },
   FloatingButtonStyle: {
     resizeMode: "contain",

@@ -26,6 +26,8 @@ const styles = {
     eventCard: {
         backgroundColor: '#E48B74',
         borderRadius: 5,
+        borderColor: '#E38A73',
+        borderWidth: 0.9,
         margin: 15,
         padding: 15,
         fontSize: 18,

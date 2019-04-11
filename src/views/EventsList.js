@@ -129,8 +129,6 @@ const styles = StyleSheet.create({
     left: 0,
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
-    justifyContent: "center",
-    alignItems: "center"
   },
   header: {
     fontSize: 35,
