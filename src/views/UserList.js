@@ -38,7 +38,7 @@ export default class UserList extends Component {
             <List>
               {event.attendeesUids.map(attendee => {
                 console.log(attendee)
-                return <ListItem>
+                return <ListItem key={attendee}>
                   <Left>
                     <Text>{event.attendeesNames[attendee]}</Text>
                   </Left>

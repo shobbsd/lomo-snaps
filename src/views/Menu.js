@@ -21,6 +21,8 @@ import Camera from "./Camera";
 import UserList from "./UserList";
 import PhotoGallery from "./PhotoGallery";
 import Loading from "../components/Loading";
+import firebaseConnect from "../../firebaseConfig";
+import "@firebase/firestore";
 
 class Menu extends Component {
   state = {
@@ -42,6 +44,15 @@ class Menu extends Component {
   }
 
   depreciatePhotosLeft = () => {
+    const db = firebaseConnect.firestore();
+    const { event } = this.state
+    const docname = event.organiser + event.eventName
+    db.collection('events')
+      .doc(docname)
+      .update({
+
+      })
+
     this.setState((prevState) => {
       return { photosleft: prevState.photosleft - 1 }
     })
@@ -67,7 +78,7 @@ class Menu extends Component {
             {/* <Subtitle>Released on : {devDate}</Subtitle> */}
           </Body>
           <Right>
-            <Text>{this.state.photosleft}</Text>
+            <Text style={{ color: 'white' }}>{this.state.photosleft}</Text>
           </Right>
         </Header>
 
