@@ -39,19 +39,44 @@ export default class PhotoGallery extends React.Component {
   // }
 
   componentDidMount() {
-    const imagesArray = this.props.imagesArray;
+    const { imagesArray, eventDevelopDate } = this.props;
 
-    if (imagesArray.length !== 0) {
-      const updateGallery = imagesArray.map((imgSRC, i) => {
-        return { id: i, src: imgSRC }; // make objects
-      });
+    if (imagesArray.length > 0) {
+      if (
+        imagesArray.length !== 0 &&
+        Date.now() > eventDevelopDate.toMillis()
+      ) {
+        const updateGallery = imagesArray.map((imgSRC, i) => {
+          return { id: i, src: imgSRC }; // make objects
+        });
 
-      this.setState({ items: updateGallery });
+        this.setState({ items: updateGallery });
+      } else if (
+        imagesArray.length !== 0 &&
+        Date.now() < eventDevelopDate.toMillis()
+      ) {
+        const items = Array.apply(null, Array(imagesArray.length)).map(
+          (v, i) => {
+            //Using demo placeholder images but you can add your images here
+            return {
+              id: i,
+              src: "http://placehold.it/200x200?text=due%20soon..."
+            };
+          }
+        );
+        this.setState({ items });
+      } else {
+        const items = {
+          id: 1,
+          src: "http://placehold.it/200x200?text=Take%20some%20photos!"
+        };
+        this.setState({ items });
+      }
     } // end if
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log(prevProps);
+    console.log(prevState);
   }
 
   //   renderHeader() {
