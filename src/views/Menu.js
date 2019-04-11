@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import { StatusBar } from 'react-native';
 import {
   Container,
   Header,
@@ -28,7 +28,8 @@ class Menu extends Component {
   state = {
     isReady: false,
     event: {},
-    photosleft: 0
+    photosleft: 0,
+    user: {}
   };
 
   async componentDidMount() {
@@ -47,15 +48,16 @@ class Menu extends Component {
     const db = firebaseConnect.firestore();
     const { event } = this.state
     const docname = event.organiser + event.eventName
-    db.collection('events')
-      .doc(docname)
-      .update({
-
-      })
-
+    const photosleftObj = `photosleft.${this.state.user.uid}`
     this.setState((prevState) => {
       return { photosleft: prevState.photosleft - 1 }
     })
+    db.collection('events')
+      .doc(docname)
+      .update({
+        [photosleftObj]: this.state.photosleft
+      })
+
   }
 
   render() {
@@ -71,6 +73,7 @@ class Menu extends Component {
     }
     return (
       <Container>
+        <StatusBar hidden={true} />
         <Header hasTabs>
           <Left />
           <Body>
