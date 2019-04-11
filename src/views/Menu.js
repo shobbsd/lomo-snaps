@@ -72,7 +72,7 @@ class Menu extends Component {
       return <Loading />;
     }
     return (
-      <Container style={{ color: '#E48B74' }}>
+      <Container>
         <StatusBar hidden={true} />
         <Header hasTabs>
           <Left />

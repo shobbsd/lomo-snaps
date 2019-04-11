@@ -4,6 +4,8 @@ import {
   Text,
   TextInput,
   Button,
+  Modal,
+  TouchableHighlight,
   DatePickerIOS,
   DatePickerAndroid,
   Picker
@@ -25,8 +27,23 @@ export default class NewEvent extends Component {
       isEventNameError: null, // local state only.
       hasCalendarPermission: false,
       user: {},
-      limit: "24"
+      limit: "24",
+      modalVisiblePhotoLimit: false,
+      modalVisibleEventEndDate: false,
+      modalVisibleDevelopEndDate: false,
     };
+  }
+
+  setModalVisiblePhotoLimit(visible) {
+    this.setState({ modalVisiblePhotoLimit: visible });
+  }
+
+  setModalVisibleEventEndDate(visible) {
+    this.setState({ modalVisibleEventEndDate: visible });
+  }
+
+  setModalVisibleDevelopEndDate(visible) {
+    this.setState({ modalVisibleDevelopEndDate: visible });
   }
 
   handleEventSubmit = () => {
@@ -103,7 +120,7 @@ export default class NewEvent extends Component {
     else {
       return (
         <>
-          <Text style={{ textAlign: "center", padding: 10 }}>Event Name:</Text>
+          <Text style={{ textAlign: "center", padding: 40, fontSize: 18 }}>Enter your Event Name</Text>
           <TextInput
             style={{
               height: 40,
@@ -124,45 +141,142 @@ export default class NewEvent extends Component {
             </Text>
           )}
 
-          <Text style={{ textAlign: "center" }}>Event End Date:</Text>
+          <TouchableHighlight
+            onPress={() => {
+              this.setModalVisiblePhotoLimit(true);
+            }}>
+            <Text style={{ textAlign: "center", padding: 40, fontSize: 18 }}>Choose a photo limit...</Text>
+          </TouchableHighlight>
+
+          <Modal
+            animationType="none"
+            transparent={false}
+            visible={this.state.modalVisiblePhotoLimit}
+            onRequestClose={() => {
+              console.log('modal closed')
+            }}
+          >
+
+            <Text style={{ textAlign: "center", padding: 40, fontSize: 18 }}>How many photos each ?</Text>
+            <Picker style={{ textAlign: "center", padding: 10 }}
+              selectedValue={this.state.limit}
+              style={{ height: 200, margin: 20 }}
+              onValueChange={(limit) =>
+                this.setState({ limit })
+              }>
+              <Picker.Item label="24" value="24" />
+              <Picker.Item label="48" value="48" />
+              <Picker.Item label="72" value="72" />
+              <Picker.Item label="96" value="96" />
+            </Picker>
+
+            <TouchableHighlight
+              onPress={() => {
+                this.setModalVisiblePhotoLimit(!this.state.modalVisiblePhotoLimit);
+              }}>
+              <Text style={{ textAlign: "center", padding: 10 }}>DONE</Text>
+            </TouchableHighlight>
+
+          </Modal>
 
           {pf === "ios" && (
-            <DatePickerIOS
-              minimumDate={new Date()}
-              date={this.state.eventEndDate}
-              onDateChange={eventEndDate => this.setState({ eventEndDate })}
-            />
+            <>
+              <TouchableHighlight
+                onPress={() => {
+                  this.setModalVisibleEventEndDate(true);
+                }}>
+                <Text style={{ textAlign: "center", padding: 40, fontSize: 18 }}>Event End Date:</Text>
+              </TouchableHighlight>
+
+              <Modal
+                animationType="none"
+                transparent={false}
+                visible={this.state.modalVisibleEventEndDate}
+                style={{ marginTop: 100 }}
+                onRequestClose={() => {
+                  console.log('modal closed')
+                }}
+              >
+
+                <DatePickerIOS
+                  minimumDate={new Date()}
+                  date={this.state.eventEndDate}
+                  onDateChange={eventEndDate => this.setState({ eventEndDate })}
+                />
+
+                <TouchableHighlight
+                  onPress={() => {
+                    this.setModalVisibleEventEndDate(!this.state.modalVisibleEventEndDate);
+                  }}>
+                  <Text style={{ textAlign: "center", padding: 10 }}>DONE</Text>
+                </TouchableHighlight>
+
+              </Modal>
+            </>
+          )}
+
+          {pf === "android" && (
+
+            <>
+              <Button
+                style={{
+                  color: "red",
+                  padding: 40,
+                  borderWidth: 1,
+                  margin: 40
+                }}
+                title="Event End Date.."
+                onPress={this.handleAndroidEventDate}
+              />
+            </>
+
+          )}
+
+
+          {pf === "ios" && (
+            <>
+              {/* <Text style={{ textAlign: "center", padding: 40, fontSize: 18 }}>Develop Photos Date:</Text> */}
+
+              <TouchableHighlight
+                onPress={() => {
+                  this.setModalVisibleDevelopEndDate(true);
+                }}>
+                <Text style={{ textAlign: "center", padding: 40, fontSize: 18 }}>Develop End Date:</Text>
+              </TouchableHighlight>
+
+              <Modal
+                animationType="none"
+                transparent={false}
+                visible={this.state.modalVisibleDevelopEndDate}
+                style={{ marginTop: 100 }}
+                onRequestClose={() => {
+                  console.log('modal closed')
+                }}
+              >
+
+                <DatePickerIOS
+                  minimumDate={this.state.eventEndDate}
+                  date={this.state.eventDevelopDate}
+                  onDateChange={eventDevelopDate =>
+                    this.setState({ eventDevelopDate })
+                  }
+                />
+
+                <TouchableHighlight
+                  onPress={() => {
+                    this.setModalVisibleDevelopEndDate(!this.state.modalVisibleDevelopEndDate);
+                  }}>
+                  <Text style={{ textAlign: "center", padding: 10 }}>DONE</Text>
+                </TouchableHighlight>
+
+              </Modal>
+            </>
           )}
 
           {pf === "android" && (
             <Button
               style={{
-                color: "red",
-                padding: 40,
-                borderWidth: 1,
-                margin: 40
-              }}
-              title="Event End Date.."
-              onPress={this.handleAndroidEventDate}
-            />
-          )}
-
-          <Text style={{ textAlign: "center" }}>Develop Photos Date:</Text>
-
-          {pf === "ios" && (
-            <DatePickerIOS
-              minimumDate={this.state.eventEndDate}
-              date={this.state.eventDevelopDate}
-              onDateChange={eventDevelopDate =>
-                this.setState({ eventDevelopDate })
-              }
-            />
-          )}
-
-          {pf === "android" && (
-            <Button
-              style={{
-                color: "red",
+                color: 'red',
                 padding: 40,
                 borderWidth: 1,
                 margin: 40
@@ -171,21 +285,11 @@ export default class NewEvent extends Component {
               onPress={this.handleAndroidDevelopDate}
             />
           )}
-          <Text>Choose a photo limit:</Text>
-          <Picker
-            selectedValue={this.state.limit}
-            style={{ height: 50, width: 100 }}
-            onValueChange={limit => this.setState({ limit })}
-          >
-            <Picker.Item label="24" value="24" />
-            <Picker.Item label="48" value="48" />
-            <Picker.Item label="72" value="72" />
-            <Picker.Item label="96" value="96" />
-          </Picker>
+
 
           <Button
             style={{
-              color: "red",
+              color: 'red',
               padding: 20,
               borderWidth: 1,
               marginBottom: 40
