@@ -44,7 +44,7 @@ export default class PhotoGallery extends React.Component {
     if (imagesArray.length > 0) {
       if (
         imagesArray.length !== 0 &&
-        Date.now() > eventDevelopDate.toMillis()
+        Date.now() > eventDevelopDate.toMillis() + 3600000
       ) {
         const updateGallery = imagesArray.map((imgSRC, i) => {
           return { id: i, src: imgSRC }; // make objects
@@ -53,7 +53,7 @@ export default class PhotoGallery extends React.Component {
         this.setState({ items: updateGallery });
       } else if (
         imagesArray.length !== 0 &&
-        Date.now() < eventDevelopDate.toMillis()
+        Date.now() < eventDevelopDate.toMillis() + 3600000
       ) {
         const items = Array.apply(null, Array(imagesArray.length)).map(
           (v, i) => {

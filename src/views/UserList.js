@@ -53,7 +53,7 @@ export default class UserList extends Component {
     const db = firebaseConnect.firestore();
     console.log(name, uid);
     const attendeesObj = `attendeesNames.${uid}`;
-    const photosleftObj = `photosleft.${uid}`
+    const photosleftObj = `photosleft.${uid}`;
     db.collection("events")
       .doc(newEvent.eventUid)
       .update({
