@@ -127,187 +127,188 @@ export default class NewEvent extends Component {
     else {
       return (
         <ImageBackground source={BG_IMAGE} style={styles.bgImage}>
-        <>
-          <Text style={{ textAlign: "center", padding: 10, color: 'white', fontSize: 18 }}>Enter your Event Name</Text>
-          <TextInput
-            style={{
-              height: 40,
-              width: 200,
-              borderColor: "gray",
-              borderWidth: 1,
-              marginBottom: 20,
-              marginTop: 0,
-              backgroundColor: '#E48B74',
-              borderRadius: 10,
-              color: 'white'
-            }}
-            placeholder="Enter your event name, at least 5 characters..."
-            onChangeText={eventName =>
-              this.setState({ eventName: eventName, isEventNameError: false })
-            }
-            value={this.state.eventName}
-          />
-          {isEventNameError && (
-            <Text style={{ textAlign: "center", padding: 10, color: "red" }}>
-              Event Name must be at least 5 characters
+          <>
+            <Text style={{ textAlign: "center", padding: 10, color: 'white', fontSize: 18 }}>Enter your Event Name</Text>
+            <TextInput
+              style={{
+                height: 40,
+                width: 200,
+                borderColor: "gray",
+                borderWidth: 1,
+                marginBottom: 20,
+                marginTop: 0,
+                backgroundColor: '#E48B74',
+                borderRadius: 10,
+                color: 'white'
+              }}
+              placeholder="Enter your event name, at least 5 characters..."
+              onChangeText={eventName =>
+                this.setState({ eventName: eventName, isEventNameError: false })
+              }
+              value={this.state.eventName}
+            />
+            {isEventNameError && (
+              <Text style={{ textAlign: "center", padding: 10, color: "red" }}>
+                Event Name must be at least 5 characters
             </Text>
-          )}
+            )}
 
-          <TouchableHighlight
-            onPress={() => {
-              this.setModalVisiblePhotoLimit(true);
-            }}>
-            <Text style={{ textAlign: "center", paddingTop: 40, paddingBottom: 10, color: 'white', fontSize: 18 }}>Choose a photo limit...</Text>
-          </TouchableHighlight>
-
-          <Modal
-            animationType="none"
-            transparent={false}
-            visible={this.state.modalVisiblePhotoLimit}
-            onRequestClose={() => {
-              console.log('modal closed')
-            }}
-          >
-
-            <Text style={{ textAlign: "center", paddingTop: 40, paddingBottom: 10, color: 'white', fontSize: 18 }}>How many photos each ?</Text>
-            <Picker style={{ textAlign: "center", padding: 10 }}
-              selectedValue={this.state.limit}
-              style={{ height: 200, margin: 20 }}
-              onValueChange={(limit) =>
-                this.setState({ limit })
-              }>
-              <Picker.Item label="24" value="24" />
-              <Picker.Item label="48" value="48" />
-              <Picker.Item label="72" value="72" />
-              <Picker.Item label="96" value="96" />
-            </Picker>
-            
             <TouchableHighlight
-              style={[styles.buttonContainer, styles.loginButton]}
               onPress={() => {
-                this.setModalVisiblePhotoLimit(!this.state.modalVisiblePhotoLimit);
+                this.setModalVisiblePhotoLimit(true);
               }}>
-              <Text style={styles.loginText}>DONE</Text>
+              <Text style={{ textAlign: "center", paddingTop: 40, paddingBottom: 10, color: 'white', fontSize: 18 }}>Choose a photo limit...</Text>
             </TouchableHighlight>
 
-          </Modal>
-          {pf === "ios" && (
-            <>
+            <Modal
+              animationType="none"
+              transparent={false}
+              visible={this.state.modalVisiblePhotoLimit}
+              onRequestClose={() => {
+                console.log('modal closed')
+              }}
+            >
+
+              <Text style={{ textAlign: "center", paddingTop: 40, paddingBottom: 10, color: 'white', fontSize: 18 }}>How many photos each ?</Text>
+              <Picker style={{ textAlign: "center", padding: 10 }}
+                selectedValue={this.state.limit}
+                style={{ height: 200, margin: 20 }}
+                onValueChange={(limit) =>
+                  this.setState({ limit })
+                }>
+                <Picker.Item label="24" value="24" />
+                <Picker.Item label="48" value="48" />
+                <Picker.Item label="72" value="72" />
+                <Picker.Item label="96" value="96" />
+              </Picker>
+
               <TouchableHighlight
+                style={[styles.buttonContainer, styles.loginButton]}
                 onPress={() => {
-                  this.setModalVisibleEventEndDate(true);
+                  this.setModalVisiblePhotoLimit(!this.state.modalVisiblePhotoLimit);
                 }}>
-                <Text style={{ textAlign: "center", paddingTop: 40, paddingBottom: 10, color: 'white', fontSize: 18 }}>Event End Date:</Text>
+                <Text style={styles.loginText}>DONE</Text>
               </TouchableHighlight>
 
-              <Modal
-                animationType="none"
-                transparent={false}
-                visible={this.state.modalVisibleEventEndDate}
-                style={{ marginTop: 100 }}
-                onRequestClose={() => {
-                  console.log('modal closed')
-                }}
-              >
-
-                <DatePickerIOS
-                  minimumDate={new Date()}
-                  date={this.state.eventEndDate}
-                  onDateChange={eventEndDate => this.setState({ eventEndDate })}
-                />
-
+            </Modal>
+            <Text>{this.state.limit}</Text>
+            {pf === "ios" && (
+              <>
                 <TouchableHighlight
-                  style={[styles.buttonContainer, styles.loginButton]}
                   onPress={() => {
-                    this.setModalVisibleEventEndDate(!this.state.modalVisibleEventEndDate);
+                    this.setModalVisibleEventEndDate(true);
                   }}>
-                  <Text style={styles.loginText}>DONE</Text>
+                  <Text style={{ textAlign: "center", paddingTop: 40, paddingBottom: 10, color: 'white', fontSize: 18 }}>Event End Date:</Text>
                 </TouchableHighlight>
 
-              </Modal>
-            </>
-          )}
+                <Modal
+                  animationType="none"
+                  transparent={false}
+                  visible={this.state.modalVisibleEventEndDate}
+                  style={{ marginTop: 100 }}
+                  onRequestClose={() => {
+                    console.log('modal closed')
+                  }}
+                >
 
-          {pf === "android" && (
+                  <DatePickerIOS
+                    minimumDate={new Date()}
+                    date={this.state.eventEndDate}
+                    onDateChange={eventEndDate => this.setState({ eventEndDate })}
+                  />
 
-            <>
+                  <TouchableHighlight
+                    style={[styles.buttonContainer, styles.loginButton]}
+                    onPress={() => {
+                      this.setModalVisibleEventEndDate(!this.state.modalVisibleEventEndDate);
+                    }}>
+                    <Text style={styles.loginText}>DONE</Text>
+                  </TouchableHighlight>
+
+                </Modal>
+              </>
+            )}
+
+            {pf === "android" && (
+
+              <>
+                <Button
+                  style={{
+                    color: "red",
+                    padding: 40,
+                    borderWidth: 1,
+                    margin: 40
+                  }}
+                  title="Event End Date.."
+                  onPress={this.handleAndroidEventDate}
+                />
+              </>
+
+            )}
+
+
+            {pf === "ios" && (
+              <>
+                {/* <Text style={{ textAlign: "center", padding: 40, fontSize: 18 }}>Develop Photos Date:</Text> */}
+
+                <TouchableHighlight
+                  onPress={() => {
+                    this.setModalVisibleDevelopEndDate(true);
+                  }}>
+                  <Text style={{ textAlign: "center", paddingTop: 40, paddingBottom: 10, color: 'white', fontSize: 18 }}>Develop End Date:</Text>
+                </TouchableHighlight>
+
+                <Modal
+                  animationType="none"
+                  transparent={false}
+                  visible={this.state.modalVisibleDevelopEndDate}
+                  style={{ marginTop: 100 }}
+                  onRequestClose={() => {
+                    console.log('modal closed')
+                  }}
+                >
+
+                  <DatePickerIOS
+                    minimumDate={this.state.eventEndDate}
+                    date={this.state.eventDevelopDate}
+                    onDateChange={eventDevelopDate =>
+                      this.setState({ eventDevelopDate })
+                    }
+                  />
+
+                  <TouchableHighlight
+                    style={[styles.buttonContainer, styles.loginButton]}
+                    onPress={() => {
+                      this.setModalVisibleDevelopEndDate(!this.state.modalVisibleDevelopEndDate);
+                    }}>
+                    <Text style={styles.loginText}>DONE</Text>
+                  </TouchableHighlight>
+
+                </Modal>
+              </>
+            )}
+
+            {pf === "android" && (
               <Button
                 style={{
-                  color: "red",
+                  color: 'red',
                   padding: 40,
                   borderWidth: 1,
                   margin: 40
                 }}
-                title="Event End Date.."
-                onPress={this.handleAndroidEventDate}
+                title="Develop Photos Date..."
+                onPress={this.handleAndroidDevelopDate}
               />
-            </>
+            )}
 
-          )}
+            <TouchableHighlight
+              style={[styles.buttonContainer, styles.loginButton]}
+              onPress={this.handleEventSubmit}
+            >
+              <Text style={styles.loginText}>Submit your event</Text>
+            </TouchableHighlight>
 
-
-          {pf === "ios" && (
-            <>
-              {/* <Text style={{ textAlign: "center", padding: 40, fontSize: 18 }}>Develop Photos Date:</Text> */}
-
-              <TouchableHighlight
-                onPress={() => {
-                  this.setModalVisibleDevelopEndDate(true);
-                }}>
-                <Text style={{ textAlign: "center", paddingTop: 40, paddingBottom: 10, color: 'white', fontSize: 18 }}>Develop End Date:</Text>
-              </TouchableHighlight>
-
-              <Modal
-                animationType="none"
-                transparent={false}
-                visible={this.state.modalVisibleDevelopEndDate}
-                style={{ marginTop: 100 }}
-                onRequestClose={() => {
-                  console.log('modal closed')
-                }}
-              >
-
-                <DatePickerIOS
-                  minimumDate={this.state.eventEndDate}
-                  date={this.state.eventDevelopDate}
-                  onDateChange={eventDevelopDate =>
-                    this.setState({ eventDevelopDate })
-                  }
-                />
-
-                <TouchableHighlight
-                  style={[styles.buttonContainer, styles.loginButton]}
-                  onPress={() => {
-                    this.setModalVisibleDevelopEndDate(!this.state.modalVisibleDevelopEndDate);
-                  }}>
-                  <Text style={styles.loginText}>DONE</Text>
-                </TouchableHighlight>
-
-              </Modal>
-            </>
-          )}
-
-          {pf === "android" && (
-            <Button
-              style={{
-                color: 'red',
-                padding: 40,
-                borderWidth: 1,
-                margin: 40
-              }}
-              title="Develop Photos Date..."
-              onPress={this.handleAndroidDevelopDate}
-            />
-          )}
-
-          <TouchableHighlight
-            style={[styles.buttonContainer, styles.loginButton]}
-            onPress={this.handleEventSubmit}
-          >
-            <Text style={styles.loginText}>Submit your event</Text>
-          </TouchableHighlight>
-          
-        </>
+          </>
         </ImageBackground>
       );
     }
