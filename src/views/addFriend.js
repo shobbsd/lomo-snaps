@@ -82,14 +82,14 @@ export default class AddFriend extends Component {
             Alert.alert("Modal has been closed.");
           }}
         >
-          <View style={{ marginTop: 200, justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ marginTop: 100, justifyContent: 'center', alignItems: 'center' }}>
             <View style={{ alignItems: 'center' }}>
               <Text style={styles.header}>Select who you would like to invite:</Text>
               {this.state.contacts && (
                 <Picker
                   selectedValue={this.state.toAdd}
-                  style={{ height: 100, width: 200 }}
-                  itemStyle={{ backgroundColor: "grey", color: "blue", fontFamily: "Ebrima", fontSize: 17 }}
+                  style={{ height: 200, width: 200 }}
+                  itemStyle={{ backgroundColor: "white", color: "blue", fontSize: 17 }}
                   onValueChange={itemValue =>
                     this.setState({ toAdd: itemValue })
                   }
@@ -152,7 +152,8 @@ const styles = StyleSheet.create({
     borderRadius: 30
   },
   buttonAdd: {
-    backgroundColor: "#3176C2"
+    backgroundColor: "#3176C2",
+    marginTop: 150
   },
   buttonCancel: {
     backgroundColor: "#FF0000"
@@ -167,6 +168,6 @@ const styles = StyleSheet.create({
     marginLeft: 5
   },
   header: {
-    fontSize: 20,
+    fontSize: 20
   }
 })

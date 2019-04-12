@@ -128,20 +128,22 @@ export default class NewEvent extends Component {
       return (
         <ImageBackground source={BG_IMAGE} style={styles.bgImage}>
           <>
-            <Text style={{ textAlign: "center", padding: 10, color: 'white', fontSize: 18 }}>Enter your Event Name</Text>
+            <Text style={{ textAlign: "center", padding: 20, color: 'white', fontSize: 18 }}>Enter your Event Name</Text>
             <TextInput
               style={{
                 height: 40,
-                width: 200,
+                width: 250,
+                padding: 10,
+                fontSize: 18,
                 borderColor: "gray",
                 borderWidth: 1,
                 marginBottom: 20,
                 marginTop: 0,
-                backgroundColor: '#E48B74',
+                backgroundColor: 'white',
                 borderRadius: 10,
-                color: 'white'
+                color: 'black'
               }}
-              placeholder="Enter your event name, at least 5 characters..."
+              placeholder="Enter your event name.."
               onChangeText={eventName =>
                 this.setState({ eventName: eventName, isEventNameError: false })
               }
@@ -157,7 +159,7 @@ export default class NewEvent extends Component {
               onPress={() => {
                 this.setModalVisiblePhotoLimit(true);
               }}>
-              <Text style={{ textAlign: "center", paddingTop: 40, paddingBottom: 10, color: 'white', fontSize: 18 }}>Choose a photo limit...</Text>
+              <Text style={{ textAlign: "center", paddingTop: 30, paddingBottom: 30, color: 'white', fontSize: 18 }}>How many photos each ?</Text>
             </TouchableHighlight>
 
             <Modal
@@ -191,14 +193,16 @@ export default class NewEvent extends Component {
               </TouchableHighlight>
 
             </Modal>
-            <Text>{this.state.limit}</Text>
+
+            <Text style={{ color: 'white', fontSize: 24 }}>{this.state.limit}</Text>
+
             {pf === "ios" && (
               <>
                 <TouchableHighlight
                   onPress={() => {
                     this.setModalVisibleEventEndDate(true);
                   }}>
-                  <Text style={{ textAlign: "center", paddingTop: 40, paddingBottom: 10, color: 'white', fontSize: 18 }}>Event End Date:</Text>
+                  <Text style={{ textAlign: "center", paddingTop: 30, paddingBottom: 30, color: 'white', fontSize: 18 }}>When does the event end ?</Text>
                 </TouchableHighlight>
 
                 <Modal
@@ -246,16 +250,15 @@ export default class NewEvent extends Component {
 
             )}
 
+            <Text style={{ color: 'white', fontSize: 24 }}>{this.state.eventEndDate.toLocaleDateString()}</Text>
 
             {pf === "ios" && (
               <>
-                {/* <Text style={{ textAlign: "center", padding: 40, fontSize: 18 }}>Develop Photos Date:</Text> */}
-
                 <TouchableHighlight
                   onPress={() => {
                     this.setModalVisibleDevelopEndDate(true);
                   }}>
-                  <Text style={{ textAlign: "center", paddingTop: 40, paddingBottom: 10, color: 'white', fontSize: 18 }}>Develop End Date:</Text>
+                  <Text style={{ textAlign: "center", paddingTop: 30, paddingBottom: 30, color: 'white', fontSize: 18 }}>When are photos developed ?</Text>
                 </TouchableHighlight>
 
                 <Modal
@@ -301,6 +304,8 @@ export default class NewEvent extends Component {
               />
             )}
 
+            <Text style={{ color: 'white', fontSize: 24, paddingBottom: 30 }}>{this.state.eventDevelopDate.toLocaleDateString()}</Text>
+
             <TouchableHighlight
               style={[styles.buttonContainer, styles.loginButton]}
               onPress={this.handleEventSubmit}
@@ -309,6 +314,7 @@ export default class NewEvent extends Component {
             </TouchableHighlight>
 
           </>
+
         </ImageBackground>
       );
     }
@@ -377,7 +383,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#00b5ec"
   },
   loginText: {
-    color: "white"
+    color: "white",
+    fontSize: 18
   },
   bgImage: {
     flex: 1,
