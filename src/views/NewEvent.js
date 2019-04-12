@@ -161,7 +161,7 @@ export default class NewEvent extends Component {
             </TouchableHighlight>
 
             <Modal
-              animationType="none"
+              animationType="slide"
               transparent={false}
               visible={this.state.modalVisiblePhotoLimit}
               onRequestClose={() => {
