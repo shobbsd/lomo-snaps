@@ -3,7 +3,12 @@ import {
   Platform,
   Text,
   TextInput,
+  ImageBackground,
   Button,
+  StyleSheet,
+  Dimensions,
+  Modal,
+  TouchableHighlight,
   DatePickerIOS,
   DatePickerAndroid,
   Picker
@@ -11,6 +16,10 @@ import {
 import firebaseConnect from "../../firebaseConfig";
 import "@firebase/firestore";
 import { Permissions } from "expo";
+
+const BG_IMAGE = require("../assets/bg_screen.jpg");
+const SCREEN_WIDTH = Dimensions.get("window").width;
+const SCREEN_HEIGHT = Dimensions.get("window").height;
 
 const db = firebaseConnect.firestore();
 const pf = Platform.OS;
@@ -25,8 +34,23 @@ export default class NewEvent extends Component {
       isEventNameError: null, // local state only.
       hasCalendarPermission: false,
       user: {},
-      limit: "24"
+      limit: "24",
+      modalVisiblePhotoLimit: false,
+      modalVisibleEventEndDate: false,
+      modalVisibleDevelopEndDate: false,
     };
+  }
+
+  setModalVisiblePhotoLimit(visible) {
+    this.setState({ modalVisiblePhotoLimit: visible });
+  }
+
+  setModalVisibleEventEndDate(visible) {
+    this.setState({ modalVisibleEventEndDate: visible });
+  }
+
+  setModalVisibleDevelopEndDate(visible) {
+    this.setState({ modalVisibleDevelopEndDate: visible });
   }
 
   handleEventSubmit = () => {
@@ -102,98 +126,190 @@ export default class NewEvent extends Component {
       return <Text>Calendar permissions not given</Text>;
     else {
       return (
-        <>
-          <Text style={{ textAlign: "center", padding: 10 }}>Event Name:</Text>
-          <TextInput
-            style={{
-              height: 40,
-              borderColor: "gray",
-              borderWidth: 1,
-              margin: 20,
-              marginTop: 0
-            }}
-            placeholder="Enter your event name, at least 5 characters..."
-            onChangeText={eventName =>
-              this.setState({ eventName: eventName, isEventNameError: false })
-            }
-            value={this.state.eventName}
-          />
-          {isEventNameError && (
-            <Text style={{ textAlign: "center", padding: 10, color: "red" }}>
-              Event Name must be at least 5 characters
-            </Text>
-          )}
-
-          <Text style={{ textAlign: "center" }}>Event End Date:</Text>
-
-          {pf === "ios" && (
-            <DatePickerIOS
-              minimumDate={new Date()}
-              date={this.state.eventEndDate}
-              onDateChange={eventEndDate => this.setState({ eventEndDate })}
-            />
-          )}
-
-          {pf === "android" && (
-            <Button
+        <ImageBackground source={BG_IMAGE} style={styles.bgImage}>
+          <>
+            <Text style={{ textAlign: "center", padding: 10, color: 'white', fontSize: 18 }}>Enter your Event Name</Text>
+            <TextInput
               style={{
-                color: "red",
-                padding: 40,
+                height: 40,
+                width: 200,
+                borderColor: "gray",
                 borderWidth: 1,
-                margin: 40
+                marginBottom: 20,
+                marginTop: 0,
+                backgroundColor: '#E48B74',
+                borderRadius: 10,
+                color: 'white'
               }}
-              title="Event End Date.."
-              onPress={this.handleAndroidEventDate}
-            />
-          )}
-
-          <Text style={{ textAlign: "center" }}>Develop Photos Date:</Text>
-
-          {pf === "ios" && (
-            <DatePickerIOS
-              minimumDate={this.state.eventEndDate}
-              date={this.state.eventDevelopDate}
-              onDateChange={eventDevelopDate =>
-                this.setState({ eventDevelopDate })
+              placeholder="Enter your event name, at least 5 characters..."
+              onChangeText={eventName =>
+                this.setState({ eventName: eventName, isEventNameError: false })
               }
+              value={this.state.eventName}
             />
-          )}
+            {isEventNameError && (
+              <Text style={{ textAlign: "center", padding: 10, color: "red" }}>
+                Event Name must be at least 5 characters
+            </Text>
+            )}
 
-          {pf === "android" && (
-            <Button
-              style={{
-                color: "red",
-                padding: 40,
-                borderWidth: 1,
-                margin: 40
+            <TouchableHighlight
+              onPress={() => {
+                this.setModalVisiblePhotoLimit(true);
+              }}>
+              <Text style={{ textAlign: "center", paddingTop: 40, paddingBottom: 10, color: 'white', fontSize: 18 }}>Choose a photo limit...</Text>
+            </TouchableHighlight>
+
+            <Modal
+              animationType="slide"
+              transparent={false}
+              visible={this.state.modalVisiblePhotoLimit}
+              onRequestClose={() => {
+                console.log('modal closed')
               }}
-              title="Develop Photos Date.."
-              onPress={this.handleAndroidDevelopDate}
-            />
-          )}
-          <Text>Choose a photo limit:</Text>
-          <Picker
-            selectedValue={this.state.limit}
-            style={{ height: 50, width: 100 }}
-            onValueChange={limit => this.setState({ limit })}
-          >
-            <Picker.Item label="24" value="24" />
-            <Picker.Item label="48" value="48" />
-            <Picker.Item label="72" value="72" />
-            <Picker.Item label="96" value="96" />
-          </Picker>
+            >
 
-          <Button
-            style={{
-              color: "red",
-              padding: 20,
-              borderWidth: 1,
-              marginBottom: 40
-            }}
-            title="Submit your event"
-            onPress={this.handleEventSubmit}
-          />
-        </>
+              <Text style={{ textAlign: "center", paddingTop: 40, paddingBottom: 10, color: 'white', fontSize: 18 }}>How many photos each ?</Text>
+              <Picker style={{ textAlign: "center", padding: 10 }}
+                selectedValue={this.state.limit}
+                style={{ height: 200, margin: 20 }}
+                onValueChange={(limit) =>
+                  this.setState({ limit })
+                }>
+                <Picker.Item label="24" value="24" />
+                <Picker.Item label="48" value="48" />
+                <Picker.Item label="72" value="72" />
+                <Picker.Item label="96" value="96" />
+              </Picker>
+
+              <TouchableHighlight
+                style={[styles.buttonContainer, styles.loginButton]}
+                onPress={() => {
+                  this.setModalVisiblePhotoLimit(!this.state.modalVisiblePhotoLimit);
+                }}>
+                <Text style={styles.loginText}>DONE</Text>
+              </TouchableHighlight>
+
+            </Modal>
+            <Text>{this.state.limit}</Text>
+            {pf === "ios" && (
+              <>
+                <TouchableHighlight
+                  onPress={() => {
+                    this.setModalVisibleEventEndDate(true);
+                  }}>
+                  <Text style={{ textAlign: "center", paddingTop: 40, paddingBottom: 10, color: 'white', fontSize: 18 }}>Event End Date:</Text>
+                </TouchableHighlight>
+
+                <Modal
+                  animationType="none"
+                  transparent={false}
+                  visible={this.state.modalVisibleEventEndDate}
+                  style={{ marginTop: 100 }}
+                  onRequestClose={() => {
+                    console.log('modal closed')
+                  }}
+                >
+
+                  <DatePickerIOS
+                    minimumDate={new Date()}
+                    date={this.state.eventEndDate}
+                    onDateChange={eventEndDate => this.setState({ eventEndDate })}
+                  />
+
+                  <TouchableHighlight
+                    style={[styles.buttonContainer, styles.loginButton]}
+                    onPress={() => {
+                      this.setModalVisibleEventEndDate(!this.state.modalVisibleEventEndDate);
+                    }}>
+                    <Text style={styles.loginText}>DONE</Text>
+                  </TouchableHighlight>
+
+                </Modal>
+              </>
+            )}
+
+            {pf === "android" && (
+
+              <>
+                <Button
+                  style={{
+                    color: "red",
+                    padding: 40,
+                    borderWidth: 1,
+                    margin: 40
+                  }}
+                  title="Event End Date.."
+                  onPress={this.handleAndroidEventDate}
+                />
+              </>
+
+            )}
+
+
+            {pf === "ios" && (
+              <>
+                {/* <Text style={{ textAlign: "center", padding: 40, fontSize: 18 }}>Develop Photos Date:</Text> */}
+
+                <TouchableHighlight
+                  onPress={() => {
+                    this.setModalVisibleDevelopEndDate(true);
+                  }}>
+                  <Text style={{ textAlign: "center", paddingTop: 40, paddingBottom: 10, color: 'white', fontSize: 18 }}>Develop End Date:</Text>
+                </TouchableHighlight>
+
+                <Modal
+                  animationType="none"
+                  transparent={false}
+                  visible={this.state.modalVisibleDevelopEndDate}
+                  style={{ marginTop: 100 }}
+                  onRequestClose={() => {
+                    console.log('modal closed')
+                  }}
+                >
+
+                  <DatePickerIOS
+                    minimumDate={this.state.eventEndDate}
+                    date={this.state.eventDevelopDate}
+                    onDateChange={eventDevelopDate =>
+                      this.setState({ eventDevelopDate })
+                    }
+                  />
+
+                  <TouchableHighlight
+                    style={[styles.buttonContainer, styles.loginButton]}
+                    onPress={() => {
+                      this.setModalVisibleDevelopEndDate(!this.state.modalVisibleDevelopEndDate);
+                    }}>
+                    <Text style={styles.loginText}>DONE</Text>
+                  </TouchableHighlight>
+
+                </Modal>
+              </>
+            )}
+
+            {pf === "android" && (
+              <Button
+                style={{
+                  color: 'red',
+                  padding: 40,
+                  borderWidth: 1,
+                  margin: 40
+                }}
+                title="Develop Photos Date..."
+                onPress={this.handleAndroidDevelopDate}
+              />
+            )}
+
+            <TouchableHighlight
+              style={[styles.buttonContainer, styles.loginButton]}
+              onPress={this.handleEventSubmit}
+            >
+              <Text style={styles.loginText}>Submit your event</Text>
+            </TouchableHighlight>
+
+          </>
+        </ImageBackground>
       );
     }
   }
@@ -217,3 +333,59 @@ async function loadAndroidDatePicker() {
 // TODO can not style react-native <Button /> goto https://facebook.github.io/react-native/docs/touchableopacity.html
 // TODO simplify IOS date picker ( no time required )
 // TODO default time of events is midday
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#DCDCDC"
+  },
+  inputContainer: {
+    borderBottomColor: "#F5FCFF",
+    backgroundColor: "#FFFFFF",
+    borderRadius: 30,
+    borderBottomWidth: 1,
+    width: 250,
+    height: 30,
+    marginBottom: 10,
+    flexDirection: "row",
+    alignItems: "center"
+  },
+  inputs: {
+    height: 25,
+    marginLeft: 16,
+    borderBottomColor: "#FFFFFF",
+    flex: 1
+  },
+  inputIcon: {
+    width: 30,
+    height: 30,
+    marginLeft: 15,
+    justifyContent: "center"
+  },
+  buttonContainer: {
+    height: 45,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 20,
+    width: 250,
+    borderRadius: 30
+  },
+  loginButton: {
+    backgroundColor: "#00b5ec"
+  },
+  loginText: {
+    color: "white"
+  },
+  bgImage: {
+    flex: 1,
+    top: 0,
+    left: 0,
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
+    justifyContent: "center",
+    alignItems: "center"
+  }
+});

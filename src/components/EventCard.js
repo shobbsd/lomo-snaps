@@ -1,28 +1,38 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import Photos from '../views/Photos';
 
 export default class EventCard extends Component {
 
+    // style = {{ textAlign: 'center', color: 'white' }}
+
     render() {
+
+        const { eventName, eventEndDate, eventDevelopDate } = this.props
+        const endDate = eventEndDate.toDate()
+        const devDate = eventDevelopDate.toDate()
+
         return (
-            <View style={styles.eventCard}>
-                <Text onPress={this.props.handleClick} style={{ textAlign: 'center', color: 'white' }} >{this.props.name}</Text>
-            </View>
+            <TouchableOpacity style={styles.eventCard} onPress={this.props.handleClick} >
+                <Text style={{ color: 'white', fontSize: 24 }} >{eventName}</Text>
+                <Text style={{ color: 'white' }}>This Event ends on: {endDate.toLocaleDateString('en-GB')}</Text>
+                <Text style={{ color: 'white' }}>Photos available on : {devDate.toLocaleDateString('en-GB')}</Text>
+            </TouchableOpacity>
         )
     }
 }
 
+
 const styles = {
     eventCard: {
-        backgroundColor: '#2957a0',
-        borderColor: '#4286f4',
+        backgroundColor: '#E48B74',
         borderRadius: 5,
-        borderWidth: 0.5,
-        margin: 10,
-        padding: 10,
-        fontSize: 100,
+        borderColor: 'white',
+        borderWidth: 0.8,
+        margin: 15,
+        padding: 15,
+        fontSize: 18,
         alignContent: 'center',
         justifyContent: 'center'
     }

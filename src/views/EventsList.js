@@ -6,13 +6,20 @@ import {
   StyleSheet,
   Header,
   TouchableOpacity,
-  Image
+  Image,
+  StatusBar,
+  ImageBackground,
+  Dimensions
 } from "react-native";
 import EventCard from "../components/EventCard";
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import Photos from "./Photos";
 import "@firebase/firestore";
 import firebaseConnect from "../../firebaseConfig";
+
+const SCREEN_WIDTH = Dimensions.get("window").width;
+const SCREEN_HEIGHT = Dimensions.get("window").height;
+const BG_IMAGE = require("../assets/bg_screen.jpg");
 
 export default class EventsList extends Component {
   state = {
@@ -55,38 +62,44 @@ export default class EventsList extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
-        <Text style={{ fontSize: 30, textAlign: "center", color: "black" }}>
-          Events
+      <View style={styles.container}>
+        <ImageBackground source={BG_IMAGE} style={styles.bgImage}>
+          <StatusBar hidden={true} />
+          <Text style={styles.header}>
+            Events
         </Text>
-        <ScrollView>
-          {this.state.events.map(event => {
-            return (
-              <EventCard
-                handleClick={() => {
-                  this.handleClick(event, this.state.user);
-                }}
-                key={event.eventName}
-                name={event.eventName}
-              />
-            );
-          })}
-        </ScrollView>
-        <TouchableOpacity
-          onPress={() => {
-            this.props.navigation.navigate("NewEvent", {
-              user: this.state.user
-            });
-          }}
-          style={styles.TouchableOpacityStyle}
-        >
-          <Image
-            source={{
-              uri: "https://img.icons8.com/cotton/2x/plus--v1.png"
+          <ScrollView>
+            {this.state.events.map((event, idx) => {
+              console.log(event, '<< EVENT')
+              return (
+                <EventCard
+                  handleClick={() => {
+                    this.handleClick(event, this.state.user);
+                  }}
+                  key={idx}
+                  eventName={event.eventName}
+                  eventEndDate={(event.eventEndDate)}
+                  eventDevelopDate={event.eventDevelopDate}
+                  />
+              );
+            })}
+          </ScrollView>
+          <TouchableOpacity
+            onPress={() => {
+              this.props.navigation.navigate("NewEvent", {
+                user: this.state.user
+              });
             }}
-            style={styles.FloatingButtonStyle}
-          />
-        </TouchableOpacity>
+            style={styles.TouchableOpacityStyle}
+          >
+            <Image
+              source={{
+                uri: "https://img.icons8.com/cotton/2x/plus--v1.png"
+              }}
+              style={styles.FloatingButtonStyle}
+            />
+          </TouchableOpacity>
+        </ImageBackground>
       </View>
     );
   }
@@ -97,11 +110,9 @@ export default class EventsList extends Component {
 }
 
 const styles = StyleSheet.create({
-  MainContainer: {
+  container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F5F5F5"
+    backgroundColor: "#3176C2"
   },
 
   TouchableOpacityStyle: {
@@ -113,7 +124,18 @@ const styles = StyleSheet.create({
     right: 30,
     bottom: 30
   },
-
+  bgImage: {
+    flex: 1,
+    top: 0,
+    left: 0,
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
+  },
+  header: {
+    fontSize: 35,
+    color: 'white',
+    textAlign: "center"
+  },
   FloatingButtonStyle: {
     resizeMode: "contain",
     width: 60,

@@ -5,9 +5,10 @@ import {
   TouchableHighlight,
   View,
   Alert,
-  Picker
+  Picker,
+  StyleSheet
 } from "react-native";
-import { Contacts } from "expo";
+import { Contacts, Permissions } from "expo";
 import { Button } from "native-base";
 import firebaseConnect from "../../firebaseConfig";
 
@@ -36,40 +37,18 @@ export default class AddFriend extends Component {
   };
 
   pickerOptions = () => {
-    const multiple = this.state.contacts.map(contact => {
-      if (contact.phoneNumbers.length > 1) {
-        return contact.phoneNumbers.map(phoneNumber => {
-          return (
-            <Picker.Item
-              key={phoneNumber.digits}
-              label={`${contact.name}: ${phoneNumber.digits}`}
-              value={phoneNumber.digits}
-            />
-          );
-        });
-      }
-    });
 
     const single = this.state.contacts.map(contact => {
-      return (
-        <Picker.Item
-          key={contact.phoneNumbers[0].digits}
-          label={`${contact.name}`}
-          value={contact.phoneNumbers[0].digits}
-        />
-      );
+      if (contact.phoneNumbers) {
+        return (
+          <Picker.Item
+            key={contact.phoneNumbers[0].digits}
+            label={`${contact.name}`}
+            value={contact.phoneNumbers[0].digits}
+          />
+        );
+      } // if
     });
-
-    multiple.forEach(element => {
-      if (element) {
-        if (Array.isArray(element)) {
-          element.forEach(number => {
-            single.push(number);
-          });
-        } else single.push(element);
-      }
-    });
-
     return single;
   };
 
@@ -80,7 +59,9 @@ export default class AddFriend extends Component {
   }
 
   async componentDidMount() {
+    const { status } = await Permissions.askAsync(Permissions.CONTACTS)
     const contacts = await Contacts.getContactsAsync();
+    console.log(contacts)
     this.setState({ contacts: contacts.data });
   }
 
@@ -89,10 +70,11 @@ export default class AddFriend extends Component {
   }
 
   render() {
-    if (this.state.contacts) this.pickerOptions();
+    // if (this.state.contacts) this.pickerOptions();
     return (
       <View style={{ marginTop: 22 }}>
         <Modal
+          style={{ justifyContent: 'center' }}
           animationType="slide"
           transparent={false}
           visible={this.state.modalVisible}
@@ -100,13 +82,14 @@ export default class AddFriend extends Component {
             Alert.alert("Modal has been closed.");
           }}
         >
-          <View style={{ marginTop: 200 }}>
-            <View>
-              <Text>Select who you would like to invite:</Text>
+          <View style={{ marginTop: 200, justifyContent: 'center', alignItems: 'center' }}>
+            <View style={{ alignItems: 'center' }}>
+              <Text style={styles.header}>Select who you would like to invite:</Text>
               {this.state.contacts && (
                 <Picker
                   selectedValue={this.state.toAdd}
-                  style={{ height: 80 }}
+                  style={{ height: 100, width: 200 }}
+                  itemStyle={{ backgroundColor: "grey", color: "blue", fontFamily: "Ebrima", fontSize: 17 }}
                   onValueChange={itemValue =>
                     this.setState({ toAdd: itemValue })
                   }
@@ -116,15 +99,30 @@ export default class AddFriend extends Component {
               )}
             </View>
 
-            <View style={{ marginTop: 200 }}>
-              <Button block onPress={this.handlePress}>
-                <Text> Add </Text>
-              </Button>
+            <View >
+              <TouchableHighlight
+                block
+                style={[styles.buttonContainer, styles.buttonAdd]}
+                onPress={this.handlePress}
+              >
+                <Text style={styles.loginText}>Add</Text>
+              </TouchableHighlight>
+              {/* <Button style={styles.button} block onPress={this.handlePress}>
+                <Text> Add </Text> */}
+              {/* </Button> */}
             </View>
-            <View style={{ marginTop: 20 }}>
-              <Button danger block onPress={this.props.closeModal}>
-                <Text> Cancel </Text>
-              </Button>
+            <View>
+              <TouchableHighlight
+                danger
+                block
+                style={[styles.buttonContainer, styles.buttonCancel]}
+                onPress={this.props.closeModal}
+              >
+                <Text style={styles.loginText}>Cancel</Text>
+              </TouchableHighlight>
+              {/* <Button danger block onPress={this.props.closeModal}>
+                <Text> Cancel </Text> */}
+              {/* </Button> */}
             </View>
           </View>
         </Modal>
@@ -141,3 +139,34 @@ export default class AddFriend extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  buttonContainer: {
+    // marginTop: 200,
+    height: 45,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 10,
+    width: 250,
+    borderRadius: 30
+  },
+  buttonAdd: {
+    backgroundColor: "#3176C2"
+  },
+  buttonCancel: {
+    backgroundColor: "#FF0000"
+  },
+  loginButton: {
+    backgroundColor: "#00b5ec"
+  },
+  loginText: {
+    color: "white",
+    textAlign: 'center',
+    paddingLeft: 5,
+    marginLeft: 5
+  },
+  header: {
+    fontSize: 20,
+  }
+})
