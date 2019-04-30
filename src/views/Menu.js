@@ -4,7 +4,6 @@ import {
   Container,
   Header,
   Title,
-  Button,
   Icon,
   Tabs,
   Tab,
@@ -66,8 +65,6 @@ class Menu extends Component {
       images: imagesArray,
       eventDevelopDate
     } = this.state.event;
-    // const eventDevelopDate = this.state.event.eventDevelopDate
-    // const devDate = new (Date).toLocaleDateString('en-GB')
     if (!this.state.isReady) {
       return <Loading />;
     }
@@ -78,7 +75,6 @@ class Menu extends Component {
           <Left />
           <Body>
             <Title>{eventName}</Title>
-            {/* <Subtitle>Released on : {devDate}</Subtitle> */}
           </Body>
           <Right>
             <Text style={{ color: '#2A4F40' }}>{this.state.photosleft}</Text>
@@ -90,7 +86,6 @@ class Menu extends Component {
             heading={
               <TabHeading>
                 <Icon name="camera" />
-                {/* <Text>Camera</Text> */}
               </TabHeading>
             }
           >

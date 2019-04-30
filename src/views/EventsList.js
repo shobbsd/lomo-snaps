@@ -4,7 +4,6 @@ import {
   Text,
   ScrollView,
   StyleSheet,
-  Header,
   TouchableOpacity,
   Image,
   StatusBar,
@@ -12,8 +11,6 @@ import {
   Dimensions
 } from "react-native";
 import EventCard from "../components/EventCard";
-import { createStackNavigator, createAppContainer } from "react-navigation";
-import Photos from "./Photos";
 import "@firebase/firestore";
 import firebaseConnect from "../../firebaseConfig";
 
@@ -30,7 +27,6 @@ export default class EventsList extends Component {
 
   componentDidMount() {
     const { user, events } = this.props.navigation.state.params;
-    // this.setState({ user });
     const db = firebaseConnect.firestore();
     db.collection("events")
       .where("attendeesUids", "array-contains", user.uid)
@@ -80,7 +76,7 @@ export default class EventsList extends Component {
                   eventName={event.eventName}
                   eventEndDate={(event.eventEndDate)}
                   eventDevelopDate={event.eventDevelopDate}
-                  />
+                />
               );
             })}
           </ScrollView>
@@ -140,6 +136,5 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
     width: 60,
     height: 60
-    //backgroundColor:'black'
   }
 });

@@ -1,29 +1,20 @@
 import React, { Component } from "react";
 import {
   Container,
-  Header,
   Content,
   List,
   ListItem,
   Text,
   Left,
-  Right,
-  Icon
 } from "native-base";
 import {
   StyleSheet,
   Image,
   TouchableOpacity,
-  Dimensions,
-  ImageBackground
 } from "react-native";
 import AddFriend from "./addFriend";
 import firebaseConnect from "../../firebaseConfig";
 import * as firebase from "firebase";
-
-const SCREEN_WIDTH = Dimensions.get("window").width;
-const SCREEN_HEIGHT = Dimensions.get("window").height;
-const BG_IMAGE = require("../assets/bg_screen.jpg");
 
 export default class UserList extends Component {
   state = {
@@ -51,7 +42,6 @@ export default class UserList extends Component {
       event: newEvent
     });
     const db = firebaseConnect.firestore();
-    console.log(name, uid);
     const attendeesObj = `attendeesNames.${uid}`;
     const photosleftObj = `photosleft.${uid}`;
     db.collection("events")
@@ -69,17 +59,6 @@ export default class UserList extends Component {
     for (const uid in attendeesObj) {
       attendeesNames.push(attendeesObj[uid]);
     }
-
-    // const arr = attendeesNames.map(element => {
-    //   return (
-    //     <ListItem>
-    //       <Left>
-    //         <Text>{element}</Text>
-    //       </Left>
-    //     </ListItem>
-    //   );
-    // });
-    // console.log(arr);
 
     return (
       <Container>
@@ -100,21 +79,6 @@ export default class UserList extends Component {
                   </ListItem>
                 );
               })}
-            {/* <ListItem>
-              <Left>
-                <Text>Shaq</Text>
-              </Left>
-            </ListItem>
-            <ListItem>
-              <Left>
-                <Text>Phil</Text>
-              </Left>
-            </ListItem>
-            <ListItem>
-              <Left>
-                <Text>Chris</Text>
-              </Left>
-            </ListItem> */}
           </List>
         </Content>
         <TouchableOpacity
@@ -152,6 +116,5 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
     width: 60,
     height: 60
-    //backgroundColor:'black'
   }
 });

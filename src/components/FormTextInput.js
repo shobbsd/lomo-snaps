@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Text, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 
 export default class FormTextInput extends Component {

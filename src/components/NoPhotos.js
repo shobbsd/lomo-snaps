@@ -7,7 +7,6 @@ export default class NoPhotos extends Component {
     render() {
         return <View style={styles.container}>
             <Text style={styles.header} >You're out of film</Text>
-            {/* <Text style={styles.subheader} >Your photos will be developed on {dateString}</Text> */}
         </View>
     }
 }

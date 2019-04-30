@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import {
     ActivityIndicator,
-    AppRegistry,
     StyleSheet,
-    Text,
     View,
     Dimensions,
     ImageBackground

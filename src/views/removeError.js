@@ -6,8 +6,6 @@ const MAX_TIMER_DURATION_MS = 60 * 1000;
 
 export default (clearError = () => {
   if (Platform.OS === "android") {
-    // Work around issue `Setting a timer for long time`
-    // see: https://github.com/firebase/firebase-js-sdk/issues/97
     const timerFix = {};
     const runTask = (id, fn, ttl, args) => {
       const waitingTime = ttl - Date.now();

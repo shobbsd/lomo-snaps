@@ -6,7 +6,6 @@ import firebaseConnect from "../../firebaseConfig";
 import "@firebase/firestore";
 import verifySignUp from "../utils/verifySignUp";
 import { signInWithFacebook } from "../utils/facebookSignUp";
-import createCalendar from "../utils/createCalendar";
 
 const styles = StyleSheet.create({
   red: {
@@ -111,40 +110,7 @@ export default class SignUp extends Component {
 
   handleFacebook = event => {
     event.preventDefault();
-    // Build Firebase credential with the Facebook access token.
-    // var credential = firebaseConnect
-    //   .auth()
-    //   .FacebookAuthProvider.credential(access_token);
-
     signInWithFacebook().then(e => console.log(e, "worked?"));
-
-    // Sign in with credential from the Google user.
-    // firebaseConnect
-    //   .auth()
-    //   .signInAndRetrieveDataWithCredential(credential)
-    //   .then(x => console.log(x, "here"))
-    //   .catch(function(error) {
-    //     // Handle Errors here.
-    //     var errorCode = error.code;
-    //     var errorMessage = error.message;
-    //     // The email of the user's account used.
-    //     var email = error.email;
-    //     // The firebase.auth.AuthCredential type that was used.
-    //     var credential = error.credential;
-    //     // ...
-    //   });
-
-    // const provider = firebaseConnect.auth.FacebookAuthProvider();
-    // firebase
-    //   .auth()
-    //   .signInWithRedirect(provider)
-    //   .then(function(result) {
-    //     // This gives you a Facebook Access Token.
-    //     const token = result.credential.accessToken;
-    //     // The signed-in user info.
-    //     const user = result.user;
-    //     console.log(result);
-    //   });
   };
 
   onSubmit = event => {
@@ -156,7 +122,6 @@ export default class SignUp extends Component {
       event.preventDefault();
       firebaseConnect
         .auth()
-        //   .signInAnonymously()
         .createUserWithEmailAndPassword(email, password)
         .then(({ user }) => {
           db.collection("users")

@@ -9,7 +9,6 @@ import {
   StyleSheet
 } from "react-native";
 import { Contacts, Permissions } from "expo";
-import { Button } from "native-base";
 import firebaseConnect from "../../firebaseConfig";
 
 export default class AddFriend extends Component {
@@ -47,7 +46,7 @@ export default class AddFriend extends Component {
             value={contact.phoneNumbers[0].digits}
           />
         );
-      } // if
+      }
     });
     return single;
   };
@@ -61,7 +60,6 @@ export default class AddFriend extends Component {
   async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.CONTACTS)
     const contacts = await Contacts.getContactsAsync();
-    console.log(contacts)
     this.setState({ contacts: contacts.data });
   }
 
@@ -70,7 +68,6 @@ export default class AddFriend extends Component {
   }
 
   render() {
-    // if (this.state.contacts) this.pickerOptions();
     return (
       <View style={{ marginTop: 22 }}>
         <Modal
@@ -107,9 +104,6 @@ export default class AddFriend extends Component {
               >
                 <Text style={styles.loginText}>Add</Text>
               </TouchableHighlight>
-              {/* <Button style={styles.button} block onPress={this.handlePress}>
-                <Text> Add </Text> */}
-              {/* </Button> */}
             </View>
             <View>
               <TouchableHighlight
@@ -120,29 +114,16 @@ export default class AddFriend extends Component {
               >
                 <Text style={styles.loginText}>Cancel</Text>
               </TouchableHighlight>
-              {/* <Button danger block onPress={this.props.closeModal}>
-                <Text> Cancel </Text> */}
-              {/* </Button> */}
             </View>
           </View>
         </Modal>
       </View>
-
-      //   <TouchableHighlight
-      //     onPress={() => {
-      //       this.setModalVisible(true);
-      //     }}
-      //   >
-      //     <Text>Show Modal</Text>
-      //   </TouchableHighlight>
-      // </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    // marginTop: 200,
     height: 45,
     flexDirection: "row",
     justifyContent: "center",

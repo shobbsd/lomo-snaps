@@ -3,17 +3,13 @@ import {
   Text,
   View,
   StyleSheet,
-
-  Button,
   Alert,
   ImageBackground,
   Dimensions,
   TextInput,
   TouchableHighlight,
-  Image
 } from "react-native";
-import { Constants, Facebook, Google } from "expo";
-// import FormTextInput from "../components/FormTextInput";
+import { Facebook, Google } from "expo";
 
 import firebaseConnect from "../../firebaseConfig";
 import "@firebase/firestore";
@@ -128,12 +124,6 @@ export default class LogIn extends Component {
       <View style={styles.container}>
         <ImageBackground source={BG_IMAGE} style={styles.bgImage}>
           <View style={styles.inputContainer}>
-            {/* <Image
-            style={styles.inputIcon}
-            source={{
-              uri: "https://png.icons8.com/message/ultraviolet/50/3498db"
-            }}
-            /> */}
             <TextInput
               style={styles.inputs}
               placeholder="Email"
@@ -189,7 +179,6 @@ export default class LogIn extends Component {
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then(({ user }) => {
-        //
         this.getEvents(user.uid);
         return this.getUser(user.uid);
       })
@@ -260,6 +249,5 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT,
     justifyContent: "center",
     alignItems: "center"
-
   }
 });

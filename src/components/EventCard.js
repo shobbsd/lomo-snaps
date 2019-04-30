@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import { createStackNavigator, createAppContainer } from "react-navigation";
-import Photos from '../views/Photos';
+import { Text, TouchableOpacity } from 'react-native';
 
 export default class EventCard extends Component {
-
-    // style = {{ textAlign: 'center', color: 'white' }}
 
     render() {
 
