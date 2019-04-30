@@ -7,7 +7,6 @@ export default class EventEnded extends Component {
     render() {
         return <View style={styles.container}>
             <Text style={styles.header} >This event has ended</Text>
-            {/* <Text style={styles.subheader} >Your photos will be developed on {dateString}</Text> */}
         </View>
     }
 }

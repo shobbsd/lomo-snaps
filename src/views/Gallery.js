@@ -1,23 +1,5 @@
-// import React from "react";
-// import { View, Image, ScrollView } from "react-native";
-
-// import styles from "../styles/cameraStyle";
-
-// export default ({ captures = [] }) => (
-//   <ScrollView
-//     horizontal={true}
-//     style={[styles.bottomToolbar, styles.galleryContainer]}
-//   >
-//     {captures.map(({ uri }) => (
-//       <View style={styles.galleryImageContainer} key={uri}>
-//         <Image source={{ uri }} style={styles.galleryImage} />
-//       </View>
-//     ))}
-//   </ScrollView>
-// );
-
 import React, { Component } from "react";
-import { View, Text, Image } from "react-native";
+import { View, Image } from "react-native";
 import firebaseConnect from "../../firebaseConfig";
 
 export default class Gallery extends Component {
@@ -30,7 +12,6 @@ export default class Gallery extends Component {
       .child("/images/1554477181787")
       .getDownloadURL()
       .then(url => {
-        console.log(url);
         this.setState({ images: url });
       });
   }

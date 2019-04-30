@@ -1,42 +1,21 @@
 import * as React from "react";
-//import React in our project
 import {
   Image,
   TouchableOpacity,
-  Text,
   View,
   Modal,
   StyleSheet
 } from "react-native";
-//import all the needed components
 
 import PhotoGrid from "react-native-image-grid";
-import firebaseConnect from "../../firebaseConfig";
 
 export default class PhotoGallery extends React.Component {
   state = {
     imageuri: "",
     ModalVisibleStatus: false,
     items: [{ id: 0, src: "http://placehold.it/200x200?text=due%20soon" }]
-
-    // http://placehold.it/200x200?text=due%20soon...
   };
 
-  // componentDidMount() {
-  //   let items = Array.apply(null, Array(20)).map((v, i) => {
-  //     //Using demo placeholder images but you can add your images here
-  //     return { id: i, src: "http://placehold.it/200x200?text=" + (i + 1) };
-  //   });
-
-  //   const storageRef = firebaseConnect.storage();
-  //   storageRef
-  //     .refFromURL("gs://lomo-snaps.appspot.com/images/1554477181787")
-  //     .getDownloadURL()
-  //     .then(url => {
-  //       items = [{ id: 61, src: url }, ...items];
-  //       this.setState({ items });
-  //     });
-  // }
 
   componentDidMount() {
     const { imagesArray, eventDevelopDate } = this.props;
@@ -57,7 +36,6 @@ export default class PhotoGallery extends React.Component {
       ) {
         const items = Array.apply(null, Array(imagesArray.length)).map(
           (v, i) => {
-            //Using demo placeholder images but you can add your images here
             return {
               id: i,
               src: "http://placehold.it/200x200?text=due%20soon..."
@@ -72,32 +50,14 @@ export default class PhotoGallery extends React.Component {
         };
         this.setState({ items });
       }
-    } // end if
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
     console.log(prevState);
   }
 
-  //   renderHeader() {
-  //     //Header of the Screen
-  //     return (
-  //       <Text
-  //         style={{
-  //           padding: 16,
-  //           fontSize: 20,
-  //           color: "white",
-  //           backgroundColor: "green"
-  //         }}
-  //       >
-  //         Image Gallery
-  //       </Text>
-  //     );
-  //   }
-
   ShowModalFunction(visible, imageURL) {
-    //handler to handle the click on image of Grid
-    //and close button on modal
     this.setState({
       ModalVisibleStatus: visible,
       imageuri: imageURL
@@ -105,7 +65,6 @@ export default class PhotoGallery extends React.Component {
   }
 
   renderItem(item, itemSize, itemPaddingHorizontal) {
-    //Single item of Grid
     return (
       <TouchableOpacity
         key={item.id}
@@ -129,7 +88,6 @@ export default class PhotoGallery extends React.Component {
 
   render() {
     if (this.state.ModalVisibleStatus) {
-      //Modal to show full image with close button
       return (
         <Modal
           transparent={false}
@@ -163,13 +121,11 @@ export default class PhotoGallery extends React.Component {
         </Modal>
       );
     } else {
-      //Photo Grid of images
       return (
         <View style={styles.containerStyle}>
           <PhotoGrid
             data={this.state.items}
             itemsPerRow={3}
-            //You can decide the item per row
             itemMargin={1}
             itemPaddingHorizontal={1}
             renderHeader={this.renderHeader}

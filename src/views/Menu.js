@@ -4,7 +4,6 @@ import {
   Container,
   Header,
   Title,
-  Button,
   Icon,
   Tabs,
   Tab,

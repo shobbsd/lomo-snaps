@@ -55,7 +55,6 @@ export default class NewEvent extends Component {
 
   handleEventSubmit = () => {
     const { eventName } = this.state;
-    // console.log(this.state); // logs to expo start console
     if (eventName.length >= 5) {
       this.addEvent();
       this.props.navigation.navigate("EventsList");
@@ -81,8 +80,6 @@ export default class NewEvent extends Component {
   };
 
   addEvent = () => {
-    // https://firebase.google.com/docs/firestore/quickstart
-    // NB firestore generates unique ID eg. 8pWgaC79rQ8KbhtjTrnN
     const {
       user,
       eventName,
@@ -90,7 +87,6 @@ export default class NewEvent extends Component {
       eventDevelopDate,
       limit
     } = this.state;
-    // add first attendee who is the organiser
     const { uid } = user;
     const docname = uid + eventName;
     db.collection("events")
@@ -107,9 +103,6 @@ export default class NewEvent extends Component {
         photosleft: { [uid]: +limit },
         eventUid: docname
       });
-    // .catch(function(error) {
-    //   console.error("Error adding document: ", error);
-    // });
   };
 
   async componentDidMount() {
@@ -249,8 +242,6 @@ export default class NewEvent extends Component {
 
             {pf === "ios" && (
               <>
-                {/* <Text style={{ textAlign: "center", padding: 40, fontSize: 18 }}>Develop Photos Date:</Text> */}
-
                 <TouchableHighlight
                   onPress={() => {
                     this.setModalVisibleDevelopEndDate(true);
@@ -328,11 +319,6 @@ async function loadAndroidDatePicker() {
     console.warn("Cannot open date picker" + message);
   }
 }
-
-// TODO UI polish
-// TODO can not style react-native <Button /> goto https://facebook.github.io/react-native/docs/touchableopacity.html
-// TODO simplify IOS date picker ( no time required )
-// TODO default time of events is midday
 
 const styles = StyleSheet.create({
   container: {

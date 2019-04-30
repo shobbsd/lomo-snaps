@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Header, Button } from 'react-native';
+import { View, Text, Button } from 'react-native';
 import { Calendar } from 'expo';
 import createCalendar from '../utils/createCalendar';
 import createEvent from '../utils/createEvent';
@@ -10,24 +10,6 @@ export default class EventCalendar extends Component {
         calendars: [],
         newCalendar: []
     }
-
-    // componentDidMount() {
-    //     getCalendars()
-    //         .then((calendars) => {
-    //             this.setState({ calendars })
-    //             createCalendar()
-    //         })
-    //         .then((id) => {
-    //             console.log(id)
-    //             getCalendars()
-    //         })
-    // }
-
-    // componentDidUpdate(_, prevState) {
-    //     if (this.state.calendars.length !== prevState.calendars.length) {
-    //         console.log(this.state.calendars.length);
-    //     }
-    // }
 
     myCalendar() {
         let details = {
@@ -63,9 +45,6 @@ export default class EventCalendar extends Component {
             <Button
                 title='make calendar'
                 onPress={() => {
-                    // const eventEndDate = new Date(2019, 04, 06)
-                    // const developDate = new Date(2018, 04, 07)
-                    // const eventName = 'wedding';
                     createCalendar('grumpy19')
                         .then(id => {
                             return createEvent(id)
@@ -91,12 +70,6 @@ async function getCalendars() {
     const calendars = await Calendar.getCalendarsAsync();
     return calendars;
 }
-
-// async function createCalendar() {
-//     const calendarId = await Calendar.createCalendarAsync();
-//     return calendarId;
-// }
-
 
 const findPrimaryCalendar = (calendars) => {
     return calendars.filter((calendar => calendar.isPrimary))[0]

@@ -3,8 +3,6 @@ import {
   Text,
   View,
   StyleSheet,
-
-  Button,
   Alert,
   ImageBackground,
   Dimensions,
@@ -12,11 +10,7 @@ import {
   TouchableHighlight,
   Image
 } from "react-native";
-
 import { Facebook, Google } from "expo";
-import FormTextInput from "../components/FormTextInput";
-import CustomButton from "../components/CustomButton";
-
 import firebaseConnect from "../../firebaseConfig";
 import "@firebase/firestore";
 import verifySignUp from "../utils/verifySignUp";
@@ -52,152 +46,118 @@ export default class SignUp extends Component {
       <View style={styles.container}>
 
         <ImageBackground source={BG_IMAGE} style={styles.bgImage}>
-        <View style={styles.contentContainer}>
+          <View style={styles.contentContainer}>
 
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.inputs}
-            placeholder="Full Name"
-            keyboardType="email-address"
-            underlineColorAndroid="transparent"
-            onChangeText={event => this.onChangeText(event, "name")}
-            autoCapitalize="words"
-            value={name}
-          />
-          {toFill.name && (
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.inputs}
+                placeholder="Full Name"
+                keyboardType="email-address"
+                underlineColorAndroid="transparent"
+                onChangeText={event => this.onChangeText(event, "name")}
+                autoCapitalize="words"
+                value={name}
+              />
+              {toFill.name && (
 
-            <Text style={styles.red}>!</Text>
-          )}
-        </View>
+                <Text style={styles.red}>!</Text>
+              )}
+            </View>
 
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.inputs}
-            placeholder="Email Address"
-            keyboardType="email-address"
-            underlineColorAndroid="transparent"
-            onChangeText={event => this.onChangeText(event, "email")}
-            autoCapitalize="words"
-            value={email}
-          />
-          {toFill.name && (
-            <Text style={styles.red}>!</Text>
-          )}
-        </View>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.inputs}
-            placeholder="Phone Number:"
-            keyboardType="numeric"
-            underlineColorAndroid="transparent"
-            onChangeText={event => this.onChangeText(event, "phone")}
-            autoCapitalize="words"
-            value={phone}
-          />
-          {toFill.name && (
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.inputs}
+                placeholder="Email Address"
+                keyboardType="email-address"
+                underlineColorAndroid="transparent"
+                onChangeText={event => this.onChangeText(event, "email")}
+                autoCapitalize="words"
+                value={email}
+              />
+              {toFill.name && (
+                <Text style={styles.red}>!</Text>
+              )}
+            </View>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.inputs}
+                placeholder="Phone Number:"
+                keyboardType="numeric"
+                underlineColorAndroid="transparent"
+                onChangeText={event => this.onChangeText(event, "phone")}
+                autoCapitalize="words"
+                value={phone}
+              />
+              {toFill.name && (
 
-            <Text style={styles.red}>!</Text>
-          )}
-        </View>
+                <Text style={styles.red}>!</Text>
+              )}
+            </View>
 
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.inputs}
-            placeholder="Password"
-            secureTextEntry={true}
-            underlineColorAndroid="transparent"
-            onChangeText={event => this.onChangeText(event, "password")}
-            value={password}
-          />
-          {toFill.password && (
-            <Text style={styles.red}>
-              Your password must contain a minimum of 6 characters, one upper
-              case, one lower case and one special character
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.inputs}
+                placeholder="Password"
+                secureTextEntry={true}
+                underlineColorAndroid="transparent"
+                onChangeText={event => this.onChangeText(event, "password")}
+                value={password}
+              />
+              {toFill.password && (
+                <Text style={styles.red}>
+                  Your password must contain a minimum of 6 characters, one upper
+                  case, one lower case and one special character
             </Text>
-          )}
-        </View>
+              )}
+            </View>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.inputs}
+                placeholder="Confirm your password"
+                secureTextEntry={true}
+                underlineColorAndroid="transparent"
+                onChangeText={event => this.onChangeText(event, "passwordConfirmation")}
+                value={passwordConfirmation}
+              />
+              {toFill.passwordConfirmation && (
+                <Text style={styles.red}>Passwords do not match</Text>
+              )}
+            </View>
 
-        {/* <Text>Password:</Text>
-        <FormTextInput
-          placeholder="Enter your password number here"
-          onChangeText={event => this.onChangeText(event, "password")}
-          password={true}
-          autoCapitalize="none"
-          value={password}
-        />
-        {toFill.password && (
-          <Text style={styles.red}>
-            Your password must contain a minimum of 6 characters, one upper
-            case, one lower case and one special character
-          </Text>
-        )} */}
+            <TouchableHighlight
+              style={[styles.buttonContainer, styles.loginButton]}
+              onPress={this.onSubmit}
+            >
+              <Text style={styles.loginText}>Submit</Text>
+            </TouchableHighlight>
 
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.inputs}
-            placeholder="Confirm your password"
-            secureTextEntry={true}
-            underlineColorAndroid="transparent"
-            onChangeText={event => this.onChangeText(event, "passwordConfirmation")}
-            value={passwordConfirmation}
-          />
-          {toFill.passwordConfirmation && (
-          <Text style={styles.red}>Passwords do not match</Text>
-        )}
-        </View>
-        {/* <Text>Confirm Password:</Text>
+            <Text style={styles.loginText}>Or</Text>
 
-        <FormTextInput
-          placeholder="Confirm your password number here"
-          onChangeText={event =>
-            this.onChangeText(event, "passwordConfirmation")
-          }
-          password={true}
-          autoCapitalize="none"
-          value={passwordConfirmation}
-        /> */}
+            <TouchableHighlight
+              style={[styles.buttonContainer, styles.loginButton]}
+              onPress={this._handleFacebookLogin}
+            >
+              <Text style={styles.loginText}>
+                <Image
+                  source={require('../assets/facebook_logo.png')}
+                  style={styles.thumbnail}
+                />
+                Sign In With Facebook</Text>
+            </TouchableHighlight>
 
-          {/* <TouchableHighlight
-            style={[styles.buttonContainer, styles.loginButton]}
-            onPress={this.onSubmit}
-          >
-            <Text style={styles.loginText}>Login</Text>
-          </TouchableHighlight> */}
+            <TouchableHighlight
+              style={[styles.buttonContainer, styles.loginButton]}
+              onPress={this._handleGoogleLogin}
+            >
+              <Text style={styles.loginText}>
+                <Image
+                  source={require('../assets/google_logo.png')}
+                  style={styles.thumbnail}
+                />
+                Sign In With Google</Text>
+            </TouchableHighlight>
 
-          <TouchableHighlight
-            style={[styles.buttonContainer, styles.loginButton]}
-            onPress={this.onSubmit}
-          >
-            <Text style={styles.loginText}>Submit</Text>
-          </TouchableHighlight>
-
-          <Text style={styles.loginText}>Or</Text>
-
-          <TouchableHighlight
-            style={[styles.buttonContainer, styles.loginButton]}
-            onPress={this._handleFacebookLogin}
-          >
-            <Text style={styles.loginText}>
-            <Image
-              source={require('../assets/facebook_logo.png')}
-              style={styles.thumbnail}
-            />
-            Sign In With Facebook</Text>
-          </TouchableHighlight>
-          
-          <TouchableHighlight
-            style={[styles.buttonContainer, styles.loginButton]}
-            onPress={this._handleGoogleLogin}
-          >
-            <Text style={styles.loginText}>
-            <Image
-              source={require('../assets/google_logo.png')}
-              style={styles.thumbnail}
-            />
-            Sign In With Google</Text>
-          </TouchableHighlight>
-        
-        </View>
+          </View>
         </ImageBackground>
       </View>
     );
@@ -206,13 +166,12 @@ export default class SignUp extends Component {
   _handleFacebookLogin = async () => {
     try {
       const { type, token } = await Facebook.logInWithReadPermissionsAsync(
-        "1201211719949057", // Replace with your own app id in standalone app
+        "1201211719949057",
         { permissions: ["public_profile"] }
       );
 
       switch (type) {
         case "success": {
-          // Get the user's name using Facebook's Graph API
           const response = await fetch(
             `https://graph.facebook.com/me?access_token=${token}`
           );
@@ -282,7 +241,6 @@ export default class SignUp extends Component {
       event.preventDefault();
       firebaseConnect
         .auth()
-        //   .signInAnonymously()
         .createUserWithEmailAndPassword(email, password)
         .then(({ user }) => {
           db.collection("users")
